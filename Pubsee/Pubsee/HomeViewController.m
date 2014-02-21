@@ -32,11 +32,21 @@
  * Configure the logged in versus logged out UX
  */
 - (void)sessionStateChanged:(NSNotification*)notification {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     if (FBSession.activeSession.isOpen) {
-        NSLog(@"logado");
+        [self populateUserDetails];
     } else {
         [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
     }
+}
+
+- (void)populateUserDetails {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
+        self.userNameLabel.text = user.name;
+        self.userProfilePictureView.profileID = [user objectForKey:@"id"];
+    }];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -85,18 +95,6 @@
         FBSession.activeSession.state == FBSessionStateCreatedOpening) {
     } else {
         [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:   (NSInteger)buttonIndex {
-    
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    switch (buttonIndex) {
-        case 0: // logout
-            [appDelegate closeSession];
-            break;
-        case 1: // cancel
-            break;
     }
 }
 

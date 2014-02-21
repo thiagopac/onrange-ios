@@ -70,18 +70,6 @@
     }];
 }
 
--(id)init {
-    return [self initWithProfileID:nil];
-}
-
--(id)initWithProfileID:(NSString *)profileID {
-    self = [super init];
-    if (self) {
-        self.profileID = profileID;
-    }
-    return self;
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     
     if (FBSession.activeSession.isOpen) {
@@ -91,17 +79,6 @@
         // UI. However, since this is not user intitiated, do not show the login UX.
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate openSessionWithAllowLoginUI:NO];
-    }
-}
-
--(void)viewDidAppear:(BOOL)animated{
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    if (FBSession.activeSession.isOpen ||
-        FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded ||
-        FBSession.activeSession.state == FBSessionStateCreatedOpening) {
-    } else {
-        [appDelegate closeSession];
     }
 }
 

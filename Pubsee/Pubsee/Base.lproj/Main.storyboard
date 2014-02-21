@@ -57,10 +57,26 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="US3-xv-hIQ" customClass="FBProfilePictureView">
+                                <rect key="frame" x="123" y="110" width="74" height="74"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EEk-IE-J4o">
+                                <rect key="frame" x="43" y="197" width="235" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="WHb-yO-a3r"/>
                     <connections>
+                        <outlet property="userNameLabel" destination="EEk-IE-J4o" id="JwV-fJ-Pqf"/>
+                        <outlet property="userProfilePictureView" destination="US3-xv-hIQ" id="U8M-AI-sPU"/>
                         <segue destination="rwx-KY-xOW" kind="modal" identifier="SegueToLogin" id="yp4-19-tjq"/>
                         <segue destination="d7J-JB-9xE" kind="push" identifier="ConfigSegueFake" id="m86-XS-4cA"/>
                     </connections>

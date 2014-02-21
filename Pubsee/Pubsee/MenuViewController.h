@@ -20,8 +20,6 @@
 
 - (IBAction)logoutButtonClicked:(UIButton *)sender;
 
--(id)init;
--(id)initWithProfileID:(NSString *)profileID;
 -(void)sessionStateChanged:(NSNotification*)notification;
 -(void)populateUserDetails;
 
