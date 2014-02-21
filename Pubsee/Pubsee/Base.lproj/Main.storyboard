@@ -195,7 +195,6 @@
                     <connections>
                         <outlet property="userNameLabel" destination="jDw-lO-yaA" id="YzZ-fD-Yx5"/>
                         <outlet property="userProfilePictureView" destination="fFg-vN-mhK" id="s2S-2f-EHM"/>
-                        <segue destination="rwx-KY-xOW" kind="modal" identifier="LogoutSegue" id="0T5-35-ecI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="59V-cp-tXD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -208,7 +207,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="0T5-35-ecI"/>
-    </inferredMetricsTieBreakers>
 </document>

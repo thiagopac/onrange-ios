@@ -53,10 +53,12 @@
  * Configure the logged in versus logged out UX
  */
 - (void)sessionStateChanged:(NSNotification*)notification {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     if (FBSession.activeSession.isOpen) {
         [self populateUserDetails];
     } else {
-        [self performSegueWithIdentifier:@"LogoutSegue" sender:self];
+        [appDelegate closeSession];
     }
 }
 
@@ -93,11 +95,13 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     if (FBSession.activeSession.isOpen ||
         FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded ||
         FBSession.activeSession.state == FBSessionStateCreatedOpening) {
     } else {
-        [self performSegueWithIdentifier:@"LogoutSegue" sender:self];
+        [appDelegate closeSession];
     }
 }
 

@@ -144,6 +144,7 @@ NSString *const FBMenuDataChangedNotification =
  */
 - (void) closeSession {
     [FBSession.activeSession closeAndClearTokenInformation];
+    [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - Personalization methods
