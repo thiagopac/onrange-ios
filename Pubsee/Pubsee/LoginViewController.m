@@ -30,6 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.LoginButton.layer.cornerRadius = 5;
+    self.LoginButton.layer.masksToBounds = YES;
+    
 	// Do any additional setup after loading the view, typically from a nib.
     
     // Register for notifications on FB session state changes

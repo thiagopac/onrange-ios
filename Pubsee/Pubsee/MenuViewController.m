@@ -13,6 +13,7 @@
 #import "SlideNavigationContorllerAnimatorScaleAndFade.h"
 #import "SlideNavigationContorllerAnimatorSlideAndFade.h"
 #import "AppDelegate.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation MenuViewController
 //@synthesize cellIdentifier;
@@ -31,6 +32,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.userProfilePictureView.layer.cornerRadius = 45;
+    self.userProfilePictureView.layer.masksToBounds = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];

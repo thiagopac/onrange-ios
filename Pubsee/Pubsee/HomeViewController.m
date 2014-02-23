@@ -11,6 +11,8 @@
 
 @interface HomeViewController ()
 
+@property (nonatomic, assign) BOOL hideStatusBar;
+
 @end
 
 @implementation HomeViewController
@@ -32,21 +34,16 @@
  * Configure the logged in versus logged out UX
  */
 - (void)sessionStateChanged:(NSNotification*)notification {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     if (FBSession.activeSession.isOpen) {
-        [self populateUserDetails];
+        NSLog(@"logado");
     } else {
         [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
     }
 }
 
-- (void)populateUserDetails {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
-        self.userNameLabel.text = user.name;
-        self.userProfilePictureView.profileID = [user objectForKey:@"id"];
-    }];
+- (UIView *)getSnapShot
+{
+    return [[UIScreen mainScreen] snapshotViewAfterScreenUpdates:NO];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -75,6 +72,9 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
+    UIImageView *logo = [[UIImageView alloc]initWithFrame:CGRectMake(104, 28, 110, 31)];
+    logo.image = [UIImage imageNamed:@"icone_nav.png"];
+    [self.navigationController.view addSubview:logo];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

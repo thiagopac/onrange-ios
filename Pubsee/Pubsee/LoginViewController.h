@@ -10,5 +10,6 @@
 
 @interface LoginViewController : UIViewController
 - (IBAction)LoginButtonClicked:(UIButton *)sender;
+@property (strong, nonatomic) IBOutlet UIButton *LoginButton;
 
 @end

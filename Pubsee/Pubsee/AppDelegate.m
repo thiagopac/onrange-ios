@@ -30,8 +30,8 @@ NSString *const FBMenuDataChangedNotification =
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
 															 bundle: nil];
 	
-	MenuViewController *rightMenu = (MenuViewController*)[mainStoryboard
-                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
+	LocaisTableViewController *rightMenu = (LocaisTableViewController*)[mainStoryboard
+                                                          instantiateViewControllerWithIdentifier: @"LocaisTableViewController"];
 	
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
@@ -41,10 +41,19 @@ NSString *const FBMenuDataChangedNotification =
 	
 	// Creating a custom bar button for right menu
 	UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-	[button setImage:[UIImage imageNamed:@"menu-button"] forState:UIControlStateNormal];
+	[button setImage:[UIImage imageNamed:@"icone_locais"] forState:UIControlStateNormal];
 	[button addTarget:[SlideNavigationController sharedInstance] action:@selector(toggleRightMenu) forControlEvents:UIControlEventTouchUpInside];
+    
 	UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 	[SlideNavigationController sharedInstance].rightBarButtonItem = rightBarButtonItem;
+    
+    // Creating a custom bar button for left menu
+	UIButton *button2  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+	[button2 setImage:[UIImage imageNamed:@"icone_menu"] forState:UIControlStateNormal];
+	[button2 addTarget:[SlideNavigationController sharedInstance] action:@selector(toggleLeftMenu) forControlEvents:UIControlEventTouchUpInside];
+    
+	UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button2];
+	[SlideNavigationController sharedInstance].leftBarButtonItem = leftBarButtonItem;
     
     return YES;
 }
@@ -109,8 +118,8 @@ NSString *const FBMenuDataChangedNotification =
     
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Error"
-                                  message:error.localizedDescription
+                                  initWithTitle:@"Erro"
+                                  message:@"Ops! Parece que o aplicativo não tem permissão para se conectar ao seu perfil. Vamos tentar novamente?"
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -125,7 +134,7 @@ NSString *const FBMenuDataChangedNotification =
     // Ask for permissions for getting info about uploaded
     // custom photos.
     NSArray *permissions = [NSArray arrayWithObjects:
-                            @"basic_info",
+                            @"basic_info",@"email",
                             nil];
     
     return [FBSession openActiveSessionWithReadPermissions:permissions

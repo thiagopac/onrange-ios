@@ -10,6 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "HomeViewController.h"
 #import "MenuViewController.h"
+#import "LocaisTableViewController.h"
 
 
 @class HomeViewController;
