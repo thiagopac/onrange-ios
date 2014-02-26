@@ -11,8 +11,6 @@
 
 @interface HomeViewController ()
 
-@property (nonatomic, assign) BOOL hideStatusBar;
-
 @end
 
 @implementation HomeViewController
@@ -35,15 +33,10 @@
  */
 - (void)sessionStateChanged:(NSNotification*)notification {
     if (FBSession.activeSession.isOpen) {
-        NSLog(@"logado");
+        NSLog(@"");
     } else {
         [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
     }
-}
-
-- (UIView *)getSnapShot
-{
-    return [[UIScreen mainScreen] snapshotViewAfterScreenUpdates:NO];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,6 +63,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
     UIImageView *logo = [[UIImageView alloc]initWithFrame:CGRectMake(104, 28, 110, 31)];
@@ -80,7 +74,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     if (FBSession.activeSession.isOpen) {
-        NSLog(@"logado");
+        NSLog(@"");
     } else if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
         // Check the session for a cached token to show the proper authenticated
         // UI. However, since this is not user intitiated, do not show the login UX.

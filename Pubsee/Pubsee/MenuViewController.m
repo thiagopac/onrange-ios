@@ -28,7 +28,6 @@
     return self;
 }
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -74,7 +73,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
     if (FBSession.activeSession.isOpen) {
         [self populateUserDetails];
     } else if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
@@ -97,6 +96,7 @@
     }
 }
 
+
 #pragma mark - Action methods
 - (IBAction)logoutButtonClicked:(UIButton *)sender {
     UIActionSheet* action = [[UIActionSheet alloc]
@@ -106,6 +106,20 @@
                              destructiveButtonTitle:@"Logout"
                              otherButtonTitles:nil ];
     [action showInView:self.view];
+}
+
+- (IBAction)settingsButtonClicked:(UIButton *)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+															 bundle: nil];
+    UIViewController *SettingsViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"SettingsViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:SettingsViewController withCompletion:nil];
+}
+
+- (IBAction)inicioButtonClicked:(UIButton *)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+															 bundle: nil];
+    UIViewController *HomeViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:HomeViewController withCompletion:nil];
 }
 
 #pragma mark - UITableView Delegate & Datasrouce -

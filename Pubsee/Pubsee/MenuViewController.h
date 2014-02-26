@@ -19,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet FBProfilePictureView *userProfilePictureView;
 
 - (IBAction)logoutButtonClicked:(UIButton *)sender;
+- (IBAction)settingsButtonClicked:(UIButton *)sender;
+- (IBAction)inicioButtonClicked:(UIButton *)sender;
 
 -(void)sessionStateChanged:(NSNotification*)notification;
 -(void)populateUserDetails;

@@ -54,6 +54,7 @@ NSString *const FBMenuDataChangedNotification =
     
 	UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button2];
 	[SlideNavigationController sharedInstance].leftBarButtonItem = leftBarButtonItem;
+
     
     return YES;
 }
@@ -119,7 +120,7 @@ NSString *const FBMenuDataChangedNotification =
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Erro"
-                                  message:@"Ops! Parece que o aplicativo não tem permissão para se conectar ao seu perfil. Vamos tentar novamente?"
+                                  message:@"Ops! O aplicativo ainda não tem permissão para se conectar ao seu perfil do Facebook. Vamos tentar novamente?"
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
