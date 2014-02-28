@@ -9,7 +9,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 #import "AppDelegate.h"
-#import "HomeViewController.h"
 
 NSString *const FBSessionStateChangedNotification =
 @"com.facebook.samples.SocialCafe:FBSessionStateChangedNotification";
@@ -18,10 +17,6 @@ NSString *const FBMenuDataChangedNotification =
 @"com.facebook.samples.SocialCafe:FBMenuDataChangedNotification";
 
 @implementation AppDelegate
-
-@synthesize openedURL = _openedURL;
-@synthesize window = _window;
-@synthesize user = _user;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -174,6 +169,7 @@ NSString *const FBMenuDataChangedNotification =
              if (!error) {
                  // Update menu user info
                  self.home.profileID = user.id;
+                 self.menu.profileID = user.id;
                  // Save the user data
                  self.user = user;
                  if (handler) {

@@ -14,6 +14,8 @@
 
 
 @class HomeViewController;
+@class MenuViewController;
+
 
 extern NSString *const FBSessionStateChangedNotification;
 extern NSString *const FBMenuDataChangedNotification;
@@ -23,8 +25,9 @@ typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) id<FBGraphUser> user;
 @property (strong, nonatomic) NSURL *openedURL;
+@property (strong, nonatomic) id<FBGraphUser> user;
+@property (strong, nonatomic) MenuViewController *menu;
 @property (strong, nonatomic) HomeViewController *home;
 
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;

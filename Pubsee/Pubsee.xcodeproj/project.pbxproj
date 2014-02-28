@@ -25,7 +25,13 @@
 		6EA93A0118B9BD9C007B0025 /* icone_configuracoes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA939FE18B9BD9C007B0025 /* icone_configuracoes@2x.png */; };
 		6EA93A0218B9BD9C007B0025 /* icone_logout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA939FF18B9BD9C007B0025 /* icone_logout@2x.png */; };
 		6EA93A0318B9BD9C007B0025 /* icone_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA93A0018B9BD9C007B0025 /* icone_profile@2x.png */; };
+		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
+		6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61818C01ED400240B6B /* PontoLocal.m */; };
+		6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB6C61A18C020F800240B6B /* MapKit.framework */; };
+		6EB6C61F18C025B000240B6B /* Usuario.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61E18C025B000240B6B /* Usuario.m */; };
 		6EBAE5B318B69C8C0050FC63 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EBAE5B218B69C8C0050FC63 /* MenuViewController.m */; };
+		6EE440C818C02C870033D95B /* MappingProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE440C718C02C870033D95B /* MappingProvider.m */; };
+		6EE440CB18C037590033D95B /* TopLocaisComCheckinCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE440CA18C037590033D95B /* TopLocaisComCheckinCell.m */; };
 		6EF4313C18B17755007F7D79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF4313B18B17755007F7D79 /* Foundation.framework */; };
 		6EF4313E18B17755007F7D79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF4313D18B17755007F7D79 /* CoreGraphics.framework */; };
 		6EF4314018B17755007F7D79 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF4313F18B17755007F7D79 /* UIKit.framework */; };
@@ -76,8 +82,19 @@
 		6EA939FE18B9BD9C007B0025 /* icone_configuracoes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_configuracoes@2x.png"; sourceTree = "<group>"; };
 		6EA939FF18B9BD9C007B0025 /* icone_logout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_logout@2x.png"; sourceTree = "<group>"; };
 		6EA93A0018B9BD9C007B0025 /* icone_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_profile@2x.png"; sourceTree = "<group>"; };
+		6EB6C61318C0199E00240B6B /* Local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Local.h; sourceTree = "<group>"; };
+		6EB6C61418C0199E00240B6B /* Local.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Local.m; sourceTree = "<group>"; };
+		6EB6C61718C01ED400240B6B /* PontoLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PontoLocal.h; sourceTree = "<group>"; };
+		6EB6C61818C01ED400240B6B /* PontoLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PontoLocal.m; sourceTree = "<group>"; };
+		6EB6C61A18C020F800240B6B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		6EB6C61D18C025B000240B6B /* Usuario.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Usuario.h; sourceTree = "<group>"; };
+		6EB6C61E18C025B000240B6B /* Usuario.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Usuario.m; sourceTree = "<group>"; };
 		6EBAE5B118B69C8C0050FC63 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		6EBAE5B218B69C8C0050FC63 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		6EE440C618C02C870033D95B /* MappingProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MappingProvider.h; sourceTree = "<group>"; };
+		6EE440C718C02C870033D95B /* MappingProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MappingProvider.m; sourceTree = "<group>"; };
+		6EE440C918C037590033D95B /* TopLocaisComCheckinCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopLocaisComCheckinCell.h; sourceTree = "<group>"; };
+		6EE440CA18C037590033D95B /* TopLocaisComCheckinCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopLocaisComCheckinCell.m; sourceTree = "<group>"; };
 		6EF4313818B17755007F7D79 /* Pubsee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pubsee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EF4313B18B17755007F7D79 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6EF4313D18B17755007F7D79 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -107,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */,
 				6E0AB74018B7B01C003DCF1E /* QuartzCore.framework in Frameworks */,
 				6EF4313E18B17755007F7D79 /* CoreGraphics.framework in Frameworks */,
 				6EF4314018B17755007F7D79 /* UIKit.framework in Frameworks */,
@@ -133,6 +151,8 @@
 			children = (
 				6E0AB74118B7C500003DCF1E /* LocaisTableViewController.h */,
 				6E0AB74218B7C500003DCF1E /* LocaisTableViewController.m */,
+				6EE440C918C037590033D95B /* TopLocaisComCheckinCell.h */,
+				6EE440CA18C037590033D95B /* TopLocaisComCheckinCell.m */,
 			);
 			name = Locais;
 			sourceTree = "<group>";
@@ -144,6 +164,42 @@
 				6E7050A118BAB64F0029E58A /* SettingsViewController.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		6EB6C61118C0196600240B6B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6EB6C61C18C025A100240B6B /* Usuario */,
+				6EB6C61218C0197600240B6B /* Local */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		6EB6C61218C0197600240B6B /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				6EB6C61318C0199E00240B6B /* Local.h */,
+				6EB6C61418C0199E00240B6B /* Local.m */,
+			);
+			name = Local;
+			sourceTree = "<group>";
+		};
+		6EB6C61618C01E6C00240B6B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6EB6C61718C01ED400240B6B /* PontoLocal.h */,
+				6EB6C61818C01ED400240B6B /* PontoLocal.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		6EB6C61C18C025A100240B6B /* Usuario */ = {
+			isa = PBXGroup;
+			children = (
+				6EB6C61D18C025B000240B6B /* Usuario.h */,
+				6EB6C61E18C025B000240B6B /* Usuario.m */,
+			);
+			name = Usuario;
 			sourceTree = "<group>";
 		};
 		6EBAE5AF18B69C620050FC63 /* Home */ = {
@@ -194,6 +250,15 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		6EE440C518C02BEA0033D95B /* MappingProvider */ = {
+			isa = PBXGroup;
+			children = (
+				6EE440C618C02C870033D95B /* MappingProvider.h */,
+				6EE440C718C02C870033D95B /* MappingProvider.m */,
+			);
+			name = MappingProvider;
+			sourceTree = "<group>";
+		};
 		6EE518BA18B186B400250C71 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +303,7 @@
 		6EF4313A18B17755007F7D79 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6EB6C61A18C020F800240B6B /* MapKit.framework */,
 				6E0AB73F18B7B01C003DCF1E /* QuartzCore.framework */,
 				6EF4313B18B17755007F7D79 /* Foundation.framework */,
 				6EF4313D18B17755007F7D79 /* CoreGraphics.framework */,
@@ -251,12 +317,15 @@
 		6EF4314118B17755007F7D79 /* Pubsee */ = {
 			isa = PBXGroup;
 			children = (
-				6EBAE5B418B6B12E0050FC63 /* Resources */,
 				6EF4314A18B17755007F7D79 /* AppDelegate.h */,
 				6EF4314B18B17755007F7D79 /* AppDelegate.m */,
 				6EF4314D18B17755007F7D79 /* Main.storyboard */,
+				6EE440C518C02BEA0033D95B /* MappingProvider */,
+				6EB6C61118C0196600240B6B /* Model */,
 				6EE518BA18B186B400250C71 /* Controller */,
+				6EB6C61618C01E6C00240B6B /* View */,
 				6EF4315318B17755007F7D79 /* Images.xcassets */,
+				6EBAE5B418B6B12E0050FC63 /* Resources */,
 				6EF4314218B17755007F7D79 /* Supporting Files */,
 			);
 			path = Pubsee;
@@ -438,13 +507,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EE440C818C02C870033D95B /* MappingProvider.m in Sources */,
+				6EB6C61F18C025B000240B6B /* Usuario.m in Sources */,
 				6EF4314C18B17755007F7D79 /* AppDelegate.m in Sources */,
 				6EF4314818B17755007F7D79 /* main.m in Sources */,
 				6E0AB74318B7C500003DCF1E /* LocaisTableViewController.m in Sources */,
 				6EF4D31218B3F6CE00334BDD /* LoginViewController.m in Sources */,
+				6EE440CB18C037590033D95B /* TopLocaisComCheckinCell.m in Sources */,
 				6EF4D31518B3F6F800334BDD /* HomeViewController.m in Sources */,
+				6EB6C61518C0199E00240B6B /* Local.m in Sources */,
 				6EBAE5B318B69C8C0050FC63 /* MenuViewController.m in Sources */,
 				6E7050A218BAB64F0029E58A /* SettingsViewController.m in Sources */,
+				6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

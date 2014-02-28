@@ -67,7 +67,9 @@
 - (void)populateUserDetails {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
-        self.userNameLabel.text = user.name;
+//        self.userNameLabel.text = user.name;
+        self.userNameLabel.text = user.first_name;
+//        self.userNameLabel.text = [user objectForKey:@"email"];
         self.userProfilePictureView.profileID = [user objectForKey:@"id"];
     }];
 }
