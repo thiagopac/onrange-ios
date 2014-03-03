@@ -7,11 +7,6 @@
 //
 
 #import "MenuViewController.h"
-#import "SlideNavigationContorllerAnimatorFade.h"
-#import "SlideNavigationContorllerAnimatorSlide.h"
-#import "SlideNavigationContorllerAnimatorScale.h"
-#import "SlideNavigationContorllerAnimatorScaleAndFade.h"
-#import "SlideNavigationContorllerAnimatorSlideAndFade.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -113,8 +108,8 @@
 - (IBAction)settingsButtonClicked:(UIButton *)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
 															 bundle: nil];
-    UIViewController *SettingsViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"SettingsViewController"];
-    [[SlideNavigationController sharedInstance] switchToViewController:SettingsViewController withCompletion:nil];
+    UIViewController *SettingsTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"SettingsTableViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:SettingsTableViewController withCompletion:nil];
 }
 
 - (IBAction)inicioButtonClicked:(UIButton *)sender {

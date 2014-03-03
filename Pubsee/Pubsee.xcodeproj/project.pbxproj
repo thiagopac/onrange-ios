@@ -15,9 +15,9 @@
 		6E0AB75C18B7D1E0003DCF1E /* icone_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E0AB75A18B7D1E0003DCF1E /* icone_menu@2x.png */; };
 		6E0AB76718B7E179003DCF1E /* icone_nav.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E0AB76518B7E179003DCF1E /* icone_nav.png */; };
 		6E0AB76818B7E179003DCF1E /* icone_nav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E0AB76618B7E179003DCF1E /* icone_nav@2x.png */; };
+		6E516FE318C4C63D00C8A929 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E516FE218C4C63D00C8A929 /* SettingsTableViewController.m */; };
 		6E70509A18BAA68F0029E58A /* background@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6E70509818BAA68F0029E58A /* background@2x.jpg */; };
 		6E70509B18BAA68F0029E58A /* background-568h@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6E70509918BAA68F0029E58A /* background-568h@2x.jpg */; };
-		6E7050A218BAB64F0029E58A /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7050A118BAB64F0029E58A /* SettingsViewController.m */; };
 		6E7050A618BABB160029E58A /* icone_inicio.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7050A418BABB160029E58A /* icone_inicio.png */; };
 		6E7050A718BABB160029E58A /* icone_inicio@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7050A518BABB160029E58A /* icone_inicio@2x.png */; };
 		6EA939FC18B9B68C007B0025 /* fb_transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA939FA18B9B68C007B0025 /* fb_transparent.png */; };
@@ -71,10 +71,10 @@
 		6E0AB75A18B7D1E0003DCF1E /* icone_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_menu@2x.png"; sourceTree = "<group>"; };
 		6E0AB76518B7E179003DCF1E /* icone_nav.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icone_nav.png; sourceTree = "<group>"; };
 		6E0AB76618B7E179003DCF1E /* icone_nav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_nav@2x.png"; sourceTree = "<group>"; };
+		6E516FE118C4C63D00C8A929 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
+		6E516FE218C4C63D00C8A929 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
 		6E70509818BAA68F0029E58A /* background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background@2x.jpg"; sourceTree = "<group>"; };
 		6E70509918BAA68F0029E58A /* background-568h@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background-568h@2x.jpg"; sourceTree = "<group>"; };
-		6E7050A018BAB64F0029E58A /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		6E7050A118BAB64F0029E58A /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		6E7050A418BABB160029E58A /* icone_inicio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icone_inicio.png; sourceTree = "<group>"; };
 		6E7050A518BABB160029E58A /* icone_inicio@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_inicio@2x.png"; sourceTree = "<group>"; };
 		6EA939FA18B9B68C007B0025 /* fb_transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_transparent.png; sourceTree = "<group>"; };
@@ -160,8 +160,8 @@
 		6E7050A318BAB65C0029E58A /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				6E7050A018BAB64F0029E58A /* SettingsViewController.h */,
-				6E7050A118BAB64F0029E58A /* SettingsViewController.m */,
+				6E516FE118C4C63D00C8A929 /* SettingsTableViewController.h */,
+				6E516FE218C4C63D00C8A929 /* SettingsTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -507,6 +507,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E516FE318C4C63D00C8A929 /* SettingsTableViewController.m in Sources */,
 				6EE440C818C02C870033D95B /* MappingProvider.m in Sources */,
 				6EB6C61F18C025B000240B6B /* Usuario.m in Sources */,
 				6EF4314C18B17755007F7D79 /* AppDelegate.m in Sources */,
@@ -517,7 +518,6 @@
 				6EF4D31518B3F6F800334BDD /* HomeViewController.m in Sources */,
 				6EB6C61518C0199E00240B6B /* Local.m in Sources */,
 				6EBAE5B318B69C8C0050FC63 /* MenuViewController.m in Sources */,
-				6E7050A218BAB64F0029E58A /* SettingsViewController.m in Sources */,
 				6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
