@@ -14,6 +14,6 @@
 @property (nonatomic, strong) NSString *nome;
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
-@property (nonatomic, strong) NSString *qtdCheckins;
+@property (nonatomic, strong) NSString *qt_checkin;
 
 @end

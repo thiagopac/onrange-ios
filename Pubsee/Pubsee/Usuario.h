@@ -11,9 +11,9 @@
 @interface Usuario : NSObject
 
 @property (assign, nonatomic) NSInteger id_usuario;
-@property (strong, nonatomic) NSString *nome;
-@property (strong, nonatomic) NSString *sexo;
-@property (strong, nonatomic) NSString *email;
-@property (strong, nonatomic) NSString *id_facebook;
+@property (strong, nonatomic) NSString *nome_usuario;
+@property (strong, nonatomic) NSString *sexo_usuario;
+@property (strong, nonatomic) NSString *email_usuario;
+@property (strong, nonatomic) NSString *facebook_usuario;
 
 @end

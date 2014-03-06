@@ -7,13 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "AppDelegate.h"
 #import <SlideNavigationController.h>
+#import "Local.h"
 
-@interface HomeViewController : UIViewController
+#import "PointLocais.h"
 
+@interface HomeViewController : UIViewController<CLLocationManagerDelegate>
+
+@property (strong, nonatomic) IBOutlet MKMapView *mapGlobal;
 @property (strong, nonatomic) NSString *profileID;
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
+@property (strong, nonatomic) Local *local;
 
 -(id)init;
 -(id)initWithProfileID:(NSString *)profileID;

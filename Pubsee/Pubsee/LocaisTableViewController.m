@@ -12,8 +12,12 @@
 #import "MappingProvider.h"
 #import "TopLocaisComCheckinCell.h"
 #import "Local.h"
+#import "UsuariosCheckedViewController.h"
 
-@interface LocaisTableViewController ()
+@interface LocaisTableViewController (){
+    NSString *latitude;
+    NSString *longitude;
+}
 
 @property (nonatomic, strong) NSMutableArray *arrLocais;
 
@@ -41,11 +45,16 @@
 }
 
 - (void)carregaLocais {
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    latitude = [def objectForKey:@"userLatitude"];
+    longitude = [def objectForKey:@"userLongitude"];
+    
+    
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listatodoslocais",API]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/20",API,latitude,longitude]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -94,7 +103,21 @@
 - (void)configureCell:(TopLocaisComCheckinCell *)cell withLocal:(Local *)local {
     
     cell.lblLocal.text = local.nome;
-//    cell.lblQuantidadeCheckins.text = local.qtdCheckins;
+    cell.lblQuantidadeCheckins.text = local.qt_checkin;
+}
+
+
+//SEGUE POR PUSH NÃO FUNCIONA SE AS VIEWS NÃO ESTIVEREM NA MESMA NAVIGATION
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
+    
+    Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
+    
+    [usuariosCheckedVC setLocal:local];
+    
+    [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
 }
 
 @end

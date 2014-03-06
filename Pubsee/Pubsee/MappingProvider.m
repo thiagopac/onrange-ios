@@ -14,13 +14,13 @@
 
 +(RKMapping *)usuarioMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome", @"sexo", @"email", @"id_facebook"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario"]];
     return mapping;
 }
 
 +(RKMapping *)localMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Local class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin"]];
     return mapping;
 }
 
