@@ -1,6 +1,6 @@
 //
 //  MenuViewController.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 18/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
@@ -8,10 +8,9 @@
 
 #import "MenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "HomeViewController.h"
 
 @implementation MenuViewController
-//@synthesize cellIdentifier;
-
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -25,7 +24,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.userProfilePictureView.layer.cornerRadius = 45;
+    self.userProfilePictureView.layer.cornerRadius = 2;
     self.userProfilePictureView.layer.masksToBounds = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
@@ -55,9 +54,7 @@
 - (void)populateUserDetails {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
-//        self.userNameLabel.text = user.name;
         self.userNameLabel.text = user.first_name;
-//        self.userNameLabel.text = [user objectForKey:@"email"];
         self.userProfilePictureView.profileID = [user objectForKey:@"id"];
     }];
 }
@@ -90,7 +87,7 @@
 - (IBAction)logoutButtonClicked:(UIButton *)sender {
     UIActionSheet* action = [[UIActionSheet alloc]
                              initWithTitle:nil
-                             delegate:self
+                             delegate:(id<UIActionSheetDelegate>)self
                              cancelButtonTitle:@"Cancel"
                              destructiveButtonTitle:@"Logout"
                              otherButtonTitles:nil ];
@@ -110,114 +107,5 @@
     UIViewController *HomeViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
     [[SlideNavigationController sharedInstance] switchToViewController:HomeViewController withCompletion:nil];
 }
-
-#pragma mark - UITableView Delegate & Datasrouce -
-//
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//	return 1;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//	return 3;
-//}
-//
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//	return nil;
-//}
-
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier];
-//		switch (indexPath.row)
-//		{
-//			case 0:
-//				cell.textLabel.text = @"Usuário";
-//				break;
-//				
-//			case 1:
-//				cell.textLabel.text = @"Configurações";
-//				break;
-//				
-//			case 2:
-//				cell.textLabel.text = @"Logout";
-//				break;
-//		}
-//	
-//	return cell;
-//}
-
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
-//															 bundle: nil];
-//		UIViewController *vc ;
-//		
-//		switch (indexPath.row)
-//		{
-//			case 0:
-//				vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
-//				break;
-//				
-//			case 1:
-//				vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
-//				break;
-//				
-//			case 2:
-//				vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
-//				break;
-//				
-//			case 3:
-//				[[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
-//				return;
-//				break;
-//		}
-//		
-//		[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
-//}
-
-//CHEGUEI AQUI. TIREI O IF ACIMA DA CONDICAO DAS 2 SESSOES E FALTA TIRAR ABAIXO E COMENTAR OS METODOS DOS ESTILOS DE SLIDE PARA NÃO PERDER.
-//
-//	else
-//	{
-//		id <SlideNavigationContorllerAnimator> revealAnimator;
-//		
-//		switch (indexPath.row)
-//		{
-//			case 0:
-//				revealAnimator = nil;
-//				break;
-//				
-//			case 1:
-//				revealAnimator = [[SlideNavigationContorllerAnimatorSlide alloc] init];
-//				break;
-//				
-//			case 2:
-//				revealAnimator = [[SlideNavigationContorllerAnimatorFade alloc] init];
-//				break;
-//				
-//			case 3:
-//				revealAnimator = [[SlideNavigationContorllerAnimatorSlideAndFade alloc] initWithMaximumFadeAlpha:.7 fadeColor:[UIColor purpleColor] andSlideMovement:100];
-//				break;
-//				
-//			case 4:
-//				revealAnimator = [[SlideNavigationContorllerAnimatorScale alloc] init];
-//				break;
-//				
-//			case 5:
-//				revealAnimator = [[SlideNavigationContorllerAnimatorScaleAndFade alloc] initWithMaximumFadeAlpha:.6 fadeColor:[UIColor blueColor] andMinimumScale:.7];
-//				break;
-//				
-//			default:
-//				return;
-//		}
-//		
-//		[[SlideNavigationController sharedInstance] closeMenuWithCompletion:^{
-//			[SlideNavigationController sharedInstance].menuRevealAnimator = revealAnimator;
-//		}];
-//	}
-//}
 
 @end

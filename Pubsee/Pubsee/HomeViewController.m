@@ -1,13 +1,12 @@
 //
 //  HomeViewController.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 18/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
 #import "HomeViewController.h"
-#import "AppDelegate.h"
 #import <Restkit/RestKit.h>
 #import "Usuario.h"
 #import "MappingProvider.h"
@@ -15,14 +14,8 @@
 
 @interface HomeViewController (){
     int raio;
-    CLLocationManager *locationManager;
     NSString *latitude;
     NSString *longitude;
-    NSString *nome_usuario;
-    NSString *sexo_usuario;
-    NSString *facebook_usuario;
-    NSString *email_usuario;
-    NSString *valida_sexo;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrLocais;
@@ -52,8 +45,11 @@
         [def setObject:[NSString stringWithFormat:@"%.6f", currentLocation.coordinate.longitude] forKey:@"userLongitude"];
         
         [def synchronize];
-        
     }
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark - SlideNavigationController Methods -
@@ -65,7 +61,7 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayRightMenu
 {
-	return YES;
+	return NO;
 }
 
 #pragma mark - Helper methods
@@ -102,75 +98,22 @@
 }
 
 -(void)buscarLocalizacao{
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [locationManager startUpdatingLocation];
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        self.locationManager.distanceFilter = 2000.00;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    }
+
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)populateUserDetails {
 
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
-        nome_usuario = user.first_name;
-        email_usuario = [user objectForKey:@"email"];
-        facebook_usuario = user.id;
-        valida_sexo = [user objectForKey:@"gender"];
-        if ([valida_sexo isEqualToString:@"male"]) {
-            sexo_usuario = @"M";
-        }else if([valida_sexo isEqualToString:@"female"]) {
-            sexo_usuario = @"F";
-        }
-        [self postUsuario];
+
     }];
-
-}
-
--(void)postUsuario{
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario"]];
-    
-    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
-    
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    NSURL *url = [NSURL URLWithString:API];
-    NSString  *path= @"usuario/adicionausuario";
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
-    [objectManager addRequestDescriptor:requestDescriptor];
-    [objectManager addResponseDescriptor:responseDescriptor];
-    
-    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
-    
-    Usuario *usuario = [Usuario new];
-    
-    usuario.nome_usuario = nome_usuario;
-    usuario.sexo_usuario = sexo_usuario;
-    usuario.email_usuario = email_usuario;
-    usuario.facebook_usuario = facebook_usuario;
-    
-    [objectManager postObject:usuario
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Login efetuado na base Pubse");
-                          }else{
-                              NSLog(@"Falha ao tentar logar na base Pubsee");
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Error: %@", error);
-                              NSLog(@"Falha ao tentar enviar dados de login");
-                      }];    
 }
 
 - (void)carregaLocais {
@@ -181,7 +124,7 @@
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Locais" statusCodes:statusCodeSet];
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/%d",API,latitude,longitude,raio]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -194,7 +137,7 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
+        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar locais",nil));
     }];
     
     [operation start];
@@ -214,7 +157,8 @@
         myAnnotation.latitude = local.latitude;
         myAnnotation.longitude = local.longitude;
         myAnnotation.id_local = local.id_local;
-        
+        myAnnotation.qt_checkin = local.qt_checkin;
+        myAnnotation.tipo_local = local.tipo_local;
         myAnnotation.coordinate = theCoordinate;
         myAnnotation.title = [NSString stringWithFormat:@"%@",local.nome];
         [_mapGlobal addAnnotation:myAnnotation];
@@ -235,9 +179,43 @@
     
 }
 
+-(void)appWillResignActive:(NSNotification*)note
+{
+    NSLog(@"Foi minimizado");
+    [self.locationManager stopUpdatingLocation];
+}
+-(void)appWillTerminate:(NSNotification*)note
+{
+    NSLog(@"Foi fechado");
+    [self.locationManager stopUpdatingLocation];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)appDidBecomeActive:(NSNotification*)note
+{
+    NSLog(@"Foi aberto");
+    [self.locationManager startUpdatingLocation];
+}
+
+
+- (void)menuAbriu:(NSNotification *)notification {
+    if([[SlideNavigationController sharedInstance] isMenuOpen]){
+        _mapGlobal.scrollEnabled = NO;
+    }else{
+        _mapGlobal.scrollEnabled = YES;
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
     [self buscarLocalizacao];
     
@@ -248,9 +226,9 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
-    UIImageView *logo = [[UIImageView alloc]initWithFrame:CGRectMake(103, 23, 110, 38)];
-    logo.image = [UIImage imageNamed:@"icone_nav.png"];
-    [self.navigationController.view addSubview:logo];
+
+    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -294,44 +272,56 @@
     } else {
         pin.annotation = annotation;
     }
-
-    static NSInteger pinColorCount = 0;
-    pinColorCount++;
     
-    if (pinColorCount == 1) {
-        pin.image = [UIImage imageNamed:@"pinred"];
+    int annType = ((PointLocais *)annotation).tipo_local;
+    switch (annType)
+    {
+        case 1 :   //Balada
+            pin.image = [UIImage imageNamed:@"pin-boate"];
+            break;
+        case 2 :   //Bar
+            pin.image = [UIImage imageNamed:@"pin-bar"];
+            break;
+        case 3 :   //Festa
+            pin.image = [UIImage imageNamed:@"pin-festa"];
+            break;
+        case 4 :   //Local público
+            pin.image = [UIImage imageNamed:@"pin-localpublico"];
+            break;
+        default :
+            NSLog(@"Local não compatível com tipos de local cadastrados");
     }
-    else if (pinColorCount == 2) {
-        pin.image = [UIImage imageNamed:@"pinblue"];
-    }
-    else if (pinColorCount == 3) {
-        pin.image = [UIImage imageNamed:@"pingreen"];
-    }
-    else if (pinColorCount == 4) {
-        pin.image = [UIImage imageNamed:@"pinyellow"];
-    }
-    else if (pinColorCount == 5) {
-        pin.image = [UIImage imageNamed:@"pinpink"];
-    }
-    else if (pinColorCount == 6) {
-        pin.image = [UIImage imageNamed:@"pinorange"];
-        pinColorCount = 0;
-    }
+    
     
     pin.canShowCallout = YES;
-
-    UIButton *detailButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    
+    UIButton *detailButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [detailButton setImage:[UIImage imageNamed:@"seta"] forState:UIControlStateNormal];
+    detailButton.frame = CGRectMake(0,0, 40.0, 45.0);
+    
+    UIView *left = [[UIView alloc]initWithFrame:CGRectMake(0,0, 50.0, 45.0)];
+    left.backgroundColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1.0f];
+    
+    UILabel *lblqt_checkin = [[UILabel alloc] initWithFrame:CGRectMake(0, 12, 50, 25)];
+    [lblqt_checkin setText:((PointLocais *)annotation).qt_checkin];
+    [lblqt_checkin setTextAlignment:NSTextAlignmentCenter];
+    [lblqt_checkin setTextColor:[UIColor whiteColor]];
+    [lblqt_checkin setFont:[UIFont fontWithName: @"Brie_Medium" size: 24.0f]];
+    [left addSubview:lblqt_checkin];
     
     NSInteger annotationValue = [self.annotations indexOfObject:annotation];
     
     detailButton.tag = annotationValue;
     
     pin.rightCalloutAccessoryView = detailButton;
+    
+    pin.leftCalloutAccessoryView = left;
+    
     return pin;
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
-    
+
     if ([view.annotation isKindOfClass:[PointLocais class]]) {
         // Store a reference to the annotation so that we can pass it on in prepare for segue.
         self.selectedAnnotation = view.annotation;

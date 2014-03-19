@@ -1,6 +1,6 @@
 //
 //  TopLocaisComCheckinCell.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 28/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.

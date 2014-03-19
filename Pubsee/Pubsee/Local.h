@@ -1,6 +1,6 @@
 //
 //  Local.h
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 27/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
@@ -15,5 +15,6 @@
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
 @property (nonatomic, strong) NSString *qt_checkin;
+@property (nonatomic, assign) int tipo_local;
 
 @end

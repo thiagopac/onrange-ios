@@ -1,12 +1,13 @@
 //
 //  SettingsTableViewController.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 03/03/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
 #import "SettingsTableViewController.h"
+#import "SlideNavigationController.h"
 
 @interface SettingsTableViewController ()
 
@@ -47,6 +48,9 @@
     
     [[self sliderRaio]setValue:[def integerForKey:@"userRange"]];
     [self alterarLabelRaio];
+    
+    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,5 +101,18 @@
     [def synchronize];
 }
 
+- (IBAction)inicioToque:(UISlider *)sender {
+    NSLog(@"inicio toque");
+    [SlideNavigationController sharedInstance].enableSwipeGesture = NO;
+}
 
+- (IBAction)fimToque:(UISlider *)sender {
+    NSLog(@"fim toque");
+    [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
+}
+
+- (IBAction)fimToqueFora:(UISlider *)sender {
+    NSLog(@"fim toque");
+    [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
+}
 @end

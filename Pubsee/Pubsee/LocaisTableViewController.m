@@ -1,6 +1,6 @@
 //
 //  LocaisTableViewController.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 21/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
@@ -38,6 +38,11 @@
 {
     [super viewDidLoad];
     
+    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    self.navigationController.navigationBar.topItem.title = @"•";
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         [self carregaLocais];
@@ -52,7 +57,7 @@
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Locais" statusCodes:statusCodeSet];
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/20",API,latitude,longitude]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -89,6 +94,11 @@
     return self.arrLocais.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Top checkins";
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"LocalCell";
@@ -106,8 +116,6 @@
     cell.lblQuantidadeCheckins.text = local.qt_checkin;
 }
 
-
-//SEGUE POR PUSH NÃO FUNCIONA SE AS VIEWS NÃO ESTIVEREM NA MESMA NAVIGATION
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

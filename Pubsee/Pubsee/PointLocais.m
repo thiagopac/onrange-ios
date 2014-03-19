@@ -1,6 +1,6 @@
 //
 //  PointLocais.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 04/03/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.

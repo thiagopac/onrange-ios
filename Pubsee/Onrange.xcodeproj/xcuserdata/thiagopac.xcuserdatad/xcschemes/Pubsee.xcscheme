@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6EF4313718B17755007F7D79"
-               BuildableName = "Pubsee.app"
-               BlueprintName = "Pubsee"
-               ReferencedContainer = "container:Pubsee.xcodeproj">
+               BuildableName = "Onrange.app"
+               BlueprintName = "Onrange"
+               ReferencedContainer = "container:Onrange.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6EF4315818B17755007F7D79"
-               BuildableName = "PubseeTests.xctest"
-               BlueprintName = "PubseeTests"
-               ReferencedContainer = "container:Pubsee.xcodeproj">
+               BuildableName = "OnrangeTests.xctest"
+               BlueprintName = "OnrangeTests"
+               ReferencedContainer = "container:Onrange.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EF4313718B17755007F7D79"
-            BuildableName = "Pubsee.app"
-            BlueprintName = "Pubsee"
-            ReferencedContainer = "container:Pubsee.xcodeproj">
+            BuildableName = "Onrange.app"
+            BlueprintName = "Onrange"
+            ReferencedContainer = "container:Onrange.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EF4313718B17755007F7D79"
-            BuildableName = "Pubsee.app"
-            BlueprintName = "Pubsee"
-            ReferencedContainer = "container:Pubsee.xcodeproj">
+            BuildableName = "Onrange.app"
+            BlueprintName = "Onrange"
+            ReferencedContainer = "container:Onrange.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EF4313718B17755007F7D79"
-            BuildableName = "Pubsee.app"
-            BlueprintName = "Pubsee"
-            ReferencedContainer = "container:Pubsee.xcodeproj">
+            BuildableName = "Onrange.app"
+            BlueprintName = "Onrange"
+            ReferencedContainer = "container:Onrange.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

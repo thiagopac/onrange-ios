@@ -1,13 +1,15 @@
 //
 //  AppDelegate.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 16/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
 #import <FacebookSDK/FacebookSDK.h>
-
+#import <Restkit/RestKit.h>
+#import "Usuario.h"
+#import "MappingProvider.h"
 #import "AppDelegate.h"
 
 NSString *const FBSessionStateChangedNotification =
@@ -34,10 +36,10 @@ NSString *const FBMenuDataChangedNotification =
 	[SlideNavigationController sharedInstance].rightMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
 	
-    [SlideNavigationController sharedInstance].enableSwipeGesture = NO;
+    [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
     
 	// Creating a custom bar button for right menu
-	UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+	UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 35)];
 	[button setImage:[UIImage imageNamed:@"icone_locais"] forState:UIControlStateNormal];
 	[button addTarget:[SlideNavigationController sharedInstance] action:@selector(toggleRightMenu) forControlEvents:UIControlEventTouchUpInside];
     
@@ -45,7 +47,7 @@ NSString *const FBMenuDataChangedNotification =
 	[SlideNavigationController sharedInstance].rightBarButtonItem = rightBarButtonItem;
     
     // Creating a custom bar button for left menu
-	UIButton *button2  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+	UIButton *button2  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 35)];
 	[button2 setImage:[UIImage imageNamed:@"icone_menu"] forState:UIControlStateNormal];
 	[button2 addTarget:[SlideNavigationController sharedInstance] action:@selector(toggleLeftMenu) forControlEvents:UIControlEventTouchUpInside];
     
@@ -58,14 +60,13 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -170,10 +171,21 @@ NSString *const FBMenuDataChangedNotification =
          ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
              if (!error) {
                  // Update menu user info
-                 self.home.profileID = user.id;
                  self.menu.profileID = user.id;
                  // Save the user data
                  self.user = user;
+                 
+                 //cadastra usuário ou valida
+                 _nome_usuario = user.first_name;
+                 _email_usuario = [user objectForKey:@"email"];
+                 _facebook_usuario = user.id;
+                 _valida_sexo = [user objectForKey:@"gender"];
+                 if ([_valida_sexo isEqualToString:@"male"]) {
+                     _sexo_usuario = @"M";
+                 }else if([_valida_sexo isEqualToString:@"female"]) {
+                     _sexo_usuario = @"F";
+                 }
+                 [self postUsuario];
                  if (handler) {
                      handler(self, self.user);
                  }
@@ -182,6 +194,52 @@ NSString *const FBMenuDataChangedNotification =
     }
 }
     
+-(void)postUsuario{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPOST
+                                                                                       pathPattern:nil
+                                                                                           keyPath:nil
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"usuario/adicionausuario";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Usuario *usuario = [Usuario new];
+    
+    usuario.nome_usuario = _nome_usuario;
+    usuario.sexo_usuario = _sexo_usuario;
+    usuario.email_usuario = _email_usuario;
+    usuario.facebook_usuario = _facebook_usuario;
+    
+    [objectManager postObject:usuario
+                         path:path
+                   parameters:nil
+                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          if(mappingResult != nil){
+                              NSLog(@"Login efetuado na base Pubse");
+                          }else{
+                              NSLog(@"Falha ao tentar logar na base Onrange");
+                          }
+                      }
+                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Error: %@", error);
+                          NSLog(@"Falha ao tentar enviar dados de login");
+                      }];
+}
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {

@@ -1,6 +1,6 @@
 //
-//  PubseeTests.m
-//  PubseeTests
+//  OnrangeTests.m
+//  OnrangeTests
 //
 //  Created by Thiago Castro on 16/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface PubseeTests : XCTestCase
+@interface OnrangeTests : XCTestCase
 
 @end
 
-@implementation PubseeTests
+@implementation OnrangeTests
 
 - (void)setUp
 {

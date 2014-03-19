@@ -1,6 +1,6 @@
 //
 //  MappingProvider.m
-//  Pubsee
+//  Onrange
 //
 //  Created by Thiago Castro on 27/02/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
@@ -20,7 +20,7 @@
 
 +(RKMapping *)localMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Local class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin", @"tipo_local"]];
     return mapping;
 }
 
