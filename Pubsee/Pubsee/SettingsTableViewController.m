@@ -21,11 +21,6 @@
 	return YES;
 }
 
-- (BOOL)slideNavigationControllerShouldDisplayRightMenu
-{
-	return NO;
-}
-
 -(void)alterarLabelRaio
 {
     self.lblRadio.text = [NSString stringWithFormat:@"%d KM",(int)[[self sliderRaio] value]];

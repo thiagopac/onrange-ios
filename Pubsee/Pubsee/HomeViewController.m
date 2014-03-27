@@ -48,6 +48,12 @@
     }
 }
 
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    MKAnnotationView *userLocationView = [_mapGlobal viewForAnnotation:userLocation];
+    userLocationView.canShowCallout = NO;
+}
+
 -(void)viewDidDisappear:(BOOL)animated{
     [self.locationManager stopUpdatingLocation];
 }
@@ -126,7 +132,7 @@
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Locais" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/%d",API,latitude,longitude,raio]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/%d/checkin",API,latitude,longitude,raio]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -144,6 +150,7 @@
 }
 
 -(void)montarMapaWithArray:(NSArray *)locais {
+
     NSMutableArray *annotations = [[NSMutableArray alloc]init];
     
     for (int i=0; i<[locais count]; i++) {
@@ -219,11 +226,6 @@
     
     [self buscarLocalizacao];
     
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        [self carregaLocais];
-    });
-    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
 
@@ -232,7 +234,6 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
     if (FBSession.activeSession.isOpen) {
         [self populateUserDetails];
     } else if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
@@ -241,6 +242,11 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate openSessionWithAllowLoginUI:NO];
     }
+    [_mapGlobal removeAnnotations:_mapGlobal.annotations];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self carregaLocais];
+    });
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -330,11 +336,13 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     // Check that the segue is our showPinDetails-segue
     if ([segue.identifier isEqualToString:@"checkinsFotosSegue"]) {
         // Pass the annotation reference to the detail view controller.
         UsuariosCheckedViewController *usuarioCheckedVC = [segue destinationViewController];
         usuarioCheckedVC.annotation = self.selectedAnnotation;
+        
     }
 }
 

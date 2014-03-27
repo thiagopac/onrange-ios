@@ -13,5 +13,6 @@
 
 + (RKMapping *)usuarioMapping;
 + (RKMapping *)localMapping;
++ (RKMapping *)checkinMapping;
 
 @end

@@ -9,6 +9,7 @@
 #import "MenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HomeViewController.h"
+#import "LocaisProximosTableViewController.h"
 
 @implementation MenuViewController
 
@@ -97,7 +98,7 @@
 - (IBAction)settingsButtonClicked:(UIButton *)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
 															 bundle: nil];
-    UIViewController *SettingsTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"SettingsTableViewController"];
+    UITableViewController *SettingsTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"SettingsTableViewController"];
     [[SlideNavigationController sharedInstance] switchToViewController:SettingsTableViewController withCompletion:nil];
 }
 
@@ -106,6 +107,13 @@
 															 bundle: nil];
     UIViewController *HomeViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
     [[SlideNavigationController sharedInstance] switchToViewController:HomeViewController withCompletion:nil];
+}
+
+- (IBAction)fazerCheckinButtonClicked:(UIButton *)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+															 bundle: nil];
+     UITableViewController *LocaisProximosTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"LocaisProximosTableViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:LocaisProximosTableViewController withCompletion:nil];
 }
 
 @end

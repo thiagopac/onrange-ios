@@ -27,24 +27,12 @@ NSString *const FBMenuDataChangedNotification =
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
 															 bundle: nil];
 	
-	LocaisTableViewController *rightMenu = (LocaisTableViewController*)[mainStoryboard
-                                                          instantiateViewControllerWithIdentifier: @"LocaisTableViewController"];
-	
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	
-	[SlideNavigationController sharedInstance].rightMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
 	
     [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
-    
-	// Creating a custom bar button for right menu
-	UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 35)];
-	[button setImage:[UIImage imageNamed:@"icone_locais"] forState:UIControlStateNormal];
-	[button addTarget:[SlideNavigationController sharedInstance] action:@selector(toggleRightMenu) forControlEvents:UIControlEventTouchUpInside];
-    
-	UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-	[SlideNavigationController sharedInstance].rightBarButtonItem = rightBarButtonItem;
     
     // Creating a custom bar button for left menu
 	UIButton *button2  = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 35)];
@@ -207,7 +195,7 @@ NSString *const FBMenuDataChangedNotification =
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:nil
+                                                                                           keyPath:@"Usuario"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/adicionausuario";
@@ -230,7 +218,12 @@ NSString *const FBMenuDataChangedNotification =
                    parameters:nil
                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                           if(mappingResult != nil){
-                              NSLog(@"Login efetuado na base Pubse");
+                              NSLog(@"Login efetuado na base Onrage");
+                              Usuario *userLogged = [mappingResult firstObject];
+                              NSUserDefaults  *def = [NSUserDefaults standardUserDefaults ];
+                              [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
+                              [def synchronize];
+                              
                           }else{
                               NSLog(@"Falha ao tentar logar na base Onrange");
                           }

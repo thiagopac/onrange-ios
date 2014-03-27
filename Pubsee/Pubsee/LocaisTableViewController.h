@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
-
+#import "CWStatusBarNotification.h"
 
 @interface LocaisTableViewController : UITableViewController
 
+@property (strong, nonatomic) CWStatusBarNotification *notification;
 
 @end

@@ -15,5 +15,4 @@
 - (IBAction)fimToque:(UISlider *)sender;
 - (IBAction)fimToqueFora:(UISlider *)sender;
 
-
 @end

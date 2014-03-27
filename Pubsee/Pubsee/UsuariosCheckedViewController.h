@@ -13,13 +13,16 @@
 #import "UsuariosCheckinHeaderView.h"
 #import "PointLocais.h"
 #import "Local.h"
+#import "QBFlatButton.h"
+#import "CWStatusBarNotification.h"
 
 @interface UsuariosCheckedViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) NSString *profileID;
+@property (strong, nonatomic) CWStatusBarNotification *notification;
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (weak, nonatomic) PointLocais *annotation;
 @property (weak, nonatomic) Local *local;
-- (IBAction)btCheckinLocal:(UIButton *)sender;
+- (IBAction)btCheckinLocal:(id)sender;
 
 @end

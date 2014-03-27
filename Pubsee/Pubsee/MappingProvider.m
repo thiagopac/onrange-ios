@@ -9,6 +9,7 @@
 #import "MappingProvider.h"
 #import "Usuario.h"
 #import "Local.h"
+#import "Checkin.h"
 
 @implementation MappingProvider
 
@@ -21,6 +22,12 @@
 +(RKMapping *)localMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Local class]];
     [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin", @"tipo_local"]];
+    return mapping;
+}
+
++(RKMapping *)checkinMapping {
+    RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Checkin class]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"id_local", @"id_checkin", @"checkin_vigente", @"id_checkin_anterior", @"id_local_anterior", @"id_output"]];
     return mapping;
 }
 
