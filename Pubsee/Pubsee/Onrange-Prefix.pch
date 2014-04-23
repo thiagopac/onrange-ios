@@ -6,7 +6,7 @@
 
 #import <Availability.h>
 
-#define API @"http://pubsee.com/api/"
+#define API @"http://roomnants.com/onrange/api/"
 
 #ifndef __IPHONE_5_0
 #warning "This project uses features only available in iOS SDK 5.0 and later."

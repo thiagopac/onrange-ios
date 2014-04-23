@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (strong, nonatomic) Local *local;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) IBOutlet UIButton *btnMe;
+- (IBAction)btnMe:(UIButton *)sender;
 
 -(id)init;
 -(id)initWithProfileID:(NSString *)profileID;

@@ -11,6 +11,7 @@
 #import "Usuario.h"
 #import "MappingProvider.h"
 #import "UsuariosCheckedViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface HomeViewController (){
     int raio;
@@ -89,6 +90,9 @@
         // Custom initialization
     }
     return self;
+}
+
+- (IBAction)btnMe:(UIButton *)sender {
 }
 
 -(id)init {
@@ -231,6 +235,9 @@
 
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    self.btnMe.layer.cornerRadius = 10;
+    self.btnMe.clipsToBounds = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -279,25 +286,126 @@
         pin.annotation = annotation;
     }
     
+    int checkins = [((PointLocais *)annotation).qt_checkin intValue];
+    
     int annType = ((PointLocais *)annotation).tipo_local;
+    
+//    SIMULACAO COM PINS DE GRANDE NUMERO DE PESSOAS
+//    switch (annType)
+//    {
+//        case 1 :   //Balada
+//            if (checkins <2) {
+//                pin.image = [UIImage imageNamed:@"pin-balada-1"];
+//            }else if(checkins >= 2 && checkins <3){
+//                pin.image = [UIImage imageNamed:@"pin-balada-2"];
+//            }else if(checkins >= 3 && checkins <20){
+//                pin.image = [UIImage imageNamed:@"pin-balada-3"];
+//            }else if(checkins >= 20 && checkins <22){
+//                pin.image = [UIImage imageNamed:@"pin-balada-4"];
+//            }else if(checkins >= 22){
+//                pin.image = [UIImage imageNamed:@"pin-balada-5"];
+//            }
+//            break;
+//        case 2 :   //Bar
+//            if (checkins <2) {
+//                pin.image = [UIImage imageNamed:@"pin-bar-1"];
+//            }else if(checkins >= 2 && checkins <3){
+//                pin.image = [UIImage imageNamed:@"pin-bar-2"];
+//            }else if(checkins >= 3 && checkins <20){
+//                pin.image = [UIImage imageNamed:@"pin-bar-3"];
+//            }else if(checkins >= 20 && checkins <22){
+//                pin.image = [UIImage imageNamed:@"pin-bar-4"];
+//            }else if(checkins >= 22){
+//                pin.image = [UIImage imageNamed:@"pin-bar-5"];
+//            }
+//            break;
+//        case 3 :   //Festa
+//            if (checkins <2) {
+//                pin.image = [UIImage imageNamed:@"pin-festa-1"];
+//            }else if(checkins >= 2 && checkins <3){
+//                pin.image = [UIImage imageNamed:@"pin-festa-2"];
+//            }else if(checkins >= 3 && checkins <20){
+//                pin.image = [UIImage imageNamed:@"pin-festa-3"];
+//            }else if(checkins >= 20 && checkins <22){
+//                pin.image = [UIImage imageNamed:@"pin-festa-4"];
+//            }else if(checkins >= 22){
+//                pin.image = [UIImage imageNamed:@"pin-festa-5"];
+//            }
+//            break;
+//        case 4 :   //Local público
+//            if (checkins <2) {
+//                pin.image = [UIImage imageNamed:@"pin-publicos-1"];
+//            }else if(checkins >= 2 && checkins <3){
+//                pin.image = [UIImage imageNamed:@"pin-publicos-2"];
+//            }else if(checkins >= 3 && checkins <20){
+//                pin.image = [UIImage imageNamed:@"pin-publicos-3"];
+//            }else if(checkins >= 20 && checkins <22){
+//                pin.image = [UIImage imageNamed:@"pin-publicos-4"];
+//            }else if(checkins >= 22){
+//                pin.image = [UIImage imageNamed:@"pin-publicos-5"];
+//            }
+//            break;
+//        default :
+//            NSLog(@"Local não compatível com tipos de local cadastrados");
+//    }
+    
     switch (annType)
     {
         case 1 :   //Balada
-            pin.image = [UIImage imageNamed:@"pin-boate"];
+            if (checkins <10) {
+                pin.image = [UIImage imageNamed:@"pin-balada-1"];
+            }else if(checkins >= 10 && checkins <30){
+                pin.image = [UIImage imageNamed:@"pin-balada-2"];
+            }else if(checkins >= 30 && checkins <50){
+                pin.image = [UIImage imageNamed:@"pin-balada-3"];
+            }else if(checkins >= 50 && checkins <99){
+                pin.image = [UIImage imageNamed:@"pin-balada-4"];
+            }else if(checkins >= 99){
+                pin.image = [UIImage imageNamed:@"pin-balada-5"];
+            }
             break;
         case 2 :   //Bar
-            pin.image = [UIImage imageNamed:@"pin-bar"];
+            if (checkins <10) {
+                pin.image = [UIImage imageNamed:@"pin-bar-1"];
+            }else if(checkins >= 10 && checkins <30){
+                pin.image = [UIImage imageNamed:@"pin-bar-2"];
+            }else if(checkins >= 30 && checkins <50){
+                pin.image = [UIImage imageNamed:@"pin-bar-3"];
+            }else if(checkins >= 50 && checkins <99){
+                pin.image = [UIImage imageNamed:@"pin-bar-4"];
+            }else if(checkins >= 99){
+                pin.image = [UIImage imageNamed:@"pin-bar-5"];
+            }
             break;
         case 3 :   //Festa
-            pin.image = [UIImage imageNamed:@"pin-festa"];
+            if (checkins <10) {
+                pin.image = [UIImage imageNamed:@"pin-festa-1"];
+            }else if(checkins >= 10 && checkins <30){
+                pin.image = [UIImage imageNamed:@"pin-festa-2"];
+            }else if(checkins >= 30 && checkins <50){
+                pin.image = [UIImage imageNamed:@"pin-festa-3"];
+            }else if(checkins >= 50 && checkins <99){
+                pin.image = [UIImage imageNamed:@"pin-festa-4"];
+            }else if(checkins >= 99){
+                pin.image = [UIImage imageNamed:@"pin-festa-5"];
+            }
             break;
         case 4 :   //Local público
-            pin.image = [UIImage imageNamed:@"pin-localpublico"];
+            if (checkins <10) {
+                pin.image = [UIImage imageNamed:@"pin-publicos-1"];
+            }else if(checkins >= 10 && checkins <30){
+                pin.image = [UIImage imageNamed:@"pin-publicos-2"];
+            }else if(checkins >= 30 && checkins <50){
+                pin.image = [UIImage imageNamed:@"pin-publicos-3"];
+            }else if(checkins >= 50 && checkins <99){
+                pin.image = [UIImage imageNamed:@"pin-publicos-4"];
+            }else if(checkins >= 99){
+                pin.image = [UIImage imageNamed:@"pin-publicos-5"];
+            }
             break;
         default :
             NSLog(@"Local não compatível com tipos de local cadastrados");
     }
-    
     
     pin.canShowCallout = YES;
     
@@ -305,7 +413,7 @@
     [detailButton setImage:[UIImage imageNamed:@"seta"] forState:UIControlStateNormal];
     detailButton.frame = CGRectMake(0,0, 40.0, 45.0);
     
-    UIView *left = [[UIView alloc]initWithFrame:CGRectMake(0,0, 50.0, 45.0)];
+    UIView *left = [[UIView alloc]initWithFrame:CGRectMake(0,0, 50.0, 65.0)];
     left.backgroundColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1.0f];
     
     UILabel *lblqt_checkin = [[UILabel alloc] initWithFrame:CGRectMake(0, 12, 50, 25)];

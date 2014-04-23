@@ -88,7 +88,7 @@
         [actionCheckout showInView:self.view];
     }else{
         UIActionSheet* actionCheckin = [[UIActionSheet alloc]
-                                        initWithTitle:[NSString stringWithFormat:@"Confirmar checkoin em %@?", self.local.nome]
+                                        initWithTitle:[NSString stringWithFormat:@"Confirmar checkin em %@?", self.local.nome]
                                         delegate:(id<UIActionSheetDelegate>)self
                                         cancelButtonTitle:@"Sim"
                                         destructiveButtonTitle:@"Não"
