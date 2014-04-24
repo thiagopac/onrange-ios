@@ -64,6 +64,12 @@
     CLLocationCoordinate2D startCoord = theCoordinate;
     MKCoordinateRegion adjustedRegion = [self.mapLocal regionThatFits:MKCoordinateRegionMakeWithDistance(startCoord, 400, 400)];
     [self.mapLocal setRegion:adjustedRegion animated:YES];
+
+    MKAnnotationView *viewPoint = [MKAnnotationView new];
+    viewPoint.image = [UIImage imageNamed:@"pin-balada-1"];
+                                   
+    PointLocais *point = [[PointLocais alloc]initWithCoordenada:startCoord nome:self.local.nome];
+    [self.mapLocal addAnnotation:point];
     [self.btnCheckin setTitle:@"Checkin" forState: UIControlStateNormal];
     [self carregaUsuarios];
 

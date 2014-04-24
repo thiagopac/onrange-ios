@@ -20,6 +20,7 @@
 		6E516FE518C4EDB300C8A929 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E516FE418C4EDB200C8A929 /* CoreLocation.framework */; };
 		6E5FC43018D881FB00879CA6 /* UsuariosCheckinHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E5FC42F18D881FB00879CA6 /* UsuariosCheckinHeaderView.m */; };
 		6E606F3A18DA4251003291E6 /* ConfirmaCheckinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E606F3918DA4251003291E6 /* ConfirmaCheckinViewController.m */; };
+		6E6DF74A19088F3700DF8D76 /* stickman.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6DF74919088F3700DF8D76 /* stickman.png */; };
 		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
 		6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61818C01ED400240B6B /* PontoLocal.m */; };
 		6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB6C61A18C020F800240B6B /* MapKit.framework */; };
@@ -112,6 +113,7 @@
 		6E5FC42F18D881FB00879CA6 /* UsuariosCheckinHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsuariosCheckinHeaderView.m; sourceTree = "<group>"; };
 		6E606F3818DA4251003291E6 /* ConfirmaCheckinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmaCheckinViewController.h; sourceTree = "<group>"; };
 		6E606F3918DA4251003291E6 /* ConfirmaCheckinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmaCheckinViewController.m; sourceTree = "<group>"; };
+		6E6DF74919088F3700DF8D76 /* stickman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stickman.png; sourceTree = "<group>"; };
 		6EB6C61318C0199E00240B6B /* Local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Local.h; sourceTree = "<group>"; };
 		6EB6C61418C0199E00240B6B /* Local.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Local.m; sourceTree = "<group>"; };
 		6EB6C61718C01ED400240B6B /* PontoLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PontoLocal.h; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				6E4B15DE18C5B19A00A6BBE2 /* pins */,
 				6ED68C2718F5C843005F4FCA /* logo_splash.png */,
 				6ED68C2918F5C8E6005F4FCA /* logo_splash@2x.png */,
+				6E6DF74919088F3700DF8D76 /* stickman.png */,
 				6ED597EA18D625FF00573E7E /* icone_configuracoes@2x.png */,
 				6ED68C2B18F5D113005F4FCA /* fb_transparent@2x.png */,
 				6ED597EB18D625FF00573E7E /* icone_fazercheckin@2x.png */,
@@ -637,6 +640,7 @@
 				6ECA6E0218D0ECC800DC067C /* icone_locais@2x.png in Resources */,
 				6EE922F01900835700020991 /* pin-publicos-5@2x.png in Resources */,
 				6EE922E01900835700020991 /* pin-bar-4@2x.png in Resources */,
+				6E6DF74A19088F3700DF8D76 /* stickman.png in Resources */,
 				6EE922EA1900835700020991 /* pin-festa-4@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

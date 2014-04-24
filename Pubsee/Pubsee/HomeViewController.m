@@ -11,6 +11,7 @@
 #import "Usuario.h"
 #import "MappingProvider.h"
 #import "UsuariosCheckedViewController.h"
+#import "CheckinViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HomeViewController (){
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) NSMutableArray *arrLocais;
 @property (nonatomic, strong) NSMutableArray *annotations;
 @property (nonatomic, strong) id<MKAnnotation> selectedAnnotation;
+@property (nonatomic, strong) Local *localOndeEstou;
 
 @end
 
@@ -92,9 +94,6 @@
     return self;
 }
 
-- (IBAction)btnMe:(UIButton *)sender {
-}
-
 -(id)init {
     return [self initWithProfileID:nil];
 }
@@ -148,6 +147,30 @@
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
         NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar locais",nil));
+    }];
+    
+    [operation start];
+}
+
+- (void)ondeEstou:(int)id_usuario{
+    
+    NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKMapping *mapping = [MappingProvider localMapping];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Local" statusCodes:statusCodeSet];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/verificaCheckinUsuario/%d",API,id_usuario]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
+                                                                        responseDescriptors:@[responseDescriptor]];
+    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        
+        self.localOndeEstou = [mappingResult firstObject];
+        
+        NSLog(@"usuario está no local: %d", self.localOndeEstou.id_local);
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"ERROR: %@", error);
+        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar local",nil));
     }];
     
     [operation start];
@@ -236,8 +259,15 @@
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
+    
+    //btnMe
     self.btnMe.layer.cornerRadius = 10;
-    self.btnMe.clipsToBounds = YES;
+    self.btnMe.clipsToBounds = NO;
+    self.btnMe.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.btnMe.layer.shadowOpacity = 0.2;
+    self.btnMe.layer.shadowRadius = 1;
+    self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -254,6 +284,15 @@
     dispatch_async(queue, ^{
         [self carregaLocais];
     });
+    
+    self.btnMe.hidden = YES;
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    if ([def integerForKey:@"id_usuario"]) {
+        int id_usuario = [def integerForKey:@"id_usuario"];
+        self.btnMe.hidden = NO;
+        [self ondeEstou:id_usuario];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -452,6 +491,14 @@
         usuarioCheckedVC.annotation = self.selectedAnnotation;
         
     }
+}
+
+- (IBAction)btnMe:(UIButton *)sender {
+    CheckinViewController *checkinVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"CheckinViewController"];
+    
+    [checkinVC setLocal:self.localOndeEstou];
+    
+    [[self navigationController]pushViewController:checkinVC animated:YES];
 }
 
 @end
