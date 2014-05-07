@@ -12,7 +12,7 @@
 		6E1D84A618D7382D00CF5496 /* icone_inicio@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E1D84A518D7382D00CF5496 /* icone_inicio@2x.png */; };
 		6E211F5E18DFBE3F008DCC1F /* LocaisProximosTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E211F5D18DFBE3F008DCC1F /* LocaisProximosTableViewController.m */; };
 		6E3596F418D9340700C5D4B4 /* Checkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E3596F318D9340700C5D4B4 /* Checkin.m */; };
-		6E3E17ED18E0AAD300DF30D2 /* CheckinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E3E17EC18E0AAD300DF30D2 /* CheckinViewController.m */; };
+		6E3E17ED18E0AAD300DF30D2 /* PerfilLocalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E3E17EC18E0AAD300DF30D2 /* PerfilLocalViewController.m */; };
 		6E4B15C118C5934700A6BBE2 /* PointLocais.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B15C018C5934700A6BBE2 /* PointLocais.m */; };
 		6E4B15E118C810FB00A6BBE2 /* UsuariosCheckedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B15E018C810FB00A6BBE2 /* UsuariosCheckedViewController.m */; };
 		6E4B15E818C81CF000A6BBE2 /* UsuarioFotoCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B15E718C81CF000A6BBE2 /* UsuarioFotoCollectionCell.m */; };
@@ -98,8 +98,8 @@
 		6E211F5D18DFBE3F008DCC1F /* LocaisProximosTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocaisProximosTableViewController.m; sourceTree = "<group>"; };
 		6E3596F218D9340700C5D4B4 /* Checkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checkin.h; sourceTree = "<group>"; };
 		6E3596F318D9340700C5D4B4 /* Checkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Checkin.m; sourceTree = "<group>"; };
-		6E3E17EB18E0AAD300DF30D2 /* CheckinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckinViewController.h; sourceTree = "<group>"; };
-		6E3E17EC18E0AAD300DF30D2 /* CheckinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckinViewController.m; sourceTree = "<group>"; };
+		6E3E17EB18E0AAD300DF30D2 /* PerfilLocalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerfilLocalViewController.h; sourceTree = "<group>"; };
+		6E3E17EC18E0AAD300DF30D2 /* PerfilLocalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerfilLocalViewController.m; sourceTree = "<group>"; };
 		6E4B15BF18C5934700A6BBE2 /* PointLocais.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLocais.h; sourceTree = "<group>"; };
 		6E4B15C018C5934700A6BBE2 /* PointLocais.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointLocais.m; sourceTree = "<group>"; };
 		6E4B15DF18C810FB00A6BBE2 /* UsuariosCheckedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsuariosCheckedViewController.h; sourceTree = "<group>"; };
@@ -262,8 +262,8 @@
 			children = (
 				6E211F5C18DFBE3F008DCC1F /* LocaisProximosTableViewController.h */,
 				6E211F5D18DFBE3F008DCC1F /* LocaisProximosTableViewController.m */,
-				6E3E17EB18E0AAD300DF30D2 /* CheckinViewController.h */,
-				6E3E17EC18E0AAD300DF30D2 /* CheckinViewController.m */,
+				6E3E17EB18E0AAD300DF30D2 /* PerfilLocalViewController.h */,
+				6E3E17EC18E0AAD300DF30D2 /* PerfilLocalViewController.m */,
 				6E606F3818DA4251003291E6 /* ConfirmaCheckinViewController.h */,
 				6E606F3918DA4251003291E6 /* ConfirmaCheckinViewController.m */,
 			);
@@ -695,7 +695,7 @@
 			files = (
 				6E3596F418D9340700C5D4B4 /* Checkin.m in Sources */,
 				6E516FE318C4C63D00C8A929 /* SettingsTableViewController.m in Sources */,
-				6E3E17ED18E0AAD300DF30D2 /* CheckinViewController.m in Sources */,
+				6E3E17ED18E0AAD300DF30D2 /* PerfilLocalViewController.m in Sources */,
 				6E211F5E18DFBE3F008DCC1F /* LocaisProximosTableViewController.m in Sources */,
 				6EE440C818C02C870033D95B /* MappingProvider.m in Sources */,
 				6EB6C61F18C025B000240B6B /* Usuario.m in Sources */,

@@ -10,7 +10,7 @@
 #import "SlideNavigationController.h"
 #import "MappingProvider.h"
 #import "Local.h"
-#import "CheckinViewController.h"
+#import "PerfilLocalViewController.h"
 #import "SVProgressHUD.h"
 
 @interface LocaisProximosTableViewController (){
@@ -106,7 +106,7 @@
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Locais" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/8.0/distancia",API,latitude,longitude]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/80.0/distancia",API,latitude,longitude]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -195,7 +195,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.arrLocais.count;
+    return self.arrLocais.count +1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -203,21 +203,34 @@
     static NSString *CellIdentifier = @"LocalProximoCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
+    if (indexPath.row == self.arrLocais.count) {
+        cell.textLabel.text = @"Adicionar novo local...";
+        return cell;
+    }
+    
     Local *local = [self.arrLocais objectAtIndex:indexPath.row];
     cell.textLabel.text = [local nome];
+    
+
+    
     return cell;
 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CheckinViewController *checkinVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"CheckinViewController"];
+    if (indexPath.row == self.arrLocais.count) {
+        NSLog(@"Abriu adição de local");
+    }else{
+    
+    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
     
     Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
     
-    [checkinVC setLocal:local];
+    [perfilLocalVC setLocal:local];
     
-    [[self navigationController]pushViewController:checkinVC animated:YES];
+        [[self navigationController]pushViewController:perfilLocalVC animated:YES];
+    }
 }
 
 

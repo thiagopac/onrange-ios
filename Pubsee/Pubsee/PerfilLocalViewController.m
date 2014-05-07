@@ -6,17 +6,22 @@
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
-#import "CheckinViewController.h"
-#import "PointLocais.h"
+#import "PerfilLocalViewController.h"
 #import <RestKit/RestKit.h>
 #import "MappingProvider.h"
 #import "Usuario.h"
 #import "Checkin.h"
 #import "ConfirmaCheckinViewController.h"
+#import "UsuariosCheckedViewController.h"
 #import <SVProgressHUD.h>
 
-@interface CheckinViewController (){
+@interface PerfilLocalViewController (){
     int id_usuario;
+    NSInteger id_local;
+    NSString *nome_local;
+    NSString *qt_checkin;
+    NSString *latitude;
+    NSString *longitude;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrUsuarios;
@@ -24,7 +29,7 @@
 
 @end
 
-@implementation CheckinViewController
+@implementation PerfilLocalViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,7 +43,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+ 
+    if (_annotation) {
+        id_local = _annotation.id_local;
+        nome_local = _annotation.title;
+        qt_checkin = _annotation.qt_checkin;
+        latitude = _annotation.latitude;
+        longitude = _annotation.longitude;
+    }else if(self.local){
+        id_local = self.local.id_local;
+        nome_local = self.local.nome;
+        qt_checkin = self.local.qt_checkin;
+        latitude = self.local.latitude;
+        longitude = self.local.longitude;
+    }
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
@@ -52,14 +70,14 @@
     self.btnCheckin.margin = 4.0;
     self.btnCheckin.depth = 3.0;
     
-    self.lblNomeLocal.text = self.local.nome.uppercaseString;
+    self.lblNomeLocal.text = nome_local.uppercaseString;
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     id_usuario = [def integerForKey:@"id_usuario"];
     
     CLLocationCoordinate2D theCoordinate;
-    theCoordinate.latitude = [self.local.latitude doubleValue];
-    theCoordinate.longitude = [self.local.longitude doubleValue];
+    theCoordinate.latitude = [latitude doubleValue];
+    theCoordinate.longitude = [longitude doubleValue];
     
     CLLocationCoordinate2D startCoord = theCoordinate;
     MKCoordinateRegion adjustedRegion = [self.mapLocal regionThatFits:MKCoordinateRegionMakeWithDistance(startCoord, 400, 400)];
@@ -68,11 +86,17 @@
     MKAnnotationView *viewPoint = [MKAnnotationView new];
     viewPoint.image = [UIImage imageNamed:@"pin-balada-1"];
                                    
-    PointLocais *point = [[PointLocais alloc]initWithCoordenada:startCoord nome:self.local.nome];
+    PointLocais *point = [[PointLocais alloc]initWithCoordenada:startCoord nome:nome_local];
     [self.mapLocal addAnnotation:point];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
     [self.btnCheckin setTitle:@"Checkin" forState: UIControlStateNormal];
     [self carregaUsuarios];
-
+    if (qt_checkin == 0) {
+        [self.btnUsuariosNoLocal setTitle:@"Ninguém no local" forState: UIControlStateNormal];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,7 +109,7 @@
     
     if (self.usuarioEstaNoLocal == YES){
         UIActionSheet* actionCheckout = [[UIActionSheet alloc]
-                                 initWithTitle:[NSString stringWithFormat:@"Confirmar checkout em %@?", self.local.nome]
+                                 initWithTitle:[NSString stringWithFormat:@"Confirmar checkout em %@?", nome_local]
                                  delegate:(id<UIActionSheetDelegate>)self
                                  cancelButtonTitle:@"Sim"
                                  destructiveButtonTitle:@"Não"
@@ -94,7 +118,7 @@
         [actionCheckout showInView:self.view];
     }else{
         UIActionSheet* actionCheckin = [[UIActionSheet alloc]
-                                        initWithTitle:[NSString stringWithFormat:@"Confirmar checkin em %@?", self.local.nome]
+                                        initWithTitle:[NSString stringWithFormat:@"Confirmar checkin em %@?", nome_local]
                                         delegate:(id<UIActionSheetDelegate>)self
                                         cancelButtonTitle:@"Sim"
                                         destructiveButtonTitle:@"Não"
@@ -103,7 +127,6 @@
         [actionCheckin showInView:self.view];
     }
 }
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:   (NSInteger)buttonIndex {
     if (actionSheet.tag == 1) {
@@ -157,7 +180,7 @@
     Checkin *checkin= [Checkin new];
     
     checkin.id_usuario = id_usuario;
-    checkin.id_local = self.local.id_local;
+    checkin.id_local = id_local;
     
     [objectManager postObject:checkin
                          path:path
@@ -199,7 +222,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d",API,self.local.id_local]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,id_local]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -234,4 +257,18 @@
     [alertView show];
 }
 
+- (IBAction)btnUsuariosNoLocal:(UIButton *)sender {
+    UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
+    
+    if (_annotation) {
+        [usuariosCheckedVC setAnnotation:self.annotation];
+    }else{
+        [usuariosCheckedVC setLocal:self.local];
+    }
+    
+    if (qt_checkin > 0) {
+        [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
+    }
+    
+}
 @end

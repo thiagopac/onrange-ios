@@ -12,7 +12,7 @@
 #import "MappingProvider.h"
 #import "TopLocaisComCheckinCell.h"
 #import "Local.h"
-#import "UsuariosCheckedViewController.h"
+#import "PerfilLocalViewController.h"
 #import <SVProgressHUD.h>
 
 @interface LocaisTableViewController (){
@@ -146,13 +146,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
+    
+    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
     
     Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
     
-    [usuariosCheckedVC setLocal:local];
+    [perfilLocalVC setLocal:local];
     
-    [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
+    [[self navigationController]pushViewController:perfilLocalVC animated:YES];
 }
 
 @end

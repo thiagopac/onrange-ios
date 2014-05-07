@@ -42,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     if (_annotation) {
         id_local = _annotation.id_local;
         nome_local = _annotation.title;
@@ -50,6 +51,7 @@
         id_local = self.local.id_local;
         nome_local = self.local.nome;
         qt_checkin = self.local.qt_checkin;
+
     }
     
     UsuariosCheckinHeaderView *headerView = [[UsuariosCheckinHeaderView alloc]init];
@@ -114,7 +116,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d",API,id_local]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,id_local]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];

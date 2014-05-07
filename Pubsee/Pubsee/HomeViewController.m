@@ -10,8 +10,7 @@
 #import <Restkit/RestKit.h>
 #import "Usuario.h"
 #import "MappingProvider.h"
-#import "UsuariosCheckedViewController.h"
-#import "CheckinViewController.h"
+#import "PerfilLocalViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HomeViewController (){
@@ -290,8 +289,8 @@
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     if ([def integerForKey:@"id_usuario"]) {
         int id_usuario = [def integerForKey:@"id_usuario"];
-        self.btnMe.hidden = NO;
-        [self ondeEstou:id_usuario];
+            [self ondeEstou:id_usuario];
+            self.btnMe.hidden = NO;
     }
 }
 
@@ -328,65 +327,6 @@
     int checkins = [((PointLocais *)annotation).qt_checkin intValue];
     
     int annType = ((PointLocais *)annotation).tipo_local;
-    
-//    SIMULACAO COM PINS DE GRANDE NUMERO DE PESSOAS
-//    switch (annType)
-//    {
-//        case 1 :   //Balada
-//            if (checkins <2) {
-//                pin.image = [UIImage imageNamed:@"pin-balada-1"];
-//            }else if(checkins >= 2 && checkins <3){
-//                pin.image = [UIImage imageNamed:@"pin-balada-2"];
-//            }else if(checkins >= 3 && checkins <20){
-//                pin.image = [UIImage imageNamed:@"pin-balada-3"];
-//            }else if(checkins >= 20 && checkins <22){
-//                pin.image = [UIImage imageNamed:@"pin-balada-4"];
-//            }else if(checkins >= 22){
-//                pin.image = [UIImage imageNamed:@"pin-balada-5"];
-//            }
-//            break;
-//        case 2 :   //Bar
-//            if (checkins <2) {
-//                pin.image = [UIImage imageNamed:@"pin-bar-1"];
-//            }else if(checkins >= 2 && checkins <3){
-//                pin.image = [UIImage imageNamed:@"pin-bar-2"];
-//            }else if(checkins >= 3 && checkins <20){
-//                pin.image = [UIImage imageNamed:@"pin-bar-3"];
-//            }else if(checkins >= 20 && checkins <22){
-//                pin.image = [UIImage imageNamed:@"pin-bar-4"];
-//            }else if(checkins >= 22){
-//                pin.image = [UIImage imageNamed:@"pin-bar-5"];
-//            }
-//            break;
-//        case 3 :   //Festa
-//            if (checkins <2) {
-//                pin.image = [UIImage imageNamed:@"pin-festa-1"];
-//            }else if(checkins >= 2 && checkins <3){
-//                pin.image = [UIImage imageNamed:@"pin-festa-2"];
-//            }else if(checkins >= 3 && checkins <20){
-//                pin.image = [UIImage imageNamed:@"pin-festa-3"];
-//            }else if(checkins >= 20 && checkins <22){
-//                pin.image = [UIImage imageNamed:@"pin-festa-4"];
-//            }else if(checkins >= 22){
-//                pin.image = [UIImage imageNamed:@"pin-festa-5"];
-//            }
-//            break;
-//        case 4 :   //Local público
-//            if (checkins <2) {
-//                pin.image = [UIImage imageNamed:@"pin-publicos-1"];
-//            }else if(checkins >= 2 && checkins <3){
-//                pin.image = [UIImage imageNamed:@"pin-publicos-2"];
-//            }else if(checkins >= 3 && checkins <20){
-//                pin.image = [UIImage imageNamed:@"pin-publicos-3"];
-//            }else if(checkins >= 20 && checkins <22){
-//                pin.image = [UIImage imageNamed:@"pin-publicos-4"];
-//            }else if(checkins >= 22){
-//                pin.image = [UIImage imageNamed:@"pin-publicos-5"];
-//            }
-//            break;
-//        default :
-//            NSLog(@"Local não compatível com tipos de local cadastrados");
-//    }
     
     switch (annType)
     {
@@ -476,29 +416,27 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
 
     if ([view.annotation isKindOfClass:[PointLocais class]]) {
-        // Store a reference to the annotation so that we can pass it on in prepare for segue.
+
         self.selectedAnnotation = view.annotation;
-        [self performSegueWithIdentifier:@"checkinsFotosSegue" sender:self];
+        [self performSegueWithIdentifier:@"perfilLocalSegue" sender:self];
     }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    // Check that the segue is our showPinDetails-segue
-    if ([segue.identifier isEqualToString:@"checkinsFotosSegue"]) {
-        // Pass the annotation reference to the detail view controller.
-        UsuariosCheckedViewController *usuarioCheckedVC = [segue destinationViewController];
-        usuarioCheckedVC.annotation = self.selectedAnnotation;
+    if ([segue.identifier isEqualToString:@"perfilLocalSegue"]) {
+        PerfilLocalViewController *perfilLocalVC = [segue destinationViewController];
+        perfilLocalVC.annotation = self.selectedAnnotation;
         
     }
 }
 
 - (IBAction)btnMe:(UIButton *)sender {
-    CheckinViewController *checkinVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"CheckinViewController"];
+    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
     
-    [checkinVC setLocal:self.localOndeEstou];
+    [perfilLocalVC setLocal:self.localOndeEstou];
     
-    [[self navigationController]pushViewController:checkinVC animated:YES];
+    [[self navigationController]pushViewController:perfilLocalVC animated:YES];
 }
 
 @end
