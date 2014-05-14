@@ -11,6 +11,8 @@
 #import "MappingProvider.h"
 #import "Local.h"
 #import "PerfilLocalViewController.h"
+#import "AdicionaLocalTableViewController.h"
+#import "LocaisProximosTableViewCell.h"
 #import "SVProgressHUD.h"
 
 @interface LocaisProximosTableViewController (){
@@ -201,34 +203,37 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"LocalProximoCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-
+    LocaisProximosTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
     if (indexPath.row == self.arrLocais.count) {
-        cell.textLabel.text = @"Adicionar novo local...";
+        [cell.lblCell setFont:[UIFont fontWithName:@"GillSans" size:16]];
+        cell.lblCell.text = @"Adicionar novo local...";
+
         return cell;
     }
     
     Local *local = [self.arrLocais objectAtIndex:indexPath.row];
-    cell.textLabel.text = [local nome];
+    cell.lblCell.text = local.nome;
     
+    [cell.lblCell setFont:[UIFont fontWithName:@"GillSans-Light" size:16]];
 
-    
     return cell;
-
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == self.arrLocais.count) {
-        NSLog(@"Abriu adição de local");
+       
+        AdicionaLocalTableViewController *adicionaLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"AdicionaLocalTableViewController"];
+        
+        [[self navigationController]pushViewController:adicionaLocalTVC animated:YES];
+        
     }else{
     
-    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
-    
-    Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
-    
-    [perfilLocalVC setLocal:local];
-    
+        PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
+        
+        Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
+        [perfilLocalVC setLocal:local];
         [[self navigationController]pushViewController:perfilLocalVC animated:YES];
     }
 }
