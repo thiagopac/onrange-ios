@@ -82,10 +82,7 @@
     CLLocationCoordinate2D startCoord = theCoordinate;
     MKCoordinateRegion adjustedRegion = [self.mapLocal regionThatFits:MKCoordinateRegionMakeWithDistance(startCoord, 400, 400)];
     [self.mapLocal setRegion:adjustedRegion animated:YES];
-
-    MKAnnotationView *viewPoint = [MKAnnotationView new];
-    viewPoint.image = [UIImage imageNamed:@"pin-balada-1"];
-                                   
+    
     PointLocais *point = [[PointLocais alloc]initWithCoordenada:startCoord nome:nome_local];
     [self.mapLocal addAnnotation:point];
     
@@ -167,9 +164,8 @@
                                                                                        pathPattern:nil
                                                                                            keyPath:@"Checkin"
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    NSURL *url
-    = [NSURL URLWithString:API];
-    NSString  *path= @"checkin/adicionacheckin";
+    NSURL *url = [NSURL URLWithString:API];
+    NSString *path= @"checkin/adicionacheckin";
     
     RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
     [objectManager addRequestDescriptor:requestDescriptor];
@@ -193,6 +189,7 @@
                               if (checkinefetuado.id_output == 1) {
                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                                   ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
+                                  vc.strNomeLocal = nome_local;
                                   [self presentViewController:vc animated:YES completion:nil];
                                   [self.view setNeedsLayout];
 
@@ -222,7 +219,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,id_local]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,(int)id_local]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];

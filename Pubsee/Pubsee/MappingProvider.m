@@ -21,7 +21,7 @@
 
 +(RKMapping *)localMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Local class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin", @"tipo_local"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_local", @"nome", @"latitude", @"longitude", @"qt_checkin",@"tipo_local",@"id_usuario",@"id_output"]];
     return mapping;
 }
 

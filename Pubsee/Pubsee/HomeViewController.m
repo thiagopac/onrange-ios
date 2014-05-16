@@ -217,6 +217,7 @@
     NSLog(@"Foi minimizado");
     [self.locationManager stopUpdatingLocation];
 }
+
 -(void)appWillTerminate:(NSNotification*)note
 {
     NSLog(@"Foi fechado");

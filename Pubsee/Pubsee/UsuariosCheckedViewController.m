@@ -63,7 +63,6 @@
     headerView.btCheckinLocal.margin = 4.0;
     headerView.btCheckinLocal.depth = 3.0;
     
-    
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     id_usuario = [def integerForKey:@"id_usuario"];
     
@@ -153,6 +152,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UsuarioFotoCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"fotoCell" forIndexPath:indexPath];
+    
+    cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     Usuario *usuario = [_arrUsuarios objectAtIndex:[indexPath item]];
 
@@ -298,6 +299,7 @@
                                   
                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                                   ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
+                                  vc.strNomeLocal = nome_local;
                                   [self presentViewController:vc animated:YES completion:nil];
                                   [self.view setNeedsLayout];
                               }else if(checkinefetuado.id_output == 2){

@@ -15,7 +15,7 @@
 #import "QBFlatButton.h"
 #import "CWStatusBarNotification.h"
 
-@interface UsuariosCheckedViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate>
+@interface UsuariosCheckedViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
 @property (strong, nonatomic) PointLocais *annotation;
 @property (strong, nonatomic) NSString *profileID;

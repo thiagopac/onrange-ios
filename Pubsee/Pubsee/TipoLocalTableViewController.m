@@ -8,6 +8,7 @@
 
 #import "TipoLocalTableViewController.h"
 #import "AdicionaLocalTableViewController.h"
+#import "TipoLocalTableViewCell.h"
 
 @interface TipoLocalTableViewController (){
     NSArray *arrTiposLocais;
@@ -57,7 +58,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"tipoLocalCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    TipoLocalTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if([checkedIndexPath isEqual:indexPath]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -66,7 +67,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    [[cell textLabel]setText:[arrTiposLocais objectAtIndex:indexPath.row]];
+    [[cell lblTipoLocal]setText:[arrTiposLocais objectAtIndex:indexPath.row]];
     
     return cell;
 }
@@ -81,15 +82,9 @@
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
     checkedIndexPath = indexPath;
-    
-    /*
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    [def setInteger:indexPath.row forKey:@"tipoLocal"];
-    [def synchronize];
-     */
-    
+
     AdicionaLocalTableViewController *adicionaLocalTVC = [self.navigationController.viewControllers objectAtIndex:2];
-    adicionaLocalTVC.tipoLocal = indexPath.row+1;
+    adicionaLocalTVC.tipoLocal = (int)indexPath.row+1;
     adicionaLocalTVC.nomeCategoria = [arrTiposLocais objectAtIndex:indexPath.row];
     [self.navigationController popToViewController:adicionaLocalTVC animated:YES];
 }

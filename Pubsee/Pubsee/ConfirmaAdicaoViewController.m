@@ -1,18 +1,18 @@
 //
-//  ConfirmaCheckinViewController.m
+//  ConfirmaAdicaoViewController.m
 //  Onrange
 //
-//  Created by Thiago Castro on 19/03/14.
+//  Created by Thiago Castro on 16/05/14.
 //  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
-#import "ConfirmaCheckinViewController.h"
+#import "ConfirmaAdicaoViewController.h"
 
-@interface ConfirmaCheckinViewController ()
+@interface ConfirmaAdicaoViewController ()
 
 @end
 
-@implementation ConfirmaCheckinViewController
+@implementation ConfirmaAdicaoViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.lblNomeLocal.text = self.strNomeLocal;
+    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,4 +49,5 @@
 - (IBAction)btnFechar:(UIButton *)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end

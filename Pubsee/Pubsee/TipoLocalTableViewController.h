@@ -10,4 +10,5 @@
 
 @interface TipoLocalTableViewController : UITableViewController
 
+
 @end
