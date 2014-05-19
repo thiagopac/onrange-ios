@@ -113,7 +113,7 @@
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
+
         self.arrLocais = [NSMutableArray arrayWithArray:mappingResult.array];
 
         if (self.arrLocais.count < 1) {
@@ -122,8 +122,10 @@
         }
         [self.notification dismissNotification];
         [self.tableView reloadData];
+        [self.refreshControl performSelector:@selector(endRefreshing)];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+        [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.notification dismissNotification];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
@@ -131,7 +133,6 @@
     }];
     
     [operation start];
-    [self.refreshControl performSelector:@selector(endRefreshing)];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -198,6 +199,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.arrLocais.count +1;
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return @"Lista de locais mais próximos";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

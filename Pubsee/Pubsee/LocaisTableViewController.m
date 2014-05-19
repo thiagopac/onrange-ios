@@ -41,11 +41,11 @@
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
-    
+
     self.navigationController.navigationBar.topItem.title = @"•";
-    
+
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
-        
+
     [refresh addTarget:self action:@selector(carregaLocais) forControlEvents:UIControlEventValueChanged];
 
     self.refreshControl = refresh;
@@ -64,7 +64,7 @@
     self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
     self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-    
+
     self.notification.notificationLabelBackgroundColor = [UIColor colorWithRed:244/255.0f green:97/255.0f blue:34/255.0f alpha:1.0f];
     self.notification.notificationLabelTextColor = [UIColor whiteColor];
     [self.notification displayNotificationWithMessage:msg completion:nil];
@@ -87,9 +87,11 @@
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.arrLocais = [NSMutableArray arrayWithArray:mappingResult.array];
         [self.notification dismissNotification];
+        [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.tableView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+        [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.notification dismissNotification];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
@@ -97,7 +99,6 @@
     }];
     
     [operation start];
-    [self.refreshControl performSelector:@selector(endRefreshing)];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{

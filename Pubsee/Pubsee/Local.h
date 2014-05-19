@@ -19,5 +19,4 @@
 @property (nonatomic, assign) NSInteger tipo_local;
 @property (nonatomic, assign) NSInteger id_output;
 
-
 @end

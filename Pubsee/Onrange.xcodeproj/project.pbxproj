@@ -240,6 +240,7 @@
 		6E0AB74418B7C50C003DCF1E /* Locais */ = {
 			isa = PBXGroup;
 			children = (
+				6E606F3718DA41F6003291E6 /* Checkin */,
 				6E2ABFDF19251E5100C8CE36 /* TopLocais */,
 				6EB6C61718C01ED400240B6B /* PontoLocal.h */,
 				6EB6C61818C01ED400240B6B /* PontoLocal.m */,
@@ -459,7 +460,6 @@
 		6EE518BA18B186B400250C71 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				6E606F3718DA41F6003291E6 /* Checkin */,
 				6E4B15E218C8110700A6BBE2 /* Usuários */,
 				6E7050A318BAB65C0029E58A /* Settings */,
 				6E0AB74418B7C50C003DCF1E /* Locais */,

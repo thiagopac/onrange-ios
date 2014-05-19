@@ -73,7 +73,7 @@
     self.lblNomeLocal.text = nome_local.uppercaseString;
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    id_usuario = [def integerForKey:@"id_usuario"];
+    id_usuario = (int)[def integerForKey:@"id_usuario"];
     
     CLLocationCoordinate2D theCoordinate;
     theCoordinate.latitude = [latitude doubleValue];
@@ -91,8 +91,12 @@
 -(void)viewWillAppear:(BOOL)animated{
     [self.btnCheckin setTitle:@"Checkin" forState: UIControlStateNormal];
     [self carregaUsuarios];
-    if (qt_checkin == 0) {
+    if ([qt_checkin intValue] == 0) {
         [self.btnUsuariosNoLocal setTitle:@"Ninguém no local" forState: UIControlStateNormal];
+    }else if([qt_checkin intValue] == 1){
+        [self.btnUsuariosNoLocal setTitle:[NSString stringWithFormat:@"%@ pessoa no local",qt_checkin] forState: UIControlStateNormal];
+    }else{
+        [self.btnUsuariosNoLocal setTitle:[NSString stringWithFormat:@"%@ pessoas no local",qt_checkin] forState: UIControlStateNormal];
     }
 }
 
@@ -255,6 +259,7 @@
 }
 
 - (IBAction)btnUsuariosNoLocal:(UIButton *)sender {
+    
     UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
     
     if (_annotation) {
@@ -263,7 +268,7 @@
         [usuariosCheckedVC setLocal:self.local];
     }
     
-    if (qt_checkin > 0) {
+    if ([qt_checkin intValue]> 0) {
         [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
     }
     
