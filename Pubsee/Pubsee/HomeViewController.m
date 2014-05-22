@@ -10,7 +10,7 @@
 #import <Restkit/RestKit.h>
 #import "Usuario.h"
 #import "MappingProvider.h"
-#import "PerfilLocalViewController.h"
+#import "PerfilLocalTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HomeViewController (){
@@ -128,7 +128,7 @@
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     latitude = [def objectForKey:@"userLatitude"];
     longitude = [def objectForKey:@"userLongitude"];
-    raio = [def integerForKey:@"userRange"];
+    raio = (int)[def integerForKey:@"userRange"];
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
@@ -165,7 +165,7 @@
         
         self.localOndeEstou = [mappingResult firstObject];
         
-        NSLog(@"usuario está no local: %d", self.localOndeEstou.id_local);
+        NSLog(@"usuario está no local: %d",(int)self.localOndeEstou.id_local);
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
@@ -191,7 +191,7 @@
         myAnnotation.longitude = local.longitude;
         myAnnotation.id_local = local.id_local;
         myAnnotation.qt_checkin = local.qt_checkin;
-        myAnnotation.tipo_local = local.tipo_local;
+        myAnnotation.tipo_local = (int)local.tipo_local;
         myAnnotation.coordinate = theCoordinate;
         myAnnotation.title = [NSString stringWithFormat:@"%@",local.nome];
         [_mapGlobal addAnnotation:myAnnotation];
@@ -289,7 +289,7 @@
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     if ([def integerForKey:@"id_usuario"]) {
-        int id_usuario = [def integerForKey:@"id_usuario"];
+        int id_usuario = (int)[def integerForKey:@"id_usuario"];
             [self ondeEstou:id_usuario];
             self.btnMe.hidden = NO;
     }
@@ -426,18 +426,18 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"perfilLocalSegue"]) {
-        PerfilLocalViewController *perfilLocalVC = [segue destinationViewController];
-        perfilLocalVC.annotation = self.selectedAnnotation;
+        PerfilLocalTableViewController *perfilLocalTVC = [segue destinationViewController];
+        perfilLocalTVC.annotation = self.selectedAnnotation;
         
     }
 }
 
 - (IBAction)btnMe:(UIButton *)sender {
-    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
+    PerfilLocalTableViewController *perfilLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalTableViewController"];
     
-    [perfilLocalVC setLocal:self.localOndeEstou];
+    [perfilLocalTVC setLocal:self.localOndeEstou];
     
-    [[self navigationController]pushViewController:perfilLocalVC animated:YES];
+    [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
 }
 
 @end

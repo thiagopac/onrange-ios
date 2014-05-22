@@ -12,7 +12,7 @@
 #import "MappingProvider.h"
 #import "TopLocaisComCheckinCell.h"
 #import "Local.h"
-#import "PerfilLocalViewController.h"
+#import "PerfilLocalTableViewController.h"
 #import <SVProgressHUD.h>
 
 @interface LocaisTableViewController (){
@@ -148,13 +148,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
+    PerfilLocalTableViewController *perfilLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalTableViewController"];
     
     Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
     
-    [perfilLocalVC setLocal:local];
+    [perfilLocalTVC setLocal:local];
     
-    [[self navigationController]pushViewController:perfilLocalVC animated:YES];
+    [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
 }
 
 @end

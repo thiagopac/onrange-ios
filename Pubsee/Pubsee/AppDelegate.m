@@ -42,6 +42,7 @@ NSString *const FBMenuDataChangedNotification =
 	UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button2];
 	[SlideNavigationController sharedInstance].leftBarButtonItem = leftBarButtonItem;
 
+     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     return YES;
 }

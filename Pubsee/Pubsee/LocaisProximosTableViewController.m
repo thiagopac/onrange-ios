@@ -10,7 +10,7 @@
 #import "SlideNavigationController.h"
 #import "MappingProvider.h"
 #import "Local.h"
-#import "PerfilLocalViewController.h"
+#import "PerfilLocalTableViewController.h"
 #import "AdicionaLocalTableViewController.h"
 #import "LocaisProximosTableViewCell.h"
 #import "SVProgressHUD.h"
@@ -201,10 +201,9 @@
     return self.arrLocais.count +1;
 }
 
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return @"Lista de locais mais próximos";
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+//    return @"Lista de locais mais próximos";
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -212,8 +211,9 @@
     LocaisProximosTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if (indexPath.row == self.arrLocais.count) {
-        [cell.lblCell setFont:[UIFont fontWithName:@"GillSans" size:16]];
+        [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Medium" size:16]];
         cell.lblCell.text = @"Adicionar novo local...";
+        cell.lblCell.textColor = [UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:1.0f];
 
         return cell;
     }
@@ -221,7 +221,8 @@
     Local *local = [self.arrLocais objectAtIndex:indexPath.row];
     cell.lblCell.text = local.nome;
     
-    [cell.lblCell setFont:[UIFont fontWithName:@"GillSans-Light" size:16]];
+    [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:16]];
+    cell.lblCell.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
 
     return cell;
 }
@@ -236,11 +237,11 @@
         
     }else{
     
-        PerfilLocalViewController *perfilLocalVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalViewController"];
+        PerfilLocalTableViewController *perfilLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalTableViewController"];
         
         Local *local = [[self arrLocais]objectAtIndex:indexPath.row];
-        [perfilLocalVC setLocal:local];
-        [[self navigationController]pushViewController:perfilLocalVC animated:YES];
+        [perfilLocalTVC setLocal:local];
+        [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
     }
 }
 
