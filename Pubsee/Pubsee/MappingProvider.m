@@ -10,6 +10,7 @@
 #import "Usuario.h"
 #import "Local.h"
 #import "Checkin.h"
+#import "Like.h"
 
 @implementation MappingProvider
 
@@ -28,6 +29,12 @@
 +(RKMapping *)checkinMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Checkin class]];
     [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"id_local", @"id_checkin", @"checkin_vigente", @"id_checkin_anterior", @"id_local_anterior", @"id_output"]];
+    return mapping;
+}
+
++(RKMapping *)likeMapping {
+    RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Like class]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match"]];
     return mapping;
 }
 

@@ -13,7 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <SWTableViewCell/SWTableViewCell.h>
 
-@interface PerfilLocalTableViewController : UITableViewController<SWTableViewCellDelegate>
+@interface PerfilLocalTableViewController : UITableViewController<SWTableViewCellDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) PointLocais *annotation;
 @property (strong, nonatomic) Local *local;

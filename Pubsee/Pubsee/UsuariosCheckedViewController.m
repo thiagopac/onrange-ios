@@ -14,6 +14,7 @@
 #import "Checkin.h"
 #import "ConfirmaCheckinViewController.h"
 #import <SVProgressHUD.h>
+#import "PerfilUsuarioTableViewController.h"
 
 @interface UsuariosCheckedViewController (){
     NSInteger id_local;
@@ -53,15 +54,6 @@
         qt_checkin = self.local.qt_checkin;
 
     }
-    
-    UsuariosCheckinHeaderView *headerView = [[UsuariosCheckinHeaderView alloc]init];
-    
-    headerView.btCheckinLocal.faceColor = [UIColor colorWithRed:0.333 green:0.631 blue:0.851 alpha:1.0];
-    headerView.btCheckinLocal.sideColor = [UIColor colorWithRed:0.310 green:0.498 blue:0.702 alpha:1.0];
-    
-    headerView.btCheckinLocal.radius = 4.0;
-    headerView.btCheckinLocal.margin = 4.0;
-    headerView.btCheckinLocal.depth = 3.0;
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     id_usuario = [def integerForKey:@"id_usuario"];
@@ -182,10 +174,18 @@
                 self.usuarioEstaNoLocal = YES;
                 [headerView.btCheckinLocal setTitle:@"Checkout" forState: UIControlStateNormal];
             }else{
-                NSString *nomeLocalCheckins = [NSString stringWithFormat:@"Entrar em %@ [ %@ ]",nome_local,qt_checkin];
+                NSString *pluralPessoas = [NSString new];
+                if ([qt_checkin integerValue] == 1) {
+                    pluralPessoas = @"pessoa";
+                }else{
+                    pluralPessoas = @"pessoas";
+                }
+                NSString *nomeLocalCheckins = [NSString stringWithFormat:@"%@ %@ neste local",qt_checkin,pluralPessoas];
                 if (nomeLocalCheckins != nil) {
                     self.usuarioEstaNoLocal = NO;
-                    [headerView.btCheckinLocal setTitle:nomeLocalCheckins forState: UIControlStateNormal];
+                    [headerView.lblNomeLocal setText:nome_local];
+                    [headerView.lblQtPessoas setText:nomeLocalCheckins];
+                    [headerView.btCheckinLocal setTitle:@"Checkin" forState: UIControlStateNormal];
                 }
             }
         }
@@ -198,6 +198,22 @@
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UsuarioFotoCollectionCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.userProfilePictureView.profileID = nil;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.usuarioEstaNoLocal == YES) {
+        PerfilUsuarioTableViewController *perfilUsuarioTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilUsuarioTableViewController"];
+        
+        Usuario *usuario = [[self arrUsuarios]objectAtIndex:indexPath.item];
+        
+        [perfilUsuarioTVC setUsuario:usuario];
+        
+        [[self navigationController]pushViewController:perfilUsuarioTVC animated:YES];
+    }else{
+        [self alert:@"Faça checkin neste local para interagir com os outros usuários." :@"Aviso"];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning

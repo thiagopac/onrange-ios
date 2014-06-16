@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "QBFlatButton.h"
 
 @interface UsuariosCheckinHeaderView : UICollectionReusableView
-@property (strong, nonatomic) IBOutlet UILabel *lblNomeLocalCheckins;
-@property (strong, nonatomic) IBOutlet QBFlatButton *btCheckinLocal;
+@property (strong, nonatomic) IBOutlet UIButton *btCheckinLocal;
+@property (strong, nonatomic) IBOutlet UILabel *lblNomeLocal;
+@property (strong, nonatomic) IBOutlet UILabel *lblQtPessoas;
 
 @end

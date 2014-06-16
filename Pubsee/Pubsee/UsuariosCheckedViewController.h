@@ -12,8 +12,8 @@
 #import "UsuarioFotoCollectionCell.h"
 #import "UsuariosCheckinHeaderView.h"
 #import "Local.h"
-#import "QBFlatButton.h"
 #import "CWStatusBarNotification.h"
+#import "CSAnimationView.h"
 
 @interface UsuariosCheckedViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 

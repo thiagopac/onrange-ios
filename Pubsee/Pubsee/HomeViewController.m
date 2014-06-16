@@ -164,6 +164,9 @@
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
         self.localOndeEstou = [mappingResult firstObject];
+        if (self.localOndeEstou.id_local != 0 && self.localOndeEstou != nil) {
+            self.btnMe.hidden = NO;
+        }
         
         NSLog(@"usuario está no local: %d",(int)self.localOndeEstou.id_local);
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -279,19 +282,19 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate openSessionWithAllowLoginUI:NO];
     }
+    
+    self.btnMe.hidden = YES;
+    
     [_mapGlobal removeAnnotations:_mapGlobal.annotations];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         [self carregaLocais];
     });
     
-    self.btnMe.hidden = YES;
-    
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     if ([def integerForKey:@"id_usuario"]) {
         int id_usuario = (int)[def integerForKey:@"id_usuario"];
             [self ondeEstou:id_usuario];
-            self.btnMe.hidden = NO;
     }
 }
 

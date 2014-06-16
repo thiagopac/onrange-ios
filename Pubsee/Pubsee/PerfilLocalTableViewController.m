@@ -23,6 +23,8 @@
     NSString *qt_checkin;
     NSString *latitude;
     NSString *longitude;
+    float deltaLatFor1px;
+    CLLocationCoordinate2D center;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrUsuarios;
@@ -76,12 +78,30 @@
     theCoordinate.longitude = [longitude doubleValue];
     
     CLLocationCoordinate2D startCoord = theCoordinate;
+    
+    center = startCoord;
+    
     MKCoordinateRegion adjustedRegion = [self.mapLocal regionThatFits:MKCoordinateRegionMakeWithDistance(startCoord, 400, 400)];
     [self.mapLocal setRegion:adjustedRegion animated:YES];
     
     PointLocais *point = [[PointLocais alloc]initWithCoordenada:startCoord nome:nil];
     [self.mapLocal addAnnotation:point];
     
+    CLLocationCoordinate2D referencePosition = [_mapLocal convertPoint:CGPointMake(0, 0) toCoordinateFromView:_mapLocal];
+    CLLocationCoordinate2D referencePosition2 = [_mapLocal convertPoint:CGPointMake(0, 100) toCoordinateFromView:_mapLocal];
+    deltaLatFor1px = (referencePosition2.latitude - referencePosition.latitude)/100;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat y = self.tableView.contentOffset.y;
+    if (y<0) {
+        //we moved y pixels down, how much latitude is that ?
+        double deltaLat = y * deltaLatFor1px;
+        //Move the center coordinate accordingly
+        CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(center.latitude-deltaLat/50, center.longitude);
+        _mapLocal.centerCoordinate = newCenter;
+        _mapLocal.frame = CGRectMake(0, 160, 320, -160+y);
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,8 +127,8 @@
                 break;
             case 1: //Sim
                 NSLog(@"Tentativa de checkout!");
-                //                [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
-                //                [self fazCheckin];
+                [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
+                [self fazCheckout];
                 break;
         }
     }
@@ -120,7 +140,7 @@
     [requestMapping addAttributeMappingsFromArray:@[@"id_usuario", @"id_local"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Checkin class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"id_local", @"id_checkin", @"checkin_vigente", @"id_checkin_anterior", @"id_local_anterior", @"id_output"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"id_local", @" eckin", @"checkin_vigente", @"id_checkin_anterior", @"id_local_anterior", @"id_output"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Checkin class] rootKeyPath:nil method:RKRequestMethodPOST];
     
@@ -175,6 +195,62 @@
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
+                      }];
+}
+
+-(void)fazCheckout{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"id_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Checkin class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_output"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Checkin class] rootKeyPath:nil method:RKRequestMethodPUT];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPUT
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Checkout"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString *path= @"checkin/fazcheckout";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Checkin *checkin= [Checkin new];
+    
+    checkin.id_usuario = id_usuario;
+    
+    [objectManager putObject:checkin
+                         path:path
+                   parameters:nil
+                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          if(mappingResult != nil){
+                              NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
+                              Checkin *checkoutefetuado = [mappingResult firstObject];
+                              [SVProgressHUD dismiss];
+                              [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
+                              if (checkoutefetuado.id_output == 1) {
+                                  
+                                  self.usuarioEstaNoLocal = NO;
+                                  self.lblCheckinCheckout.text = @"Checkin";
+                              }else if(checkoutefetuado.id_output == 2){
+                                  [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
+                              }else{
+                                  NSLog(@"Ocorreu um erro ao efetuar o checkout");
+                              }
+                          }else{
+                              NSLog(@"Falha ao tentar fazer checkout");
+                          }
+                      }
+                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Error: %@", error);
+                          NSLog(@"Falha ao tentar enviar dados de checkout");
                       }];
 }
 
@@ -271,7 +347,7 @@
         UIImageView *imv = [[UIImageView alloc]init];
         imv.image = self.imgQuemEstaNoLocal.image;
         cell.imageView.image = imv.image;
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17];
         
         self.lblCheckinCheckout.text = @"Checkin";
         [self carregaUsuarios];
