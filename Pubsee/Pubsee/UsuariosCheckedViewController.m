@@ -88,7 +88,10 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self statusBarCustomizadaWithMsg:@"Carregando usuários no local..."];
+    [self carregaUsuarios];
+    [self.collectionView reloadData];
 }
 
 - (void)sessionStateChanged:(NSNotification*)notification {
@@ -107,14 +110,14 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,id_local]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF/%d",API,(int)id_local,(int)id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
         self.arrUsuarios = [NSMutableArray arrayWithArray:mappingResult.array];
-        qt_checkin = [NSString stringWithFormat:@"%d",[self.arrUsuarios count]];
+        qt_checkin = [NSString stringWithFormat:@"%d",(int)[self.arrUsuarios count]];
         [self.collectionView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
@@ -157,6 +160,13 @@
 
 - (void)configureCell:(UsuarioFotoCollectionCell *)cell withUsuario:(Usuario *)usuario {
     cell.userProfilePictureView.profileID = usuario.facebook_usuario;
+    if (usuario.liked == 1) {
+        cell.imgLiked.hidden = NO;
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f];
+    }else{
+        cell.imgLiked.hidden = YES;
+        cell.viewContainerUsuarios.backgroundColor = [UIColor whiteColor];
+    }
     [self.notification dismissNotification];
 }
 
@@ -174,21 +184,20 @@
                 self.usuarioEstaNoLocal = YES;
                 [headerView.btCheckinLocal setTitle:@"Checkout" forState: UIControlStateNormal];
             }else{
-                NSString *pluralPessoas = [NSString new];
-                if ([qt_checkin integerValue] == 1) {
-                    pluralPessoas = @"pessoa";
-                }else{
-                    pluralPessoas = @"pessoas";
-                }
-                NSString *nomeLocalCheckins = [NSString stringWithFormat:@"%@ %@ neste local",qt_checkin,pluralPessoas];
-                if (nomeLocalCheckins != nil) {
-                    self.usuarioEstaNoLocal = NO;
-                    [headerView.lblNomeLocal setText:nome_local];
-                    [headerView.lblQtPessoas setText:nomeLocalCheckins];
-                    [headerView.btCheckinLocal setTitle:@"Checkin" forState: UIControlStateNormal];
-                }
+                 self.usuarioEstaNoLocal = NO;
+                [headerView.btCheckinLocal setTitle:@"Checkin" forState: UIControlStateNormal];
             }
         }
+        NSString *pluralPessoas = [NSString new];
+        if ([qt_checkin integerValue] == 1) {
+            pluralPessoas = @"pessoa";
+        }else{
+            pluralPessoas = @"pessoas";
+        }
+        NSString *nomeLocalCheckins = [NSString stringWithFormat:@"%@ %@ neste local",qt_checkin,pluralPessoas];
+        
+        [headerView.lblNomeLocal setText:nome_local];
+        [headerView.lblQtPessoas setText:nomeLocalCheckins];
 
         reusableview = headerView;
     }
@@ -208,6 +217,7 @@
         Usuario *usuario = [[self arrUsuarios]objectAtIndex:indexPath.item];
         
         [perfilUsuarioTVC setUsuario:usuario];
+        [perfilUsuarioTVC setLocal:self.local];
         
         [[self navigationController]pushViewController:perfilUsuarioTVC animated:YES];
     }else{
@@ -226,7 +236,6 @@
 
 - (IBAction)btCheckinLocal:(id)sender {
     if (self.usuarioEstaNoLocal == YES){
-       NSLog(@"vou deslogar ele agora");
         UIActionSheet* actionCheckout = [[UIActionSheet alloc]
                                          initWithTitle:[NSString stringWithFormat:@"Confirmar checkout de %@?", nome_local]
                                          delegate:(id<UIActionSheetDelegate>)self

@@ -10,10 +10,10 @@
 
 @interface Like : NSObject
 
-@property (nonatomic, assign) NSInteger *id_usuario1;
-@property (nonatomic, assign) NSInteger *id_usuario2;
-@property (nonatomic, assign) NSInteger *id_local;
-@property (nonatomic, assign) NSInteger *id_like;
+@property (nonatomic, assign) NSInteger id_usuario1;
+@property (nonatomic, assign) NSInteger id_usuario2;
+@property (nonatomic, assign) NSInteger id_local;
+@property (nonatomic, assign) NSInteger id_like;
 @property (nonatomic, assign) BOOL match;
 
 @end
