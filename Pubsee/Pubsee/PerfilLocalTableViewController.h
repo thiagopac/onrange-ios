@@ -11,9 +11,8 @@
 #import "PointLocais.h"
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import <SWTableViewCell/SWTableViewCell.h>
 
-@interface PerfilLocalTableViewController : UITableViewController<SWTableViewCellDelegate, UIScrollViewDelegate>
+@interface PerfilLocalTableViewController : UITableViewController<UIScrollViewDelegate>
 
 @property (strong, nonatomic) PointLocais *annotation;
 @property (strong, nonatomic) Local *local;

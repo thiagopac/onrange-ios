@@ -34,7 +34,7 @@
 
 +(RKMapping *)likeMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Like class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match",@"id_output"]];
     return mapping;
 }
 

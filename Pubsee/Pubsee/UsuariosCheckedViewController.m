@@ -20,7 +20,7 @@
     NSInteger id_local;
     NSString *nome_local;
     NSString *qt_checkin;
-    bool usuario_no_local;
+    NSString *genero;
     int id_usuario;
 }
 
@@ -56,15 +56,17 @@
     }
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    id_usuario = [def integerForKey:@"id_usuario"];
+    
+    id_usuario = (int)[def integerForKey:@"id_usuario"];
+    
+    if (![def objectForKey:@"genero"]) {
+        genero = @"MF";
+    }else{
+        genero = [def objectForKey:@"genero"];
+    }
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        [self carregaUsuarios];
-    });
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
@@ -90,7 +92,10 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self statusBarCustomizadaWithMsg:@"Carregando usuários no local..."];
-    [self carregaUsuarios];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self carregaUsuarios];
+    });
     [self.collectionView reloadData];
 }
 
@@ -110,7 +115,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF/%d",API,(int)id_local,(int)id_usuario]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/%@/%d",API,(int)id_local,genero,(int)id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -118,6 +123,7 @@
         
         self.arrUsuarios = [NSMutableArray arrayWithArray:mappingResult.array];
         qt_checkin = [NSString stringWithFormat:@"%d",(int)[self.arrUsuarios count]];
+        [self verificaUsuarioNoLocal];
         [self.collectionView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
@@ -131,12 +137,18 @@
 }
 
 -(BOOL)verificaUsuarioNoLocal{
-    if ([self.arrUsuarios containsObject:[NSNumber numberWithInt:id_usuario]]) {
-        usuario_no_local = YES;
-    }else{
-        usuario_no_local = NO;
+    
+    for (int i=0; i<[self.arrUsuarios count]; i++) {
+        Usuario *usuario = [self.arrUsuarios objectAtIndex:i];
+        
+        if (usuario.id_usuario == id_usuario) {
+            self.usuarioEstaNoLocal = YES;
+            return self.usuarioEstaNoLocal;
+        }else{
+            self.usuarioEstaNoLocal = NO;
+        }
     }
-    return usuario_no_local;
+    return self.usuarioEstaNoLocal;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -154,7 +166,6 @@
 
     [self configureCell:cell withUsuario:usuario];
 
-    
     return cell;
 }
 
@@ -175,19 +186,14 @@
     UICollectionReusableView *reusableview = nil;
     if (kind == UICollectionElementKindSectionHeader) {
         UsuariosCheckinHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
-
-        for (int i=0; i<[self.arrUsuarios count]; i++) {
-            Usuario *usuario = [self.arrUsuarios objectAtIndex:i];
-            
-            if (usuario.id_usuario == id_usuario) {
+        
+            if (self.usuarioEstaNoLocal == YES) {
                 NSLog(@"O usuário está no local");
-                self.usuarioEstaNoLocal = YES;
                 [headerView.btCheckinLocal setTitle:@"Checkout" forState: UIControlStateNormal];
             }else{
-                 self.usuarioEstaNoLocal = NO;
                 [headerView.btCheckinLocal setTitle:@"Checkin" forState: UIControlStateNormal];
             }
-        }
+        
         NSString *pluralPessoas = [NSString new];
         if ([qt_checkin integerValue] == 1) {
             pluralPessoas = @"pessoa";
@@ -273,8 +279,8 @@
                 break;
             case 1: //Sim
                 NSLog(@"Tentativa de checkout!");
-//                [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
-//                [self fazCheckin];
+                [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
+                [self fazCheckout];
                 break;
         }
     }
@@ -329,18 +335,82 @@
                                   [self.view setNeedsLayout];
                               }else if(checkinefetuado.id_output == 2){
                                   [self alert:@"Ocorreu um erro na tentativa de efetuar checkin. Tente novamente em alguns segundos":@"Erro"];
+                                  [SVProgressHUD dismiss];
                               }else if(checkinefetuado.id_output == 3){
                                   [self alert:@"O tempo mínimo para fazer um novo checkin é de 5 minutos":@"Erro"];
+                                  [SVProgressHUD dismiss];
                               }else{
                                   NSLog(@"Ocorreu um erro ao efetuar o checkin");
+                                  [SVProgressHUD dismiss];
                               }
                           }else{
                               NSLog(@"Falha ao tentar fazer checkin");
+                              [SVProgressHUD dismiss];
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
+                          [SVProgressHUD dismiss];
+                      }];
+}
+
+-(void)fazCheckout{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"id_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Checkin class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_output"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Checkin class] rootKeyPath:nil method:RKRequestMethodPUT];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPUT
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Checkout"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"checkin/fazcheckout";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Checkin *checkin= [Checkin new];
+    
+    checkin.id_usuario = id_usuario;
+    
+    [objectManager putObject:checkin
+                         path:path
+                   parameters:nil
+                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          if(mappingResult != nil){
+                              NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
+                              Checkin *checkoutefetuado = [mappingResult firstObject];
+                              [SVProgressHUD dismiss];
+                              [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
+                              if (checkoutefetuado.id_output == 1) {
+                                  self.usuarioEstaNoLocal = NO;
+                                  [self carregaUsuarios];
+                                  
+                                  [self.view setNeedsLayout];
+                              }else if(checkoutefetuado.id_output == 2){
+                                  [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
+                              }else{
+                                  NSLog(@"Ocorreu um erro ao efetuar o checkout");
+                              }
+                          }else{
+                              NSLog(@"Falha ao tentar fazer checkout");
+                              [SVProgressHUD dismiss];
+                          }
+                      }
+                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Error: %@", error);
+                          NSLog(@"Falha ao tentar enviar dados de checkout");
+                          [SVProgressHUD dismiss];
                       }];
 }
 

@@ -11,6 +11,7 @@
 #import "RestKit.h"
 #import "MappingProvider.h"
 #import "ConfirmaMatchViewController.h"
+#import <SVProgressHUD/SVProgressHUD.h>
 
 @interface PerfilUsuarioTableViewController (){
     NSInteger id_usuario1;
@@ -51,6 +52,8 @@
     }
     if (self.usuario.liked == 1) {
         [self botaoSelecionado];
+    }else{
+        [self botaoNaoSelecionado];
     }
 }
 
@@ -73,13 +76,18 @@
     [self.btnCurtirUsuario setTitle:@"Curtido" forState:UIControlStateNormal];
 }
 
+-(void)botaoNaoSelecionado{
+    [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f]];
+    [self.btnCurtirUsuario setTitle:@"Curtir" forState:UIControlStateNormal];
+}
+
 -(void)curtirUsuario{
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
     [requestMapping addAttributeMappingsFromArray:@[@"id_usuario1",@"id_usuario2",@"id_local"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Like class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match", @"id_output"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Like class] rootKeyPath:nil method:RKRequestMethodPOST];
     
@@ -121,8 +129,17 @@
                                   [self.view setNeedsLayout];
                                   [self botaoSelecionado];
                               }else if(likeefetuado.match == 0){
-                                  [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:139/255.0f green:204/255.0f blue:0/255.0f alpha:1.0f]];
-                                  [self.btnCurtirUsuario setTitle:@"Curtido" forState:UIControlStateNormal];
+                                  if (likeefetuado.id_output == 4) {
+                                      [self botaoNaoSelecionado];
+                                  }else if (likeefetuado.id_output ==1){
+                                      [self botaoSelecionado];
+                                  }else if (likeefetuado.id_output == 2){
+                                      [self botaoSelecionado];
+                                      [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+                                  }else if (likeefetuado.id_output == 3){
+                                      [self botaoSelecionado];
+                                      [SVProgressHUD showErrorWithStatus:@"Esta pessoa não está mais no local"];
+                                  }
                               }else{
                                   NSLog(@"Ocorreu um erro ao efetuar o like");
                               }

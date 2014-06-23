@@ -21,6 +21,8 @@
 		6E402A1A1925BC4100EF9052 /* rocket.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E402A181925BC4100EF9052 /* rocket.png */; };
 		6E402A1C1925C8B600EF9052 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E402A1B1925C8B600EF9052 /* chat.png */; };
 		6E402A1F1925C9EE00EF9052 /* ConfirmaAdicaoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E402A1E1925C9EE00EF9052 /* ConfirmaAdicaoViewController.m */; };
+		6E428D7A1957AFD30031B7F2 /* GenerosTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E428D791957AFD30031B7F2 /* GenerosTableViewController.m */; };
+		6E428D7D1957B0430031B7F2 /* GenerosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E428D7C1957B0430031B7F2 /* GenerosTableViewCell.m */; };
 		6E433630194E2FB9005FB4A8 /* PerfilUsuarioTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E43362F194E2FB9005FB4A8 /* PerfilUsuarioTableViewController.m */; };
 		6E433634194E74CD005FB4A8 /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E433633194E74CD005FB4A8 /* Like.m */; };
 		6E433638194E9445005FB4A8 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E433636194E9445005FB4A8 /* heart.png */; };
@@ -134,6 +136,10 @@
 		6E402A1B1925C8B600EF9052 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
 		6E402A1D1925C9EE00EF9052 /* ConfirmaAdicaoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmaAdicaoViewController.h; sourceTree = "<group>"; };
 		6E402A1E1925C9EE00EF9052 /* ConfirmaAdicaoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmaAdicaoViewController.m; sourceTree = "<group>"; };
+		6E428D781957AFD30031B7F2 /* GenerosTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerosTableViewController.h; sourceTree = "<group>"; };
+		6E428D791957AFD30031B7F2 /* GenerosTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerosTableViewController.m; sourceTree = "<group>"; };
+		6E428D7B1957B0430031B7F2 /* GenerosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenerosTableViewCell.h; sourceTree = "<group>"; };
+		6E428D7C1957B0430031B7F2 /* GenerosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerosTableViewCell.m; sourceTree = "<group>"; };
 		6E43362E194E2FB9005FB4A8 /* PerfilUsuarioTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerfilUsuarioTableViewController.h; sourceTree = "<group>"; };
 		6E43362F194E2FB9005FB4A8 /* PerfilUsuarioTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerfilUsuarioTableViewController.m; sourceTree = "<group>"; };
 		6E433632194E74CD005FB4A8 /* Like.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Like.h; sourceTree = "<group>"; };
@@ -410,6 +416,10 @@
 			children = (
 				6E516FE118C4C63D00C8A929 /* SettingsTableViewController.h */,
 				6E516FE218C4C63D00C8A929 /* SettingsTableViewController.m */,
+				6E428D781957AFD30031B7F2 /* GenerosTableViewController.h */,
+				6E428D791957AFD30031B7F2 /* GenerosTableViewController.m */,
+				6E428D7B1957B0430031B7F2 /* GenerosTableViewCell.h */,
+				6E428D7C1957B0430031B7F2 /* GenerosTableViewCell.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -875,6 +885,7 @@
 				6EF4314C18B17755007F7D79 /* AppDelegate.m in Sources */,
 				6EF4314818B17755007F7D79 /* main.m in Sources */,
 				6E8B8080192593300006DABE /* ControleTeclado.m in Sources */,
+				6E428D7D1957B0430031B7F2 /* GenerosTableViewCell.m in Sources */,
 				6E0AB74318B7C500003DCF1E /* LocaisTableViewController.m in Sources */,
 				6EF4D31218B3F6CE00334BDD /* LoginViewController.m in Sources */,
 				6E4B15C118C5934700A6BBE2 /* PointLocais.m in Sources */,
@@ -887,6 +898,7 @@
 				6EBAE5B318B69C8C0050FC63 /* MenuViewController.m in Sources */,
 				6E433634194E74CD005FB4A8 /* Like.m in Sources */,
 				6E4B15E818C81CF000A6BBE2 /* UsuarioFotoCollectionCell.m in Sources */,
+				6E428D7A1957AFD30031B7F2 /* GenerosTableViewController.m in Sources */,
 				6E606F3A18DA4251003291E6 /* ConfirmaCheckinViewController.m in Sources */,
 				6E2ABFDC1924DE7E00C8CE36 /* TipoLocalTableViewCell.m in Sources */,
 				6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */,

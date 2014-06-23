@@ -61,8 +61,6 @@
         longitude = self.local.longitude;
     }
     
-
-    
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
@@ -183,18 +181,23 @@
                                   
                               }else if(checkinefetuado.id_output == 2){
                                   [self alert:@"Ocorreu um erro na tentativa de efetuar checkin. Tente novamente em alguns segundos":@"Erro"];
+                                  [SVProgressHUD dismiss];
                               }else if(checkinefetuado.id_output == 3){
                                   [self alert:@"O tempo mínimo para fazer um novo checkin é de 5 minutos":@"Erro"];
+                                  [SVProgressHUD dismiss];
                               }else{
                                   NSLog(@"Ocorreu um erro ao efetuar o checkin");
+                                  [SVProgressHUD dismiss];
                               }
                           }else{
                               NSLog(@"Falha ao tentar fazer checkin");
+                              [SVProgressHUD dismiss];
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
+                          [SVProgressHUD dismiss];
                       }];
 }
 
@@ -236,21 +239,24 @@
                               [SVProgressHUD dismiss];
                               [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
                               if (checkoutefetuado.id_output == 1) {
-                                  
                                   self.usuarioEstaNoLocal = NO;
                                   self.lblCheckinCheckout.text = @"Checkin";
                               }else if(checkoutefetuado.id_output == 2){
                                   [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
+                                  [SVProgressHUD dismiss];
                               }else{
                                   NSLog(@"Ocorreu um erro ao efetuar o checkout");
+                                  [SVProgressHUD dismiss];
                               }
                           }else{
                               NSLog(@"Falha ao tentar fazer checkout");
+                              [SVProgressHUD dismiss];
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkout");
+                          [SVProgressHUD dismiss];
                       }];
 }
 
@@ -260,7 +266,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Usuarios" statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF",API,(int)id_local]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF/%d",API,(int)id_local,(int)id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -336,13 +342,17 @@
     }
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SWTableViewCell *cell = (SWTableViewCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     if (indexPath.section == 0 && indexPath.row == 0) {
         
-        cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"quemEstaCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"quemEstaCell"];
         
         UIImageView *imv = [[UIImageView alloc]init];
         imv.image = self.imgQuemEstaNoLocal.image;
@@ -358,23 +368,9 @@
         }else{
             cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoas no local",qt_checkin];
         }
-        
-        cell.rightUtilityButtons = [self rightButtons];
-        cell.delegate = self;
     }
     
     return cell;
-}
-
-- (NSArray *)rightButtons
-{
-    NSMutableArray *rightUtilityButtons = [NSMutableArray new];
-    [rightUtilityButtons sw_addUtilityButtonWithColor:[UIColor colorWithRed:242/255.0f green:114/255.0f blue:173/255.0f alpha:1.0f]icon:[UIImage imageNamed:@"ico_fem"]];//icon:[UIImage imageNamed:@"ico_fem"]
-
-    [rightUtilityButtons sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:0/255.0f green:174/255.0f blue:247/255.0f alpha:1.0f]icon:[UIImage imageNamed:@"ico_mas"]];//icon:[UIImage imageNamed:@"ico_mas"]
-     
-    return rightUtilityButtons;
 }
 
 @end

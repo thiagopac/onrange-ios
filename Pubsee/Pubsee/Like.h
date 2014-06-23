@@ -15,5 +15,6 @@
 @property (nonatomic, assign) NSInteger id_local;
 @property (nonatomic, assign) NSInteger id_like;
 @property (nonatomic, assign) BOOL match;
+@property (nonatomic, assign) NSInteger id_output;
 
 @end

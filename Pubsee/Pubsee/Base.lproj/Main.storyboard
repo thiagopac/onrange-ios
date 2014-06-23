@@ -305,7 +305,7 @@
                         <sections>
                             <tableViewSection id="cNE-2k-aFq">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="65" id="6Jg-4p-ZNg">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="65" id="6Jg-4p-ZNg">
                                         <rect key="frame" x="0.0" y="280" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Jg-4p-ZNg" id="cWS-Zb-nzm">
@@ -451,7 +451,7 @@
                         <sections>
                             <tableViewSection headerTitle="RAIO DE BUSCA" id="HrX-aD-UJH">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="63" id="kqY-Jw-tqV">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="63" id="kqY-Jw-tqV">
                                         <rect key="frame" x="0.0" y="55" width="320" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kqY-Jw-tqV" id="49D-5q-wx1">
@@ -480,6 +480,30 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="MOSTRAR NOS LOCAIS" id="Woa-gv-YZO">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="46" id="tHk-KQ-4Ze">
+                                        <rect key="frame" x="0.0" y="166" width="320" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tHk-KQ-4Ze" id="YdW-w2-CjJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="45"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="lblGenero" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Eaq-4Y-t2r">
+                                                    <rect key="frame" x="20" y="12" width="196" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="rxa-Ne-v5c" kind="push" id="Okn-I3-wiC"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="bPA-8K-kcO" id="ZTS-yb-OVv"/>
@@ -488,6 +512,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="3F6-hw-10r"/>
                     <connections>
+                        <outlet property="lblGenero" destination="Eaq-4Y-t2r" id="7IH-qf-S6n"/>
                         <outlet property="lblRadio" destination="1Ve-PQ-LMF" id="8ug-cQ-h8Y"/>
                         <outlet property="sliderRaio" destination="Qje-ic-800" id="PRR-CG-3sk"/>
                     </connections>
@@ -1165,6 +1190,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvj-X8-TiW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2210" y="-175"/>
+        </scene>
+        <!--Generos Table View Controller-->
+        <scene sceneID="JNm-Nf-GWV">
+            <objects>
+                <tableViewController id="rxa-Ne-v5c" customClass="GenerosTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Z5v-Mf-kXa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="generosCell" id="Lut-4B-60D" customClass="GenerosTableViewCell">
+                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lut-4B-60D" id="lSt-0u-nLW">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="genero" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vQq-1y-VfG">
+                                            <rect key="frame" x="20" y="11" width="255" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="16"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="lblGenero" destination="vQq-1y-VfG" id="paS-L6-Gmz"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="rxa-Ne-v5c" id="MNZ-cr-vZX"/>
+                            <outlet property="delegate" destination="rxa-Ne-v5c" id="snI-KJ-Rbv"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="emF-ux-MOO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tjS-w1-Ov0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="193" y="1596"/>
         </scene>
     </scenes>
     <resources>
