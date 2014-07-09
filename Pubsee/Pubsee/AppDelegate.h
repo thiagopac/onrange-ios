@@ -22,7 +22,7 @@ extern NSString *const FBMenuDataChangedNotification;
 
 typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate, QBActionStatusDelegate>{
     HomeViewController *homeVC;
 }
 

@@ -12,6 +12,7 @@
 #import "MappingProvider.h"
 #import "AppDelegate.h"
 
+
 NSString *const FBSessionStateChangedNotification =
 @"com.facebook.samples.SocialCafe:FBSessionStateChangedNotification";
 
@@ -44,7 +45,36 @@ NSString *const FBMenuDataChangedNotification =
 
      [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    //integração com Quickblox
+    [QBSettings setApplicationID:10625];
+    [QBSettings setAuthorizationKey:@"rrTrFYFOECqjTAe"];
+    [QBSettings setAuthorizationSecret:@"hM5vAmpBYYGV-p5"];
+    [QBSettings setAccountKey:@"TzErECZmN1ELxzE22avj"];
+    
+    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    extendedAuthRequest.userLogin = @"thiagopac";
+    extendedAuthRequest.userPassword = @"GRanada11";
+    
+    // QuickBlox session creation
+    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+    
     return YES;
+}
+
+// QuickBlox queries delegate
+- (void)completedWithResult:(Result *)result{
+    if(result.success){
+        
+        // Create session result
+        if([result isKindOfClass:QBAAuthSessionCreationResult.class]){
+            // register for receive push notifications
+            [QBMessages TRegisterSubscriptionWithDelegate:self];
+            
+            // Register for receive push notifications result
+        }else if([result isKindOfClass:QBMRegisterSubscriptionTaskResult.class]){
+            // Congrats! Now you can receive Push Notifications!
+        }
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

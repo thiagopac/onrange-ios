@@ -43,6 +43,15 @@
 		6E6DF74A19088F3700DF8D76 /* stickman.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6DF74919088F3700DF8D76 /* stickman.png */; };
 		6E8B8080192593300006DABE /* ControleTeclado.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8B807E192593300006DABE /* ControleTeclado.m */; };
 		6E8B8081192593300006DABE /* ControleTeclado.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E8B807F192593300006DABE /* ControleTeclado.xib */; };
+		6EACD5FD196CD23B00719003 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD5FC196CD23B00719003 /* CFNetwork.framework */; };
+		6EACD5FF196CD24700719003 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD5FE196CD24700719003 /* SystemConfiguration.framework */; };
+		6EACD601196CD25100719003 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD600196CD25100719003 /* MobileCoreServices.framework */; };
+		6EACD603196CD26900719003 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD602196CD26900719003 /* CoreData.framework */; };
+		6EACD605196CD27000719003 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD604196CD27000719003 /* libz.dylib */; };
+		6EACD609196CD28100719003 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD608196CD28100719003 /* libxml2.2.dylib */; };
+		6EACD60B196CD28C00719003 /* libresolv.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60A196CD28C00719003 /* libresolv.9.dylib */; };
+		6EACD60D196CD2E200719003 /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60C196CD2E200719003 /* Quickblox.framework */; };
+		6EACD60F196CD65000719003 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60E196CD65000719003 /* libstdc++.dylib */; };
 		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
 		6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61818C01ED400240B6B /* PontoLocal.m */; };
 		6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB6C61A18C020F800240B6B /* MapKit.framework */; };
@@ -170,6 +179,16 @@
 		6E8B807D192593300006DABE /* ControleTeclado.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControleTeclado.h; sourceTree = "<group>"; };
 		6E8B807E192593300006DABE /* ControleTeclado.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControleTeclado.m; sourceTree = "<group>"; };
 		6E8B807F192593300006DABE /* ControleTeclado.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ControleTeclado.xib; sourceTree = "<group>"; };
+		6EACD5FC196CD23B00719003 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		6EACD5FE196CD24700719003 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		6EACD600196CD25100719003 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		6EACD602196CD26900719003 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		6EACD604196CD27000719003 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		6EACD606196CD27800719003 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
+		6EACD608196CD28100719003 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
+		6EACD60A196CD28C00719003 /* libresolv.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.9.dylib; path = usr/lib/libresolv.9.dylib; sourceTree = SDKROOT; };
+		6EACD60C196CD2E200719003 /* Quickblox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quickblox.framework; path = Pubsee/Quickblox/Quickblox.framework; sourceTree = "<group>"; };
+		6EACD60E196CD65000719003 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		6EB6C61318C0199E00240B6B /* Local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Local.h; sourceTree = "<group>"; };
 		6EB6C61418C0199E00240B6B /* Local.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Local.m; sourceTree = "<group>"; };
 		6EB6C61718C01ED400240B6B /* PontoLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PontoLocal.h; sourceTree = "<group>"; };
@@ -251,10 +270,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EACD60F196CD65000719003 /* libstdc++.dylib in Frameworks */,
+				6EACD60D196CD2E200719003 /* Quickblox.framework in Frameworks */,
+				6EACD60B196CD28C00719003 /* libresolv.9.dylib in Frameworks */,
+				6EACD609196CD28100719003 /* libxml2.2.dylib in Frameworks */,
+				6EACD605196CD27000719003 /* libz.dylib in Frameworks */,
+				6EACD603196CD26900719003 /* CoreData.framework in Frameworks */,
 				6E516FE518C4EDB300C8A929 /* CoreLocation.framework in Frameworks */,
+				6EF4313E18B17755007F7D79 /* CoreGraphics.framework in Frameworks */,
+				6EACD601196CD25100719003 /* MobileCoreServices.framework in Frameworks */,
+				6EACD5FF196CD24700719003 /* SystemConfiguration.framework in Frameworks */,
+				6EACD5FD196CD23B00719003 /* CFNetwork.framework in Frameworks */,
 				6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */,
 				6E0AB74018B7B01C003DCF1E /* QuartzCore.framework in Frameworks */,
-				6EF4313E18B17755007F7D79 /* CoreGraphics.framework in Frameworks */,
 				6EF4314018B17755007F7D79 /* UIKit.framework in Frameworks */,
 				6EF4313C18B17755007F7D79 /* Foundation.framework in Frameworks */,
 				7FA1C988812E4A6EA3EBA1CA /* libPods.a in Frameworks */,
@@ -632,6 +660,16 @@
 		6EF4313A18B17755007F7D79 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6EACD60E196CD65000719003 /* libstdc++.dylib */,
+				6EACD60C196CD2E200719003 /* Quickblox.framework */,
+				6EACD60A196CD28C00719003 /* libresolv.9.dylib */,
+				6EACD608196CD28100719003 /* libxml2.2.dylib */,
+				6EACD606196CD27800719003 /* libresolv.dylib */,
+				6EACD604196CD27000719003 /* libz.dylib */,
+				6EACD602196CD26900719003 /* CoreData.framework */,
+				6EACD600196CD25100719003 /* MobileCoreServices.framework */,
+				6EACD5FE196CD24700719003 /* SystemConfiguration.framework */,
+				6EACD5FC196CD23B00719003 /* CFNetwork.framework */,
 				6E516FE418C4EDB200C8A929 /* CoreLocation.framework */,
 				6EB6C61A18C020F800240B6B /* MapKit.framework */,
 				6E0AB73F18B7B01C003DCF1E /* QuartzCore.framework */,
@@ -1033,6 +1071,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thiago Pires Alves de Castro (42HHF3VBQ7)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pubsee/Quickblox",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pubsee/Onrange-Prefix.pch";
 				INFOPLIST_FILE = "Pubsee/Onrange-Info.plist";
@@ -1049,6 +1091,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thiago Pires Alves de Castro (42HHF3VBQ7)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pubsee/Quickblox",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pubsee/Onrange-Prefix.pch";
 				INFOPLIST_FILE = "Pubsee/Onrange-Info.plist";

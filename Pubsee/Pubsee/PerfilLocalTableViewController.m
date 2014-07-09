@@ -9,7 +9,6 @@
 #import "PerfilLocalTableViewController.h"
 #import <RestKit/RestKit.h>
 #import "MappingProvider.h"
-#import "NSMutableArray+SWUtilityButtons.h"
 #import "Usuario.h"
 #import "Checkin.h"
 #import "ConfirmaCheckinViewController.h"
