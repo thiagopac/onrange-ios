@@ -9,7 +9,7 @@
 #import "SettingsTableViewController.h"
 #import "SlideNavigationController.h"
 
-@interface SettingsTableViewController (){
+@interface SettingsTableViewController ()<QBActionStatusDelegate>{
     int prev;
 }
 
@@ -50,13 +50,30 @@
 
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    [[self sliderRaio]setValue:[def integerForKey:@"userRange"]];
+    if ([def integerForKey:@"userRange"])
+        [[self sliderRaio]setValue:[def integerForKey:@"userRange"]];
+    else
+        [[self sliderRaio]setValue:20];
+
     [self alterarLabelRaio];
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+//    [QBUsers logInWithUserLogin:@"thiagopac" password:@"GRanada11"  delegate:self];
+
+    NSString *token = [QBBaseModule sharedModule].token;
+    NSLog(@"O token válido é: %@",token);
+    
 }
+
+//- (void)completedWithResult:(Result *)result{
+//    if(result.success && [result isKindOfClass:QBUUserLogInResult.class]){
+//        // Success, do something
+//        QBUUserLogInResult *userResult = (QBUUserLogInResult *)result;
+//        NSLog(@"Logged In user=%@", userResult.user);
+//    }
+//}
 
 -(void)viewWillAppear:(BOOL)animated{
     
