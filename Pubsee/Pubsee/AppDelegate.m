@@ -53,7 +53,7 @@ NSString *const FBMenuDataChangedNotification =
     
     QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
     extendedAuthRequest.userLogin = @"thiagopac";
-    extendedAuthRequest.userPassword = @"GRanada11";
+    extendedAuthRequest.userPassword = @"qwerasdf";
     
     // QuickBlox session creation
     [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];

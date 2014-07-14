@@ -15,6 +15,7 @@
 @property (nonatomic, assign) NSInteger id_local;
 @property (nonatomic, assign) NSInteger id_like;
 @property (nonatomic, assign) BOOL match;
+@property (nonatomic, strong) NSString *nome_chat;
 @property (nonatomic, assign) NSInteger id_output;
 
 @end

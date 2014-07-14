@@ -9,7 +9,6 @@
 #import "MenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HomeViewController.h"
-#import "LocaisProximosTableViewController.h"
 
 @implementation MenuViewController
 
@@ -93,6 +92,13 @@
                              destructiveButtonTitle:@"Logout"
                              otherButtonTitles:nil ];
     [action showInView:self.view];
+}
+
+- (IBAction)minhasCombinacoesButtonClicked:(UIButton *)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+															 bundle: nil];
+    UITableViewController *SettingsTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"MinhasCombinacoesTableViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:SettingsTableViewController withCompletion:nil];
 }
 
 - (IBAction)settingsButtonClicked:(UIButton *)sender {

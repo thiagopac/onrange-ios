@@ -15,6 +15,6 @@
 + (RKMapping *)localMapping;
 + (RKMapping *)checkinMapping;
 + (RKMapping *)likeMapping;
-
++ (RKMapping *)matchMapping;
 
 @end

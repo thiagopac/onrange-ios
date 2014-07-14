@@ -52,6 +52,10 @@
 		6EACD60B196CD28C00719003 /* libresolv.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60A196CD28C00719003 /* libresolv.9.dylib */; };
 		6EACD60D196CD2E200719003 /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60C196CD2E200719003 /* Quickblox.framework */; };
 		6EACD60F196CD65000719003 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60E196CD65000719003 /* libstdc++.dylib */; };
+		6EAF7DF51973EEDF007CCC7C /* icone_combinacoes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EAF7DF41973EEDF007CCC7C /* icone_combinacoes@2x.png */; };
+		6EAF7DF81973F03D007CCC7C /* MinhasCombinacoesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */; };
+		6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */; };
+		6EAF7E0319740694007CCC7C /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7E0219740694007CCC7C /* Match.m */; };
 		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
 		6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61818C01ED400240B6B /* PontoLocal.m */; };
 		6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB6C61A18C020F800240B6B /* MapKit.framework */; };
@@ -189,6 +193,13 @@
 		6EACD60A196CD28C00719003 /* libresolv.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.9.dylib; path = usr/lib/libresolv.9.dylib; sourceTree = SDKROOT; };
 		6EACD60C196CD2E200719003 /* Quickblox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quickblox.framework; path = Pubsee/Quickblox/Quickblox.framework; sourceTree = "<group>"; };
 		6EACD60E196CD65000719003 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		6EAF7DF41973EEDF007CCC7C /* icone_combinacoes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icone_combinacoes@2x.png"; sourceTree = "<group>"; };
+		6EAF7DF61973F03D007CCC7C /* MinhasCombinacoesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinhasCombinacoesTableViewController.h; sourceTree = "<group>"; };
+		6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewController.m; sourceTree = "<group>"; };
+		6EAF7DFE1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinhasCombinacoesTableViewCell.h; sourceTree = "<group>"; };
+		6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewCell.m; sourceTree = "<group>"; };
+		6EAF7E0119740694007CCC7C /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		6EAF7E0219740694007CCC7C /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		6EB6C61318C0199E00240B6B /* Local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Local.h; sourceTree = "<group>"; };
 		6EB6C61418C0199E00240B6B /* Local.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Local.m; sourceTree = "<group>"; };
 		6EB6C61718C01ED400240B6B /* PontoLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PontoLocal.h; sourceTree = "<group>"; };
@@ -302,20 +313,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6E0AB74418B7C50C003DCF1E /* Locais */ = {
-			isa = PBXGroup;
-			children = (
-				6E606F3718DA41F6003291E6 /* Checkin */,
-				6E2ABFDF19251E5100C8CE36 /* TopLocais */,
-				6EB6C61718C01ED400240B6B /* PontoLocal.h */,
-				6EB6C61818C01ED400240B6B /* PontoLocal.m */,
-				6EECED7B1919BD220054F6F0 /* AdicionaLocalTableViewController.h */,
-				6EECED7C1919BD220054F6F0 /* AdicionaLocalTableViewController.m */,
-				6E2ABFDD1924ED6700C8CE36 /* TipoLocal */,
-			);
-			name = Locais;
-			sourceTree = "<group>";
-		};
 		6E1A0195194FB64F00AA0ABF /* Grade das latas */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,7 +326,7 @@
 			name = "Grade das latas";
 			sourceTree = "<group>";
 		};
-		6E2ABFDD1924ED6700C8CE36 /* TipoLocal */ = {
+		6E2ABFDD1924ED6700C8CE36 /* Tipo local */ = {
 			isa = PBXGroup;
 			children = (
 				6EECED7E1919C9750054F6F0 /* TipoLocalTableViewController.h */,
@@ -337,10 +334,10 @@
 				6E2ABFDA1924DE7E00C8CE36 /* TipoLocalTableViewCell.h */,
 				6E2ABFDB1924DE7E00C8CE36 /* TipoLocalTableViewCell.m */,
 			);
-			name = TipoLocal;
+			name = "Tipo local";
 			sourceTree = "<group>";
 		};
-		6E2ABFDE19251E1000C8CE36 /* LocaisProximos */ = {
+		6E2ABFDE19251E1000C8CE36 /* Locais proximos */ = {
 			isa = PBXGroup;
 			children = (
 				6E211F5C18DFBE3F008DCC1F /* LocaisProximosTableViewController.h */,
@@ -348,7 +345,7 @@
 				6E36D74E191AF722003598C4 /* LocaisProximosTableViewCell.h */,
 				6E36D74F191AF722003598C4 /* LocaisProximosTableViewCell.m */,
 			);
-			name = LocaisProximos;
+			name = "Locais proximos";
 			sourceTree = "<group>";
 		};
 		6E2ABFDF19251E5100C8CE36 /* TopLocais */ = {
@@ -425,20 +422,6 @@
 			name = "Usuários";
 			sourceTree = "<group>";
 		};
-		6E606F3718DA41F6003291E6 /* Checkin */ = {
-			isa = PBXGroup;
-			children = (
-				6E2ABFDE19251E1000C8CE36 /* LocaisProximos */,
-				6EC1E414192E1A470095693F /* PerfilLocalTableViewController.h */,
-				6EC1E415192E1A470095693F /* PerfilLocalTableViewController.m */,
-				6E606F3818DA4251003291E6 /* ConfirmaCheckinViewController.h */,
-				6E606F3918DA4251003291E6 /* ConfirmaCheckinViewController.m */,
-				6E402A1D1925C9EE00EF9052 /* ConfirmaAdicaoViewController.h */,
-				6E402A1E1925C9EE00EF9052 /* ConfirmaAdicaoViewController.m */,
-			);
-			name = Checkin;
-			sourceTree = "<group>";
-		};
 		6E7050A318BAB65C0029E58A /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,6 +445,63 @@
 			name = ControleTeclado;
 			sourceTree = "<group>";
 		};
+		6EAF7DF91973F081007CCC7C /* Minhas combinações */ = {
+			isa = PBXGroup;
+			children = (
+				6EAF7DF61973F03D007CCC7C /* MinhasCombinacoesTableViewController.h */,
+				6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */,
+				6EAF7DFE1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.h */,
+				6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */,
+			);
+			name = "Minhas combinações";
+			sourceTree = "<group>";
+		};
+		6EAF7DFA1973F0D2007CCC7C /* Perfil local */ = {
+			isa = PBXGroup;
+			children = (
+				6EC1E414192E1A470095693F /* PerfilLocalTableViewController.h */,
+				6EC1E415192E1A470095693F /* PerfilLocalTableViewController.m */,
+			);
+			name = "Perfil local";
+			sourceTree = "<group>";
+		};
+		6EAF7DFB1973F0DB007CCC7C /* Confirma checkin */ = {
+			isa = PBXGroup;
+			children = (
+				6E606F3818DA4251003291E6 /* ConfirmaCheckinViewController.h */,
+				6E606F3918DA4251003291E6 /* ConfirmaCheckinViewController.m */,
+			);
+			name = "Confirma checkin";
+			sourceTree = "<group>";
+		};
+		6EAF7DFC1973F0F4007CCC7C /* Confirma adição local */ = {
+			isa = PBXGroup;
+			children = (
+				6E402A1D1925C9EE00EF9052 /* ConfirmaAdicaoViewController.h */,
+				6E402A1E1925C9EE00EF9052 /* ConfirmaAdicaoViewController.m */,
+			);
+			name = "Confirma adição local";
+			sourceTree = "<group>";
+		};
+		6EAF7DFD1973F140007CCC7C /* Adiciona local */ = {
+			isa = PBXGroup;
+			children = (
+				6EECED7B1919BD220054F6F0 /* AdicionaLocalTableViewController.h */,
+				6EECED7C1919BD220054F6F0 /* AdicionaLocalTableViewController.m */,
+				6E2ABFDD1924ED6700C8CE36 /* Tipo local */,
+			);
+			name = "Adiciona local";
+			sourceTree = "<group>";
+		};
+		6EAF7E04197406A7007CCC7C /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				6EAF7E0119740694007CCC7C /* Match.h */,
+				6EAF7E0219740694007CCC7C /* Match.m */,
+			);
+			name = Match;
+			sourceTree = "<group>";
+		};
 		6EB6C61118C0196600240B6B /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -469,6 +509,7 @@
 				6EB6C61218C0197600240B6B /* Local */,
 				6E3596F118D933D400C5D4B4 /* Checkin */,
 				6E433635194E74D5005FB4A8 /* Like */,
+				6EAF7E04197406A7007CCC7C /* Match */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -498,6 +539,8 @@
 				6EF4D31418B3F6F800334BDD /* HomeViewController.m */,
 				6E4B15BF18C5934700A6BBE2 /* PointLocais.h */,
 				6E4B15C018C5934700A6BBE2 /* PointLocais.m */,
+				6EB6C61718C01ED400240B6B /* PontoLocal.h */,
+				6EB6C61818C01ED400240B6B /* PontoLocal.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -530,6 +573,7 @@
 				6ED68C2918F5C8E6005F4FCA /* logo_splash@2x.png */,
 				6E6DF74919088F3700DF8D76 /* stickman.png */,
 				6ED597EA18D625FF00573E7E /* icone_configuracoes@2x.png */,
+				6EAF7DF41973EEDF007CCC7C /* icone_combinacoes@2x.png */,
 				6ED68C2B18F5D113005F4FCA /* fb_transparent@2x.png */,
 				6ED597EB18D625FF00573E7E /* icone_fazercheckin@2x.png */,
 				6ED597ED18D625FF00573E7E /* icone_logout@2x.png */,
@@ -570,10 +614,16 @@
 		6EE518BA18B186B400250C71 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6EBAE5B018B69C680050FC63 /* Menu */,
+				6EAF7DF91973F081007CCC7C /* Minhas combinações */,
 				6E4B15E218C8110700A6BBE2 /* Usuários */,
 				6E7050A318BAB65C0029E58A /* Settings */,
-				6E0AB74418B7C50C003DCF1E /* Locais */,
-				6EBAE5B018B69C680050FC63 /* Menu */,
+				6EAF7DFA1973F0D2007CCC7C /* Perfil local */,
+				6EAF7DFB1973F0DB007CCC7C /* Confirma checkin */,
+				6EAF7DFC1973F0F4007CCC7C /* Confirma adição local */,
+				6E2ABFDE19251E1000C8CE36 /* Locais proximos */,
+				6E2ABFDF19251E5100C8CE36 /* TopLocais */,
+				6EAF7DFD1973F140007CCC7C /* Adiciona local */,
 				6EBAE5AF18B69C620050FC63 /* Home */,
 				6EE518BB18B186C900250C71 /* Login */,
 			);
@@ -838,6 +888,7 @@
 				6E402A1A1925BC4100EF9052 /* rocket.png in Resources */,
 				6E28FB7E192E7689008EBF48 /* ico_mas@2x.png in Resources */,
 				6ED597F318D625FF00573E7E /* icone_profile@2x.png in Resources */,
+				6EAF7DF51973EEDF007CCC7C /* icone_combinacoes@2x.png in Resources */,
 				6EE922DD1900835700020991 /* pin-bar-1@2x.png in Resources */,
 				6EE922E11900835700020991 /* pin-bar-5@2x.png in Resources */,
 				6E433640194E957A005FB4A8 /* alvo@2x.png in Resources */,
@@ -917,10 +968,12 @@
 				6E43363C194E94C1005FB4A8 /* ConfirmaMatchViewController.m in Sources */,
 				6E211F5E18DFBE3F008DCC1F /* LocaisProximosTableViewController.m in Sources */,
 				6EE440C818C02C870033D95B /* MappingProvider.m in Sources */,
+				6EAF7E0319740694007CCC7C /* Match.m in Sources */,
 				6EECED7D1919BD220054F6F0 /* AdicionaLocalTableViewController.m in Sources */,
 				6EB6C61F18C025B000240B6B /* Usuario.m in Sources */,
 				6EC1E416192E1A470095693F /* PerfilLocalTableViewController.m in Sources */,
 				6EF4314C18B17755007F7D79 /* AppDelegate.m in Sources */,
+				6EAF7DF81973F03D007CCC7C /* MinhasCombinacoesTableViewController.m in Sources */,
 				6EF4314818B17755007F7D79 /* main.m in Sources */,
 				6E8B8080192593300006DABE /* ControleTeclado.m in Sources */,
 				6E428D7D1957B0430031B7F2 /* GenerosTableViewCell.m in Sources */,
@@ -940,6 +993,7 @@
 				6E606F3A18DA4251003291E6 /* ConfirmaCheckinViewController.m in Sources */,
 				6E2ABFDC1924DE7E00C8CE36 /* TipoLocalTableViewCell.m in Sources */,
 				6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */,
+				6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */,
 				6E4B15E118C810FB00A6BBE2 /* UsuariosCheckedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
