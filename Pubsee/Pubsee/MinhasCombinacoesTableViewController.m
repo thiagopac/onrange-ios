@@ -51,11 +51,9 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        [self carregaCombinacoes];
-    });
+
+    [self carregaCombinacoes];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -73,10 +71,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.arrCombinacoes.count == 0) {
+        return 1;
+    }
     return self.arrCombinacoes.count;
 }
 
 - (void)carregaCombinacoes {
+    
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     NSInteger id_usuario = [def integerForKey:@"id_usuario"];
     
@@ -113,6 +115,18 @@
     static NSString *CellIdentifier = @"combinacaoCell";
     MinhasCombinacoesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    if (self.arrCombinacoes.count == 0 && self.arrCombinacoes != nil) {
+        cell.lblNomeCombinacao.hidden = YES;
+        cell.userProfilePictureView.hidden = YES;
+        cell.textLabel.text = @"Você não possui combinações";
+     
+        return cell;
+    }
+
+    cell.lblNomeCombinacao.hidden = NO;
+    cell.userProfilePictureView.hidden = NO;
+    cell.textLabel.text = @"";
+    
     Match *match = [self.arrCombinacoes objectAtIndex:indexPath.row];
     cell.lblNomeCombinacao.text = match.nome_usuario;
     cell.userProfilePictureView.profileID = match.facebook_usuario;
@@ -123,5 +137,8 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"Clicou em algo");
+}
 
 @end

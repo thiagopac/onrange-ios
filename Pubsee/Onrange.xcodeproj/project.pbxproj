@@ -46,12 +46,6 @@
 		6EACD5FD196CD23B00719003 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD5FC196CD23B00719003 /* CFNetwork.framework */; };
 		6EACD5FF196CD24700719003 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD5FE196CD24700719003 /* SystemConfiguration.framework */; };
 		6EACD601196CD25100719003 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD600196CD25100719003 /* MobileCoreServices.framework */; };
-		6EACD603196CD26900719003 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD602196CD26900719003 /* CoreData.framework */; };
-		6EACD605196CD27000719003 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD604196CD27000719003 /* libz.dylib */; };
-		6EACD609196CD28100719003 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD608196CD28100719003 /* libxml2.2.dylib */; };
-		6EACD60B196CD28C00719003 /* libresolv.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60A196CD28C00719003 /* libresolv.9.dylib */; };
-		6EACD60D196CD2E200719003 /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60C196CD2E200719003 /* Quickblox.framework */; };
-		6EACD60F196CD65000719003 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD60E196CD65000719003 /* libstdc++.dylib */; };
 		6EAF7DF51973EEDF007CCC7C /* icone_combinacoes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EAF7DF41973EEDF007CCC7C /* icone_combinacoes@2x.png */; };
 		6EAF7DF81973F03D007CCC7C /* MinhasCombinacoesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */; };
 		6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */; };
@@ -281,12 +275,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EACD60F196CD65000719003 /* libstdc++.dylib in Frameworks */,
-				6EACD60D196CD2E200719003 /* Quickblox.framework in Frameworks */,
-				6EACD60B196CD28C00719003 /* libresolv.9.dylib in Frameworks */,
-				6EACD609196CD28100719003 /* libxml2.2.dylib in Frameworks */,
-				6EACD605196CD27000719003 /* libz.dylib in Frameworks */,
-				6EACD603196CD26900719003 /* CoreData.framework in Frameworks */,
 				6E516FE518C4EDB300C8A929 /* CoreLocation.framework in Frameworks */,
 				6EF4313E18B17755007F7D79 /* CoreGraphics.framework in Frameworks */,
 				6EACD601196CD25100719003 /* MobileCoreServices.framework in Frameworks */,
@@ -382,7 +370,7 @@
 			path = rotulos;
 			sourceTree = "<group>";
 		};
-		6E433631194E2FC9005FB4A8 /* PerfilUsuario */ = {
+		6E433631194E2FC9005FB4A8 /* Perfil de usuário */ = {
 			isa = PBXGroup;
 			children = (
 				6E43362E194E2FB9005FB4A8 /* PerfilUsuarioTableViewController.h */,
@@ -390,7 +378,7 @@
 				6E43363A194E94C1005FB4A8 /* ConfirmaMatchViewController.h */,
 				6E43363B194E94C1005FB4A8 /* ConfirmaMatchViewController.m */,
 			);
-			name = PerfilUsuario;
+			name = "Perfil de usuário";
 			sourceTree = "<group>";
 		};
 		6E433635194E74D5005FB4A8 /* Like */ = {
@@ -411,15 +399,6 @@
 				6EE922D71900835700020991 /* locais publicos */,
 			);
 			name = pins;
-			sourceTree = "<group>";
-		};
-		6E4B15E218C8110700A6BBE2 /* Usuários */ = {
-			isa = PBXGroup;
-			children = (
-				6E1A0195194FB64F00AA0ABF /* Grade das latas */,
-				6E433631194E2FC9005FB4A8 /* PerfilUsuario */,
-			);
-			name = "Usuários";
 			sourceTree = "<group>";
 		};
 		6E7050A318BAB65C0029E58A /* Settings */ = {
@@ -456,13 +435,13 @@
 			name = "Minhas combinações";
 			sourceTree = "<group>";
 		};
-		6EAF7DFA1973F0D2007CCC7C /* Perfil local */ = {
+		6EAF7DFA1973F0D2007CCC7C /* Perfil de local */ = {
 			isa = PBXGroup;
 			children = (
 				6EC1E414192E1A470095693F /* PerfilLocalTableViewController.h */,
 				6EC1E415192E1A470095693F /* PerfilLocalTableViewController.m */,
 			);
-			name = "Perfil local";
+			name = "Perfil de local";
 			sourceTree = "<group>";
 		};
 		6EAF7DFB1973F0DB007CCC7C /* Confirma checkin */ = {
@@ -532,7 +511,7 @@
 			name = Usuario;
 			sourceTree = "<group>";
 		};
-		6EBAE5AF18B69C620050FC63 /* Home */ = {
+		6EBAE5AF18B69C620050FC63 /* Mapa principal */ = {
 			isa = PBXGroup;
 			children = (
 				6EF4D31318B3F6F800334BDD /* HomeViewController.h */,
@@ -542,7 +521,7 @@
 				6EB6C61718C01ED400240B6B /* PontoLocal.h */,
 				6EB6C61818C01ED400240B6B /* PontoLocal.m */,
 			);
-			name = Home;
+			name = "Mapa principal";
 			sourceTree = "<group>";
 		};
 		6EBAE5B018B69C680050FC63 /* Menu */ = {
@@ -616,15 +595,16 @@
 			children = (
 				6EBAE5B018B69C680050FC63 /* Menu */,
 				6EAF7DF91973F081007CCC7C /* Minhas combinações */,
-				6E4B15E218C8110700A6BBE2 /* Usuários */,
+				6E1A0195194FB64F00AA0ABF /* Grade das latas */,
+				6E433631194E2FC9005FB4A8 /* Perfil de usuário */,
 				6E7050A318BAB65C0029E58A /* Settings */,
-				6EAF7DFA1973F0D2007CCC7C /* Perfil local */,
+				6EAF7DFA1973F0D2007CCC7C /* Perfil de local */,
 				6EAF7DFB1973F0DB007CCC7C /* Confirma checkin */,
 				6EAF7DFC1973F0F4007CCC7C /* Confirma adição local */,
 				6E2ABFDE19251E1000C8CE36 /* Locais proximos */,
 				6E2ABFDF19251E5100C8CE36 /* TopLocais */,
 				6EAF7DFD1973F140007CCC7C /* Adiciona local */,
-				6EBAE5AF18B69C620050FC63 /* Home */,
+				6EBAE5AF18B69C620050FC63 /* Mapa principal */,
 				6EE518BB18B186C900250C71 /* Login */,
 			);
 			name = Controller;
@@ -1125,10 +1105,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thiago Pires Alves de Castro (42HHF3VBQ7)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pubsee/Quickblox",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pubsee/Onrange-Prefix.pch";
 				INFOPLIST_FILE = "Pubsee/Onrange-Info.plist";
@@ -1144,15 +1121,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Thiago Pires Alves de Castro (42HHF3VBQ7)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pubsee/Quickblox",
-				);
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Ingred Preis (G48Q3P557S)";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pubsee/Onrange-Prefix.pch";
 				INFOPLIST_FILE = "Pubsee/Onrange-Info.plist";
 				PRODUCT_NAME = Onrange;
+				PROVISIONING_PROFILE = "93BF9A12-1BE1-4F01-94E1-2280D0BA4CE6";
 				USER_HEADER_SEARCH_PATHS = "Pods/**";
 				WRAPPER_EXTENSION = app;
 			};

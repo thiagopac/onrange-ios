@@ -635,7 +635,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tCe-YW-Tmt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1244" y="-803"/>
+            <point key="canvasLocation" x="1244" y="-779"/>
         </scene>
         <!--Tipo Local Table View Controller-->
         <scene sceneID="Aga-5j-XD2">
@@ -677,7 +677,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eRl-tF-DjQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1739" y="-803"/>
+            <point key="canvasLocation" x="1739" y="-779"/>
         </scene>
         <!--Perfil Local Table View Controller-->
         <scene sceneID="J1x-7O-4zd">
@@ -1283,14 +1283,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="labelNomeCombinacao" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o6M-ih-aoN">
-                                            <rect key="frame" x="81" y="26" width="206" height="21"/>
+                                            <rect key="frame" x="71" y="26" width="216" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" id="GtX-ce-eMk" customClass="FBProfilePictureView">
-                                            <rect key="frame" x="20" y="12" width="50" height="50"/>
+                                            <rect key="frame" x="13" y="12" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <userDefinedRuntimeAttributes>
