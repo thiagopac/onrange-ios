@@ -17,5 +17,7 @@
 @property (nonatomic, assign) BOOL match;
 @property (nonatomic, strong) NSString *nome_chat;
 @property (nonatomic, assign) NSInteger id_output;
+@property (nonatomic, strong) NSString *qbtoken;
+@property (nonatomic, strong) NSString *chat;
 
 @end

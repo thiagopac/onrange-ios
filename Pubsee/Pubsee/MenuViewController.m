@@ -10,6 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "HomeViewController.h"
 
+#define demoUserLogin @"thiagopac"
+#define demoUserPassword @"12345678"
+
 @implementation MenuViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -24,6 +27,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // QuickBlox session creation
+    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    extendedAuthRequest.userLogin = demoUserLogin;
+    extendedAuthRequest.userPassword = demoUserPassword;
+
+	[QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+
     self.userProfilePictureView.layer.cornerRadius = 2;
     self.userProfilePictureView.layer.masksToBounds = YES;
     
@@ -120,6 +131,53 @@
 															 bundle: nil];
      UITableViewController *LocaisProximosTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"LocaisProximosTableViewController"];
     [[SlideNavigationController sharedInstance] switchToViewController:LocaisProximosTableViewController withCompletion:nil];
+}
+
+// QuickBlox API queries delegate
+- (void)completedWithResult:(Result *)result{
+    
+    // QuickBlox session creation  result
+    if([result isKindOfClass:[QBAAuthSessionCreationResult class]]){
+        
+        // Success result
+        if(result.success){
+            
+            QBAAuthSessionCreationResult *res = (QBAAuthSessionCreationResult *)result;
+            
+            // Save current user
+            //
+            QBUUser *currentUser = [QBUUser user];
+            currentUser.ID = res.session.userID;
+            currentUser.login = demoUserLogin;
+            currentUser.password = demoUserPassword;
+            //
+            [[LocalStorageService shared] setCurrentUser:currentUser];
+            
+            // Login to QuickBlox Chat
+            //
+            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+                
+                
+                // hide alert after delay
+                double delayInSeconds = 1.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                });
+            }];
+            
+        }else{
+            NSString *errorMessage = [[result.errors description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
+                                                            message:errorMessage
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles: nil];
+            [alert show];
+        }
+    }
 }
 
 @end

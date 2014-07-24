@@ -90,7 +90,8 @@
         [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.tableView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+        NSLog(@"Erro 404");
+        [self carregaLocais];
         [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.notification dismissNotification];
         NSLog(@"ERROR: %@", error);

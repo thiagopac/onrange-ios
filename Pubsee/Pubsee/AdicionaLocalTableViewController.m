@@ -270,6 +270,8 @@ didChangeDragState:(MKAnnotationViewDragState)newState
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self criaLocal];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
                       }];

@@ -12,10 +12,15 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "MinhasCombinacoesTableViewCell.h"
 #import "Match.h"
+#import "ChatViewController.h"
 
-@interface MinhasCombinacoesTableViewController ()
+@interface MinhasCombinacoesTableViewController ()<QBActionStatusDelegate>{
+    NSString *meu_id_qb;
+}
 
 @property (nonatomic, strong) NSMutableArray *arrCombinacoes;
+@property (nonatomic, strong) NSMutableArray *dialogs;
+@property (nonatomic, strong) QBChatDialog *dialog;
 
 @end
 
@@ -46,6 +51,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+        
+    meu_id_qb = [NSString stringWithFormat:@"%lu",(unsigned long)[LocalStorageService shared].currentUser.ID];
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
@@ -54,6 +61,26 @@
 
     [self carregaCombinacoes];
 
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    if([LocalStorageService shared].currentUser != nil){
+//        [self.activityIndicator startAnimating];
+//        loading carregando usuário
+        
+        // get dialogs
+        [QBChat dialogsWithExtendedRequest:nil delegate:self];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    ChatViewController *destinationViewController = (ChatViewController *)segue.destinationViewController;
+
+    QBChatDialog *dialog = self.dialogs[((UITableViewCell *)sender).tag];
+    destinationViewController.dialog = dialog;
+    
+    QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(dialog.recipientID)];
+    destinationViewController.oponentName = recipient.login == nil ? recipient.email : recipient.fullName;
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,7 +101,7 @@
     if (self.arrCombinacoes.count == 0) {
         return 1;
     }
-    return self.arrCombinacoes.count;
+	return [self.dialogs count];
 }
 
 - (void)carregaCombinacoes {
@@ -94,13 +121,11 @@
         
         self.arrCombinacoes = [NSMutableArray arrayWithArray:mappingResult.array];
         
-        if (self.arrCombinacoes.count < 1) {
-            [SVProgressHUD showErrorWithStatus:@"Nenhum local próximo encontrado"];
-        }
         [self.tableView reloadData];
         [self.refreshControl performSelector:@selector(endRefreshing)];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+        NSLog(@"Erro 404");
+        [self carregaCombinacoes];
         [self.refreshControl performSelector:@selector(endRefreshing)];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
@@ -114,7 +139,7 @@
 {
     static NSString *CellIdentifier = @"combinacaoCell";
     MinhasCombinacoesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+
     if (self.arrCombinacoes.count == 0 && self.arrCombinacoes != nil) {
         cell.lblNomeCombinacao.hidden = YES;
         cell.userProfilePictureView.hidden = YES;
@@ -128,8 +153,18 @@
     cell.textLabel.text = @"";
     
     Match *match = [self.arrCombinacoes objectAtIndex:indexPath.row];
-    cell.lblNomeCombinacao.text = match.nome_usuario;
-    cell.userProfilePictureView.profileID = match.facebook_usuario;
+
+    
+    QBChatDialog *chatDialog = self.dialogs[indexPath.row];
+    cell.tag  = indexPath.row;
+    
+    cell.detailTextLabel.text = @"private";
+    QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(chatDialog.recipientID)];
+    cell.lblNomeCombinacao.text = recipient.login == nil ? recipient.email : recipient.fullName;
+    
+    if (recipient.ID == [match.id_qb intValue]) {
+        cell.userProfilePictureView.profileID = match.facebook_usuario;
+    }
     
     [cell.lblNomeCombinacao setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:17]];
     cell.lblNomeCombinacao.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
@@ -137,8 +172,33 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"Clicou em algo");
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+// QuickBlox API queries delegate
+- (void)completedWithResult:(Result *)result{
+    if (result.success && [result isKindOfClass:[QBDialogsPagedResult class]]) {
+        QBDialogsPagedResult *pagedResult = (QBDialogsPagedResult *)result;
+        //
+        NSArray *dialogs = pagedResult.dialogs;
+        self.dialogs = [dialogs mutableCopy];
+        
+        // Get dialogs users
+        PagedRequest *pagedRequest = [PagedRequest request];
+        pagedRequest.perPage = 100;
+        //
+        NSSet *dialogsUsersIDs = pagedResult.dialogsUsersIDs;
+        //
+        [QBUsers usersWithIDs:[[dialogsUsersIDs allObjects] componentsJoinedByString:@","] pagedRequest:pagedRequest delegate:self];
+        
+    }else if (result.success && [result isKindOfClass:[QBUUserPagedResult class]]) {
+        QBUUserPagedResult *res = (QBUUserPagedResult *)result;
+        [LocalStorageService shared].users = res.users;
+        //
+        [self.tableView reloadData];
+    }
 }
 
 @end

@@ -126,7 +126,8 @@
         [self verificaUsuarioNoLocal];
         [self.collectionView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+        NSLog(@"Erro 404");
+        [self carregaUsuarios];
         [self.notification  dismissNotification];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
@@ -349,6 +350,8 @@
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self fazCheckin];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
                           [SVProgressHUD dismiss];
@@ -408,6 +411,8 @@
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self fazCheckout];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkout");
                           [SVProgressHUD dismiss];

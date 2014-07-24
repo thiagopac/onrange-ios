@@ -29,4 +29,10 @@ PODFILE
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import <Quickblox/Quickblox.h>
+    #import "LocalStorageService.h"
+    #import "ChatService.h"
+    #import "CharactersEscapeService.h"
 #endif
+
+#define kShowChatViewControllerSegue @"ShowChatViewControllerSegue"

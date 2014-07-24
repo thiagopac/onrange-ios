@@ -11,4 +11,6 @@
 
 @interface MinhasCombinacoesTableViewController : UITableViewController
 
+@property (strong, nonatomic) QBChatDialog *createdDialog;
+
 @end

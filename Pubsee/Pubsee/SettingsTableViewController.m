@@ -9,7 +9,7 @@
 #import "SettingsTableViewController.h"
 #import "SlideNavigationController.h"
 
-@interface SettingsTableViewController (){
+@interface SettingsTableViewController ()<QBActionStatusDelegate>{
     int prev;
 }
 
@@ -59,6 +59,15 @@
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    extendedAuthRequest.userLogin = @"thiagopac";
+    extendedAuthRequest.userPassword = @"12345678";
+    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+ 
+    NSString *qbtoken = [[QBBaseModule sharedModule]token];
+    
+    NSLog(@"QB-Token: %@",qbtoken);
 }
 
 -(void)viewWillAppear:(BOOL)animated{

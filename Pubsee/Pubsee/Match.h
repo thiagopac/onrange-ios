@@ -14,7 +14,8 @@
 @property (assign, nonatomic) NSInteger id_usuario;
 @property (strong, nonatomic) NSString *nome_usuario;
 @property (strong, nonatomic) NSString *facebook_usuario;
+@property (strong, nonatomic) NSString *id_qb;
 @property (strong, nonatomic) NSString *email_usuario;
-@property (strong, nonatomic) NSString *nome_chat;
+@property (strong, nonatomic) NSString *chat;
 
 @end

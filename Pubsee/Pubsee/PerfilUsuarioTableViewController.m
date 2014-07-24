@@ -13,9 +13,10 @@
 #import "ConfirmaMatchViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 
-@interface PerfilUsuarioTableViewController (){
+@interface PerfilUsuarioTableViewController ()<QBActionStatusDelegate>{
     NSInteger id_usuario1;
     NSInteger id_usuario2;
+    NSString *qbtoken;
 }
 
 @end
@@ -38,6 +39,17 @@
 //    NSURL *url = [NSURL URLWithString:link];
 //    NSData *data = [NSData dataWithContentsOfURL:url];
 //    self.imgFotoPerfilUsuario.image = [UIImage imageWithData:data];
+    
+    
+    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    extendedAuthRequest.userLogin = @"thiagopac";
+    extendedAuthRequest.userPassword = @"12345678";
+    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+    
+    qbtoken = [[QBBaseModule sharedModule]token];
+    
+    NSLog(@"QB-Token: %@",qbtoken);
+    
     self.imgProfileUsuario.profileID = self.usuario.facebook_usuario;
     self.lblNomeUsuario.text = self.usuario.nome_usuario;
     
@@ -84,7 +96,7 @@
 -(void)curtirUsuario{
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"id_usuario1",@"id_usuario2",@"id_local"]];
+    [requestMapping addAttributeMappingsFromArray:@[@"id_usuario1",@"id_usuario2",@"id_local", @"qbtoken"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Like class]];
     [responseMapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match", @"id_output"]];
@@ -112,44 +124,45 @@
     like.id_usuario1 = id_usuario1;
     like.id_usuario2 = self.usuario.id_usuario;
     like.id_local = self.local.id_local;
+    like.qbtoken = qbtoken;
     
-    [objectManager postObject:like
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Dados de like enviados e recebidos com sucesso!");
-                              Like *likeefetuado = [mappingResult firstObject];
-                              if (likeefetuado.match == 1) {
-                                  
-                                  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                  ConfirmaMatchViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaMatchViewController"];
-                                  vc.strNomeUsuario = self.usuario.nome_usuario;
-                                  [self presentViewController:vc animated:YES completion:nil];
-                                  [self.view setNeedsLayout];
-                                  [self botaoSelecionado];
-                              }else if(likeefetuado.match == 0){
-                                  if (likeefetuado.id_output == 4) {
-                                      [self botaoNaoSelecionado];
-                                  }else if (likeefetuado.id_output ==1){
-                                      [self botaoSelecionado];
-                                  }else if (likeefetuado.id_output == 2){
-                                      [self botaoSelecionado];
-                                      [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
-                                  }else if (likeefetuado.id_output == 3){
-                                      [self botaoSelecionado];
-                                      [SVProgressHUD showErrorWithStatus:@"Esta pessoa não está mais no local"];
-                                  }
-                              }else{
-                                  NSLog(@"Ocorreu um erro ao efetuar o like");
-                              }
-                          }else{
-                              NSLog(@"Falha ao tentar dar o like");
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de like");
-                      }];
+    [objectManager postObject:like path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+      if(mappingResult != nil){
+          NSLog(@"Dados de like enviados e recebidos com sucesso!");
+          Like *likeefetuado = [mappingResult firstObject];
+          if (likeefetuado.match == 1) {
+              
+              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+              ConfirmaMatchViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaMatchViewController"];
+              vc.strNomeUsuario = self.usuario.nome_usuario;
+              [self presentViewController:vc animated:YES completion:nil];
+              NSLog(@"Retorno da CallAPI: %@",likeefetuado.chat);
+              [self.view setNeedsLayout];
+              [self botaoSelecionado];
+          }else if(likeefetuado.match == 0){
+              if (likeefetuado.id_output == 4) {
+                  [self botaoNaoSelecionado];
+              }else if (likeefetuado.id_output ==1){
+                  [self botaoSelecionado];
+              }else if (likeefetuado.id_output == 2){
+                  [self botaoSelecionado];
+                  [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
+              }else if (likeefetuado.id_output == 3){
+                  [self botaoSelecionado];
+                  [SVProgressHUD showErrorWithStatus:@"Esta pessoa não está mais no local"];
+              }
+          }else{
+              NSLog(@"Ocorreu um erro ao efetuar o like");
+          }
+      }else{
+          NSLog(@"Falha ao tentar dar o like");
+      }
+  }
+  failure:^(RKObjectRequestOperation *operation, NSError *error) {
+      NSLog(@"Erro 404");
+      [self curtirUsuario];
+      NSLog(@"Error: %@", error);
+      NSLog(@"Falha ao tentar enviar dados de like");
+  }];
 }
 @end

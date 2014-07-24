@@ -194,6 +194,8 @@
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self fazCheckin];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkin");
                           [SVProgressHUD dismiss];
@@ -253,6 +255,8 @@
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self fazCheckout];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de checkout");
                           [SVProgressHUD dismiss];
@@ -284,7 +288,8 @@
         }
         
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
+        NSLog(@"Erro 404");
+        [self carregaUsuarios];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
         NSLog(NSLocalizedString(@"Ocorreu um erro",nil));

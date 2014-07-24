@@ -1305,6 +1305,7 @@
                                 <connections>
                                     <outlet property="lblNomeCombinacao" destination="o6M-ih-aoN" id="vuI-oA-NEG"/>
                                     <outlet property="userProfilePictureView" destination="GtX-ce-eMk" id="URY-n4-mfY"/>
+                                    <segue destination="K7S-JQ-kcf" kind="push" identifier="ShowChatViewControllerSegue" id="Eaw-vw-aBn"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1318,6 +1319,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lAO-AL-iv3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="193" y="-779"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="2aA-x9-YNt">
+            <objects>
+                <viewController storyboardIdentifier="chatVC" id="K7S-JQ-kcf" customClass="ChatViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="k1I-Qi-Fd1">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="4Im-Oy-051"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ElS-KA-DuA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="734" y="-779"/>
         </scene>
     </scenes>
     <resources>

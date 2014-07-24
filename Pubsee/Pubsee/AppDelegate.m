@@ -45,13 +45,24 @@ NSString *const FBMenuDataChangedNotification =
 
      [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+//integração com QuickBlox
+    // Set QuickBlox credentials
+    [QBSettings setApplicationID:10625];
+    [QBSettings setAuthorizationKey:@"rrTrFYFOECqjTAe"];
+    [QBSettings setAuthorizationSecret:@"hM5vAmpBYYGV-p5"];
+    [QBSettings setAccountKey:@"TzErECZmN1ELxzE22avj"];
+#ifndef DEBUG
+    [QBSettings useProductionEnvironmentForPushNotifications:YES];
+#endif
+    
     return YES;
 }
 
+
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-
-    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -231,6 +242,8 @@ NSString *const FBMenuDataChangedNotification =
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self postUsuario];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de login");
                       }];

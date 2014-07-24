@@ -143,6 +143,8 @@
         self.arrLocais = [NSMutableArray arrayWithArray:mappingResult.array];
         [self montarMapaWithArray:self.arrLocais];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Erro 404");
+        [self carregaLocais];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
         NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar locais",nil));
@@ -170,6 +172,8 @@
         
         NSLog(@"usuario está no local: %d",(int)self.localOndeEstou.id_local);
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Erro 404");
+        [self ondeEstou:id_usuario];
         NSLog(@"ERROR: %@", error);
         NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
         NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar local",nil));
