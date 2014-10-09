@@ -59,7 +59,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
 
-    [self carregaCombinacoes];
+//    [self carregaCombinacoes];
 
 }
 
@@ -70,6 +70,7 @@
         
         // get dialogs
         [QBChat dialogsWithExtendedRequest:nil delegate:self];
+        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     }
 }
 
@@ -98,42 +99,42 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.arrCombinacoes.count == 0) {
-        return 1;
-    }
 	return [self.dialogs count];
 }
 
-- (void)carregaCombinacoes {
-    
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    NSInteger id_usuario = [def integerForKey:@"id_usuario"];
-    
-    NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    RKMapping *mapping = [MappingProvider matchMapping];
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Matches" statusCodes:statusCodeSet];
-    
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@match/listaMatches/%d",API, (int)id_usuario]];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
-                                                                        responseDescriptors:@[responseDescriptor]];
-    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
-        self.arrCombinacoes = [NSMutableArray arrayWithArray:mappingResult.array];
-        
-        [self.tableView reloadData];
-        [self.refreshControl performSelector:@selector(endRefreshing)];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self carregaCombinacoes];
-        [self.refreshControl performSelector:@selector(endRefreshing)];
-        NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
-    }];
-    
-    [operation start];
-}
+//- (void)carregaCombinacoes {
+//    
+//    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+//    NSInteger id_usuario = [def integerForKey:@"id_usuario"];
+//    
+//    NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+//    RKMapping *mapping = [MappingProvider matchMapping];
+//    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Matches" statusCodes:statusCodeSet];
+//    
+//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@match/listaMatches/%d",API, (int)id_usuario]];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
+//                                                                        responseDescriptors:@[responseDescriptor]];
+//    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//        
+//        [SVProgressHUD show];
+//        
+//        self.arrCombinacoes = [NSMutableArray arrayWithArray:mappingResult.array];
+//        
+//        [self.tableView reloadData];
+//        [self.refreshControl performSelector:@selector(endRefreshing)];
+//    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//        NSLog(@"Erro 404");
+//        [SVProgressHUD dismiss];
+//        [self carregaCombinacoes];
+//        [self.refreshControl performSelector:@selector(endRefreshing)];
+//        NSLog(@"ERROR: %@", error);
+//        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+//        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
+//    }];
+//    
+//    [operation start];
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -180,6 +181,9 @@
 // QuickBlox API queries delegate
 - (void)completedWithResult:(Result *)result{
     if (result.success && [result isKindOfClass:[QBDialogsPagedResult class]]) {
+        
+        [SVProgressHUD dismiss];
+        
         QBDialogsPagedResult *pagedResult = (QBDialogsPagedResult *)result;
         //
         NSArray *dialogs = pagedResult.dialogs;
@@ -194,6 +198,9 @@
         [QBUsers usersWithIDs:[[dialogsUsersIDs allObjects] componentsJoinedByString:@","] pagedRequest:pagedRequest delegate:self];
         
     }else if (result.success && [result isKindOfClass:[QBUUserPagedResult class]]) {
+
+        [SVProgressHUD dismiss];
+        
         QBUUserPagedResult *res = (QBUUserPagedResult *)result;
         [LocalStorageService shared].users = res.users;
         //
