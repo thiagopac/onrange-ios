@@ -140,19 +140,19 @@
     static NSString *CellIdentifier = @"combinacaoCell";
     MinhasCombinacoesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
-    if (self.arrCombinacoes.count == 0 && self.arrCombinacoes != nil) {
-        cell.lblNomeCombinacao.hidden = YES;
-        cell.userProfilePictureView.hidden = YES;
-        cell.textLabel.text = @"Você não possui combinações";
-     
-        return cell;
-    }
-
-    cell.lblNomeCombinacao.hidden = NO;
-    cell.userProfilePictureView.hidden = NO;
-    cell.textLabel.text = @"";
+//    if (self.arrCombinacoes.count == 0 && self.arrCombinacoes != nil) {
+//        cell.lblNomeCombinacao.hidden = YES;
+//        cell.userProfilePictureView.hidden = YES;
+//        cell.textLabel.text = @"Você não possui combinações";
+//     
+//        return cell;
+//    }
+//
+//    cell.lblNomeCombinacao.hidden = NO;
+//    cell.userProfilePictureView.hidden = NO;
+//    cell.textLabel.text = @"";
     
-    Match *match = [self.arrCombinacoes objectAtIndex:indexPath.row];
+//    Match *match = [self.arrCombinacoes objectAtIndex:indexPath.row];
 
     
     QBChatDialog *chatDialog = self.dialogs[indexPath.row];
@@ -162,9 +162,9 @@
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(chatDialog.recipientID)];
     cell.lblNomeCombinacao.text = recipient.login == nil ? recipient.email : recipient.fullName;
     
-    if (recipient.ID == [match.id_qb intValue]) {
-        cell.userProfilePictureView.profileID = match.facebook_usuario;
-    }
+//    if (recipient.ID == [match.id_qb intValue]) {
+//        cell.userProfilePictureView.profileID = match.facebook_usuario;
+//    }
     
     [cell.lblNomeCombinacao setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:17]];
     cell.lblNomeCombinacao.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];

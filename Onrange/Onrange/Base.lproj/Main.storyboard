@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="bpJ-Dv-dwU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="bpJ-Dv-dwU">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Slide Navigation Controller-->
@@ -9,9 +10,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="bpJ-Dv-dwU" customClass="SlideNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <size key="freeformSize" width="320" height="480"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="k2D-AG-mvd">
-                        <rect key="frame" x="0.0" y="-44" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.95686274509803915" green="0.38039215686274508" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
@@ -31,7 +30,7 @@
             </objects>
             <point key="canvasLocation" x="-346" y="419"/>
         </scene>
-        <!--Login View Controller - LoginViewController-->
+        <!--LoginViewController-->
         <scene sceneID="pVF-fc-Nnj">
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="rwx-KY-xOW" customClass="LoginViewController" sceneMemberID="viewController">
@@ -69,7 +68,7 @@
             </objects>
             <point key="canvasLocation" x="734" y="1009"/>
         </scene>
-        <!--Home View Controller - HomeViewController-->
+        <!--HomeViewController-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController storyboardIdentifier="HomeViewController" title="HomeViewController" id="vXZ-lx-hvc" customClass="HomeViewController" sceneMemberID="viewController">
@@ -85,8 +84,8 @@
                                 </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NLQ-Lq-PAg">
-                                <rect key="frame" x="240" y="336" width="60" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="244" y="336" width="60" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="26"/>
                                 <state key="normal" backgroundImage="btn_me.png">
@@ -801,7 +800,6 @@
                             <outlet property="delegate" destination="Y4o-qA-3pS" id="4JO-DJ-cbH"/>
                         </connections>
                     </tableView>
-                    <size key="freeformSize" width="320" height="480"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TgH-hT-HDK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1273,7 +1271,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="combinacaoCell" rowHeight="74" id="IDP-fG-zhE" customClass="MinhasCombinacoesTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="74"/>
@@ -1283,28 +1280,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="labelNomeCombinacao" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o6M-ih-aoN">
-                                            <rect key="frame" x="71" y="26" width="216" height="21"/>
+                                            <rect key="frame" x="17" y="26" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" id="GtX-ce-eMk" customClass="FBProfilePictureView">
-                                            <rect key="frame" x="13" y="12" width="50" height="50"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                    <integer key="value" value="25"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="lblNomeCombinacao" destination="o6M-ih-aoN" id="vuI-oA-NEG"/>
-                                    <outlet property="userProfilePictureView" destination="GtX-ce-eMk" id="URY-n4-mfY"/>
                                     <segue destination="K7S-JQ-kcf" kind="push" identifier="ShowChatViewControllerSegue" id="Eaw-vw-aBn"/>
                                 </connections>
                             </tableViewCell>
@@ -1314,7 +1299,6 @@
                             <outlet property="delegate" destination="sua-LD-kEp" id="duV-Bx-3Xn"/>
                         </connections>
                     </tableView>
-                    <size key="freeformSize" width="320" height="480"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lAO-AL-iv3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -121,7 +121,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
     self.collectionView.delegate = self;
     
     self.inputToolbar.delegate = self;
-    self.inputToolbar.contentView.textView.placeHolder = NSLocalizedString(@"New Message", @"Placeholder text for the message input text view");
+    self.inputToolbar.contentView.textView.placeHolder = NSLocalizedString(@"", @"Placeholder text for the message input text view");
     self.inputToolbar.contentView.textView.delegate = self;
     
     self.sender = @"JSQDefaultSender";
@@ -411,8 +411,9 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
     }
     
     cell.backgroundColor = [UIColor clearColor];
-    
-    CGFloat bubbleTopLabelInset = 60.0f;
+
+//nome usuário remetente acima do balão de mensagem
+    CGFloat bubbleTopLabelInset = 10.0f;
     
     if (isOutgoingMessage) {
         cell.messageBubbleTopLabel.textInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, bubbleTopLabelInset);

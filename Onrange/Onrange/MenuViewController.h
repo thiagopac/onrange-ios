@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "SlideNavigationController.h"
 
-@interface MenuViewController : UITableViewController<QBActionStatusDelegate>
+@interface MenuViewController : UITableViewController
 
 @property (strong, nonatomic) NSString *profileID;
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;

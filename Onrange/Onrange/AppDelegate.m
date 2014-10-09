@@ -180,6 +180,8 @@ NSString *const FBMenuDataChangedNotification =
                  _nome_usuario = user.first_name;
                  _email_usuario = [user objectForKey:@"email"];
                  _facebook_usuario = user.id;
+                 NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
+                 [def setObject:user.id forKey:@"facebook_usuario"];
                  _valida_sexo = [user objectForKey:@"gender"];
                  if ([_valida_sexo isEqualToString:@"male"]) {
                      _sexo_usuario = @"M";
@@ -233,8 +235,9 @@ NSString *const FBMenuDataChangedNotification =
                           if(mappingResult != nil){
                               NSLog(@"Login efetuado na base Onrage");
                               Usuario *userLogged = [mappingResult firstObject];
-                              NSUserDefaults  *def = [NSUserDefaults standardUserDefaults ];
+                              NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
                               [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
+
                               [def synchronize];
                               
                           }else{

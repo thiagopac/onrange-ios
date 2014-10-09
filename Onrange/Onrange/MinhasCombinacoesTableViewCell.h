@@ -11,7 +11,6 @@
 
 @interface MinhasCombinacoesTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet FBProfilePictureView *userProfilePictureView;
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeCombinacao;
 
 @end

@@ -106,6 +106,7 @@
 }
 
 -(void)buscarLocalizacao{
+    [self.locationManager requestWhenInUseAuthorization];
     if (self.locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -128,7 +129,11 @@
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     latitude = [def objectForKey:@"userLatitude"];
     longitude = [def objectForKey:@"userLongitude"];
+
     raio = (int)[def integerForKey:@"userRange"];
+    
+    if(raio == 0)
+        raio = 20;
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
@@ -252,6 +257,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    self.QBUser = [def objectForKey:@"facebook_usuario"];
+    self.QBPassword = [def objectForKey:@"facebook_usuario"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
@@ -275,6 +285,13 @@
     self.btnMe.layer.shadowRadius = 1;
     self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
     
+    // QuickBlox session creation
+    
+    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    extendedAuthRequest.userLogin = self.QBUser;
+    extendedAuthRequest.userPassword = self.QBPassword;
+    
+    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -445,6 +462,53 @@
     [perfilLocalTVC setLocal:self.localOndeEstou];
     
     [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
+}
+
+// QuickBlox API queries delegate
+- (void)completedWithResult:(Result *)result{
+    
+    // QuickBlox session creation  result
+    if([result isKindOfClass:[QBAAuthSessionCreationResult class]]){
+        
+        // Success result
+        if(result.success){
+            
+            QBAAuthSessionCreationResult *res = (QBAAuthSessionCreationResult *)result;
+            
+            // Save current user
+            //
+            QBUUser *currentUser = [QBUUser user];
+            currentUser.ID = res.session.userID;
+            currentUser.login = self.QBUser;
+            currentUser.password = self.QBPassword;
+            //
+            [[LocalStorageService shared] setCurrentUser:currentUser];
+            
+            // Login to QuickBlox Chat
+            //
+            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+                
+                
+                // hide alert after delay
+                double delayInSeconds = 1.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                });
+            }];
+            
+        }else{
+            NSString *errorMessage = [[result.errors description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
+                                                            message:errorMessage
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles: nil];
+            [alert show];
+        }
+    }
 }
 
 @end
