@@ -77,9 +77,8 @@
  * Configure the logged in versus logged out UX
  */
 - (void)sessionStateChanged:(NSNotification*)notification {
-    if (FBSession.activeSession.isOpen) {
-        [self populateUserDetails];
-    } else {
+    if (false) {
+//Tratar aqui quando usuário tiver clicado no botã ode logout
         [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
     }
 }
@@ -257,6 +256,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.hidden = NO;
 
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     
@@ -269,9 +270,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
     [self buscarLocalizacao];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
-                                              object:nil];
 
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
@@ -286,25 +284,99 @@
     self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
     
     // QuickBlox session creation
-    
-    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
+    QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
     extendedAuthRequest.userLogin = self.QBUser;
     extendedAuthRequest.userPassword = self.QBPassword;
+    //
+    [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
+        
+//        [self registerForRemoteNotifications];
+        
+        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        
+        // register for notifications
+        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+        
+        // resister for push notifications
+        // this method will call didRegisterForRemoteNotificationsWithDeviceToken
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
+        // Save current user
+        //
+        QBUUser *currentUser = [QBUUser user];
+        currentUser.ID = session.userID;
+        currentUser.login = self.QBUser;
+        currentUser.password = self.QBPassword;
+        //
+        [[LocalStorageService shared] setCurrentUser:currentUser];
+        
+        // Login to QuickBlox Chat
+        //
+        [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+            
+            // hide alert after delay
+            double delayInSeconds = 1.0;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+        
+        
+        
+    } errorBlock:^(QBResponse *response) {
+        NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
+                                                        message:errorMessage
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles: nil];
+        [alert show];
+    }];
+}
+
+- (void)registerForRemoteNotifications{
     
-    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else{
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    }
+#else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+#endif
+}
+
+- (void(^)(QBResponse *))handleError
+{
+    return ^(QBResponse *response) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", "")
+                                                        message:[response.error description]
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK", "")
+                                              otherButtonTitles:nil];
+        [alert show];
+    };
+}
+
+// Chat delegate
+-(void) chatDidLogin{
+    NSLog(@"Logou no chat!");
+}
+
+- (void)chatDidNotLogin{
+        NSLog(@"Logou no chat!");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    if (FBSession.activeSession.isOpen) {
-        [self populateUserDetails];
-    } else if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        // Check the session for a cached token to show the proper authenticated
-        // UI. However, since this is not user intitiated, do not show the login UX.
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate openSessionWithAllowLoginUI:NO];
-    }
-    
-    self.btnMe.hidden = YES;
+     self.btnMe.hidden = YES;
     
     [_mapGlobal removeAnnotations:_mapGlobal.annotations];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -316,15 +388,6 @@
     if ([def integerForKey:@"id_usuario"]) {
         int id_usuario = (int)[def integerForKey:@"id_usuario"];
             [self ondeEstou:id_usuario];
-    }
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    if (FBSession.activeSession.isOpen ||
-        FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded ||
-        FBSession.activeSession.state == FBSessionStateCreatedOpening) {
-    } else {
-        [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
     }
 }
 

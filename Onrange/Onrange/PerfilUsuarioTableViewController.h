@@ -18,6 +18,8 @@
 
 @property (strong, nonatomic) Usuario *usuario;
 @property (strong, nonatomic) Local *local;
+@property (strong, nonatomic) NSString *QBUser;
+@property (strong, nonatomic) NSString *QBPassword;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeUsuario;
 @property (strong, nonatomic) IBOutlet UIButton *btnCurtirUsuario;

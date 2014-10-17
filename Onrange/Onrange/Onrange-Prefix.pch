@@ -7,6 +7,9 @@
 #import <Availability.h>
 
 #define API @"http://roomnants.com/onrange/api/"
+
+#define kPushDidReceive @"kPushDidReceive"
+
 /*
  
 PODFILE

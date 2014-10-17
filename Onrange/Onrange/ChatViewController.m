@@ -93,7 +93,8 @@
      *  You must set this from `viewDidAppear:`
      *  Note: this feature is mostly stable, but still experimental
      */
-    self.collectionView.collectionViewLayout.springinessEnabled = YES;
+//Efeitos de balões deslizando    
+    self.collectionView.collectionViewLayout.springinessEnabled = NO;
 }
 
 #pragma mark - Actions

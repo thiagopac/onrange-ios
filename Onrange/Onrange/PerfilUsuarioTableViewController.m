@@ -40,11 +40,23 @@
 //    NSData *data = [NSData dataWithContentsOfURL:url];
 //    self.imgFotoPerfilUsuario.image = [UIImage imageWithData:data];
     
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     
-    QBASessionCreationRequest *extendedAuthRequest = [QBASessionCreationRequest request];
-    extendedAuthRequest.userLogin = @"thiagopac";
-    extendedAuthRequest.userPassword = @"12345678";
-    [QBAuth createSessionWithExtendedRequest:extendedAuthRequest delegate:self];
+    self.QBUser = [def objectForKey:@"facebook_usuario"];
+    self.QBPassword = [def objectForKey:@"facebook_usuario"];
+    
+    QBSessionParameters *parameters = [QBASessionCreationRequest request];
+    parameters.userLogin = self.QBUser;
+    parameters.userPassword = self.QBPassword;
+    
+    [QBRequest createSessionWithExtendedParameters:parameters successBlock:^(QBResponse *response, QBASession *session) {
+
+        NSLog(@"Criado chat com o usuário");
+        
+    } errorBlock:^(QBResponse *response) {
+        // error handling
+        NSLog(@"error: %@", response.error);
+    }];
     
     qbtoken = [[QBBaseModule sharedModule]token];
     
@@ -57,7 +69,6 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
     self.navigationController.navigationBar.topItem.title = @"•";
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     
     if ([def integerForKey:@"id_usuario"] == self.usuario.id_usuario) {
         self.cellCurtir.hidden = YES;

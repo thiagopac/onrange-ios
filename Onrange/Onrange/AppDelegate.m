@@ -11,6 +11,7 @@
 #import "Usuario.h"
 #import "MappingProvider.h"
 #import "AppDelegate.h"
+#import "SignUpViewController.h"
 
 
 NSString *const FBSessionStateChangedNotification =
@@ -47,18 +48,28 @@ NSString *const FBMenuDataChangedNotification =
     
 //integração com QuickBlox
     // Set QuickBlox credentials
-    [QBSettings setApplicationID:10625];
-    [QBSettings setAuthorizationKey:@"rrTrFYFOECqjTAe"];
-    [QBSettings setAuthorizationSecret:@"hM5vAmpBYYGV-p5"];
+    [QBApplication sharedApplication].applicationId = 10625;
+    [QBConnection registerServiceKey:@"rrTrFYFOECqjTAe"];
+    [QBConnection registerServiceSecret:@"hM5vAmpBYYGV-p5"];
     [QBSettings setAccountKey:@"TzErECZmN1ELxzE22avj"];
+
 #ifndef DEBUG
-    [QBSettings useProductionEnvironmentForPushNotifications:YES];
+    [QBApplication sharedApplication].productionEnvironmentForPushesEnabled = YES;
 #endif
     
     return YES;
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    NSLog(@"didReceiveRemoteNotification userInfo=%@", userInfo);
+}
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    // register for push notifications
+    [QBRequest registerSubscriptionForDeviceToken:deviceToken successBlock:^(QBResponse *response, NSArray *subscriptions) {
+        // successfully subscribed
+    } errorBlock:nil];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -116,14 +127,18 @@ NSString *const FBMenuDataChangedNotification =
      postNotificationName:FBSessionStateChangedNotification
      object:session];
     
+//    if (error) {
+//        UIAlertView *alertView = [[UIAlertView alloc]
+//                                  initWithTitle:@"Aviso"
+//                                  message:@"O Onrange precisa de permissão para acessar o seu facebook e criar o seu perfil. Clique em Conectar com Facebook novamente."
+//                                  delegate:nil
+//                                  cancelButtonTitle:@"OK"
+//                                  otherButtonTitles:nil];
+//        [alertView show];
+//    }
+    
     if (error) {
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Erro"
-                                  message:@"Ops! O aplicativo ainda não tem permissão para se conectar ao seu perfil do Facebook. Vamos tentar novamente?"
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-        [alertView show];
+        [self openSessionWithAllowLoginUI:YES];
     }
 }
 
@@ -188,7 +203,7 @@ NSString *const FBMenuDataChangedNotification =
                  }else if([_valida_sexo isEqualToString:@"female"]) {
                      _sexo_usuario = @"F";
                  }
-                 [self postUsuario];
+                 [self loginUsuario];
                  if (handler) {
                      handler(self, self.user);
                  }
@@ -196,8 +211,65 @@ NSString *const FBMenuDataChangedNotification =
          }];
     }
 }
+
+-(void)loginUsuario{
     
--(void)postUsuario{
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPOST
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Usuario"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"usuario/login";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Usuario *usuario = [Usuario new];
+
+    usuario.facebook_usuario = _facebook_usuario;
+    
+    [objectManager postObject:usuario
+                         path:path
+                   parameters:nil
+                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          if(mappingResult != nil){
+                              Usuario *userLogged = [mappingResult firstObject];
+                              if (userLogged != nil) {
+                                  NSLog(@"Login efetuado na base Onrage");
+                                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
+                                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
+                                  
+                                  [def synchronize];
+                              }else{
+                                  NSLog(@"Usuário inexistente");
+                                  [self adicionaUsuario];
+                              }
+                          }else{
+                              NSLog(@"Erro na resposta de LOGIN USUARIO");
+                              [self loginUsuario];
+                          }
+                      }
+                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                          NSLog(@"Erro 404");
+                          [self loginUsuario];
+                          NSLog(@"Error: %@", error);
+                          NSLog(@"Falha ao tentar enviar dados de login");
+                      }];
+}
+
+-(void)adicionaUsuario{
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
     [requestMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario"]];
@@ -240,13 +312,18 @@ NSString *const FBMenuDataChangedNotification =
 
                               [def synchronize];
                               
+                              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                              SignUpViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+                              [self.window makeKeyAndVisible];
+                              [self.window.rootViewController presentViewController:vc animated:YES completion:NULL];
+                              
                           }else{
                               NSLog(@"Falha ao tentar logar na base Onrange");
                           }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                           NSLog(@"Erro 404");
-                          [self postUsuario];
+                          [self adicionaUsuario];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de login");
                       }];

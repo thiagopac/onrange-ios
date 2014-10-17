@@ -152,7 +152,7 @@
 //    cell.lblNomeCombinacao.hidden = NO;
 //    cell.userProfilePictureView.hidden = NO;
 //    cell.textLabel.text = @"";
-    
+//    
 //    Match *match = [self.arrCombinacoes objectAtIndex:indexPath.row];
 
     

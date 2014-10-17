@@ -15,7 +15,7 @@
 
 #import "PointLocais.h"
 
-@interface HomeViewController : UIViewController<CLLocationManagerDelegate,QBActionStatusDelegate>
+@interface HomeViewController : UIViewController<CLLocationManagerDelegate,QBChatDelegate>
 
 @property (strong, nonatomic) IBOutlet MKMapView *mapGlobal;
 @property (strong, nonatomic) NSString *profileID;

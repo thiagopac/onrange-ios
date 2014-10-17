@@ -1,12 +1,15 @@
 PODS:
   - AFNetworking (1.3.4)
+  - AnimatedGif (0.1.1)
   - Canvas (0.1.2)
   - CWStatusBarNotification (2.1.1)
+  - EAIntroView (2.6.4)
   - Facebook-iOS-SDK (3.12.0)
   - iOS-Slide-Menu (1.3.0)
   - JSQMessagesViewController (5.2.3):
     - JSQSystemSoundPlayer
-  - JSQSystemSoundPlayer (1.5.2)
+  - JSQSystemSoundPlayer (2.0.0)
+  - QuickBlox (2.0.9)
   - RestKit (0.20.3):
     - RestKit/Core
   - RestKit/Core (0.20.3):
@@ -26,29 +29,38 @@ PODS:
   - SVProgressHUD (1.0)
   - TPKeyboardAvoiding (1.2.4)
   - TransitionKit (1.1.1)
+  - YCFirstTime (1.1.1)
 
 DEPENDENCIES:
+  - AnimatedGif
   - Canvas (~> 0.1)
   - CWStatusBarNotification (~> 2.1)
+  - EAIntroView (~> 2.6)
   - Facebook-iOS-SDK (~> 3.12.0)
   - iOS-Slide-Menu (~> 1.3.0)
-  - JSQMessagesViewController (~> 5.2)
+  - JSQMessagesViewController
+  - QuickBlox
   - RestKit (~> 0.20.0)
   - SVProgressHUD
   - TPKeyboardAvoiding
+  - YCFirstTime (~> 1.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 80c4e0652b08eb34e25b9c0ff3c82556fe5967b4
+  AnimatedGif: 02960d34d11eb52a154fbf876ebc584a0fe26442
   Canvas: ae2faca05a15c4d6659fb3ae5e2a14817df4449a
   CWStatusBarNotification: 90989a73615aceb90c2da393d926ab76d8ea6a6d
+  EAIntroView: 8f66dc6b79f2d52db26af8fc5476a05ffc549d4c
   Facebook-iOS-SDK: 91763fa21b97c175dc072b5278a606b2aff62366
   iOS-Slide-Menu: d6ee5bf78951b0e501a880299459dd8739cc4b41
   JSQMessagesViewController: 57c1c05b1eee15095fde08fd34e8fb441482b3ab
-  JSQSystemSoundPlayer: c24914bc96ff5365b5d28b59d7ecffd60d1c5587
+  JSQSystemSoundPlayer: c98443b1cbb3b45db09d0d3d6c2355cf78294981
+  QuickBlox: 5a31f72824caa1903d2a3a893fec3cf1ed53591a
   RestKit: 7f9490e709ee745e166c4d2aa7a8d132831275b0
   SOCKit: d8d0dd3688ae1026c12367570da8fa8e1a6980fb
   SVProgressHUD: 5034c6e22b8c2ca3e09402e48d41ed0340aa1c50
   TPKeyboardAvoiding: 925e1e1912597d1a4956697eec3bd9656552153c
   TransitionKit: b573f93c422f6aedf7d40e93e7c2f202d1295063
+  YCFirstTime: fbef2b5b3512d3ec21367757466903547b9930cd
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.34.1

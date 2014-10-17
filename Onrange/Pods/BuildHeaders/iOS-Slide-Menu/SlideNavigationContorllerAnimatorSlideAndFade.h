@@ -1,1 +1,0 @@
-../../iOS-Slide-Menu/SlideMenu/Source/Animations/SlideNavigationContorllerAnimatorSlideAndFade.h
