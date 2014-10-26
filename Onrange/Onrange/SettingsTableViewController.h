@@ -17,5 +17,6 @@
 - (IBAction)inicioToque:(UISlider *)sender;
 - (IBAction)fimToque:(UISlider *)sender;
 - (IBAction)fimToqueFora:(UISlider *)sender;
+- (IBAction)btnTestes:(id)sender;
 
 @end

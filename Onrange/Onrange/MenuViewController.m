@@ -47,29 +47,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Helper methods
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:   (NSInteger)buttonIndex {
-    
-    switch (buttonIndex) {
-        case 0: // logout
-            NSLog(@"Voltar o usuário ao tutorial");
-            break;
-        case 1: // cancel
-            break;
-    }
-}
-
 #pragma mark - Action methods
-- (IBAction)logoutButtonClicked:(UIButton *)sender {
-    UIActionSheet* action = [[UIActionSheet alloc]
-                             initWithTitle:nil
-                             delegate:(id<UIActionSheetDelegate>)self
-                             cancelButtonTitle:@"Cancel"
-                             destructiveButtonTitle:@"Logout"
-                             otherButtonTitles:nil ];
-    [action showInView:self.view];
-}
 
 - (IBAction)minhasCombinacoesButtonClicked:(UIButton *)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"

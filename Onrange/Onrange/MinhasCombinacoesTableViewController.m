@@ -56,6 +56,7 @@
     
     UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    self.navigationController.navigationBar.topItem.title = @"";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
 
@@ -168,6 +169,16 @@
 //    }
     
     [cell.lblNomeCombinacao setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:17]];
+
+    NSString *qtdMsgsNaoLidas = [NSString stringWithFormat:@"%lu",(unsigned long)chatDialog.unreadMessagesCount];
+    
+    if ([qtdMsgsNaoLidas isEqualToString:@"0"]) {
+        cell.viewUnredMessages.hidden = YES;
+    }
+    
+// contagem de mensagens não-lidas
+//     [ NSString stringWithFormat:@"%lu",(unsigned long)chatDialog.unreadMessagesCount]
+    
     cell.lblNomeCombinacao.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
     
     return cell;

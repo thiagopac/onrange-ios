@@ -17,7 +17,7 @@
 
 +(RKMapping *)usuarioMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"liked"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"liked", @"matched"]];
     return mapping;
 }
 

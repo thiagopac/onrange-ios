@@ -8,6 +8,9 @@
 
 #import "IntroViewController.h"
 #import "AnimatedGif.h"
+#import <Restkit/RestKit.h>
+#import "Usuario.h"
+#import "MappingProvider.h"
 
 static NSString * const sampleDescription1 = @"Pagina 1. Aqui vai o texto explicativo do que é o Onrange, que ele usa mapas, que ele possibilita visualizar os locais com as baladas mais bacanas da cidade.";
 static NSString * const sampleDescription2 = @"Página 2. Aqui terá deverá apresentar o botão para link com facebook, pois já faremos o cadastro dele na base Onrange e também no Quickblox";
@@ -41,7 +44,8 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:NO];
-    [self showIntroWithCustomViewFromNib];
+//    [self showIntroWithCustomViewFromNib];
+    [self loginUsuario];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,7 +82,74 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
 
 }
 
-- (IBAction)btnIniciar:(UIButton *)sender {
-    [self showIntroWithCustomViewFromNib];
+-(void)loginUsuario{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPOST
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Usuario"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"usuario/login";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Usuario *usuario = [Usuario new];
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    self.user = [def objectForKey:@"graph_usuario"];
+    
+    usuario.facebook_usuario = [self.user objectForKey:@"id"];
+    
+    [objectManager postObject:usuario
+                         path:path
+                   parameters:nil
+                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          
+//                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
+
+                          if(mappingResult != nil){
+                              Usuario *userLogged = [mappingResult firstObject];
+
+                              if (userLogged != nil) {
+                                  NSLog(@"Login efetuado na base Onrage");
+                                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
+                                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
+                                  [def synchronize];
+                                  [self performSegueWithIdentifier:@"SegueToHome" sender:self];
+                              }else{
+                                  NSLog(@"Usuário inexistente");
+                                  [self showIntroWithCustomViewFromNib];
+                              }
+                          }else{
+                              NSLog(@"Erro na resposta de LOGIN USUARIO");
+                              [self loginUsuario];
+                          }
+                      }
+                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
+                          NSLog(@"Erro 404");
+                          [self loginUsuario];
+                          NSLog(@"Error: %@", error);
+                          NSLog(@"Falha ao tentar enviar dados de login");
+                      }];
 }
+
+- (void)introDidFinish:(EAIntroView *)introView {
+    [self loginUsuario];
+}
+
 @end

@@ -13,6 +13,7 @@
 
 - (IBAction)btnFB:(id)sender {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     [appDelegate openSessionWithAllowLoginUI:YES];
     [self.activityIndicator startAnimating];
 }

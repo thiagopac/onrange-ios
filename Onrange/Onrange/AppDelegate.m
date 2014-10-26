@@ -12,6 +12,7 @@
 #import "MappingProvider.h"
 #import "AppDelegate.h"
 #import "SignUpViewController.h"
+#import "CWStatusBarNotification.h"
 
 
 NSString *const FBSessionStateChangedNotification =
@@ -62,6 +63,29 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"didReceiveRemoteNotification userInfo=%@", userInfo);
+    
+    // Get push alert
+    NSString *message = [[userInfo objectForKey:QBMPushMessageApsKey] objectForKey:QBMPushMessageAlertKey];
+    
+    NSMutableDictionary *pushInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:message, @"message", nil];
+    
+    // get push rich content
+    NSString *richContent = [userInfo objectForKey:@"rich_content"];
+    if(richContent != nil){
+        [pushInfo setObject:richContent forKey:@"rich_content"];
+    }
+    
+    [[NSNotificationCenter defaultCenter]  postNotificationName:kPushDidReceive object:nil userInfo:pushInfo];
+    
+    CWStatusBarNotification *notification = [CWStatusBarNotification new];
+    [notification setNotificationStyle:CWNotificationStyleNavigationBarNotification];
+    
+    [notification setNotificationAnimationInStyle:CWNotificationAnimationStyleTop];
+    [notification setNotificationAnimationOutStyle:CWNotificationAnimationStyleTop];
+    notification.notificationLabelBackgroundColor = [UIColor whiteColor];
+    notification.notificationLabelTextColor = [UIColor orangeColor];
+    
+    [notification displayNotificationWithMessage:@"Mensagem recebida" forDuration:1.0f];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
@@ -88,7 +112,7 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -109,7 +133,7 @@ NSString *const FBMenuDataChangedNotification =
         case FBSessionStateOpen:
             if (!error) {
                 // We have a valid session
-                //NSLog(@"User session found");
+                NSLog(@"User session found");
             }
             break;
         case FBSessionStateClosed:
@@ -127,19 +151,16 @@ NSString *const FBMenuDataChangedNotification =
      postNotificationName:FBSessionStateChangedNotification
      object:session];
     
-//    if (error) {
-//        UIAlertView *alertView = [[UIAlertView alloc]
-//                                  initWithTitle:@"Aviso"
-//                                  message:@"O Onrange precisa de permissão para acessar o seu facebook e criar o seu perfil. Clique em Conectar com Facebook novamente."
-//                                  delegate:nil
-//                                  cancelButtonTitle:@"OK"
-//                                  otherButtonTitles:nil];
-//        [alertView show];
-//    }
-    
     if (error) {
-        [self openSessionWithAllowLoginUI:YES];
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Aviso"
+                                  message:@"O Onrange precisa de permissão para acessar o seu facebook e criar o seu perfil. Clique em Conectar com Facebook novamente."
+                                  delegate:nil
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
     }
+
 }
 
 /*
@@ -168,7 +189,6 @@ NSString *const FBMenuDataChangedNotification =
  */
 - (void) closeSession {
     [FBSession.activeSession closeAndClearTokenInformation];
-    [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - Personalization methods

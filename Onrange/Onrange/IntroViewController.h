@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "EAIntroView.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface IntroViewController : UIViewController<EAIntroDelegate>
 
-- (IBAction)btnIniciar:(UIButton *)sender;
+
+@property (strong, nonatomic) id<FBGraphUser> user;
 
 @end

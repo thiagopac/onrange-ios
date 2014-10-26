@@ -172,11 +172,21 @@
 
 - (void)configureCell:(UsuarioFotoCollectionCell *)cell withUsuario:(Usuario *)usuario {
     cell.userProfilePictureView.profileID = usuario.facebook_usuario;
-    if (usuario.liked == 1) {
+    if (usuario.liked == 1 && usuario.matched == 0) {
         cell.imgLiked.hidden = NO;
+        cell.imgMatch.hidden = YES;
         cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f];
+    }else if (usuario.liked == 1 && usuario.matched == 1) {
+        cell.imgLiked.hidden = YES;
+        cell.imgMatch.hidden = NO;
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:14/255.0f blue:1/255.0f alpha:1.0f];
+    }else if (usuario.liked == 0 && usuario.matched == 1) {
+        cell.imgLiked.hidden = YES;
+        cell.imgMatch.hidden = NO;
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:14/255.0f blue:1/255.0f alpha:1.0f];
     }else{
         cell.imgLiked.hidden = YES;
+        cell.imgMatch.hidden = YES;
         cell.viewContainerUsuarios.backgroundColor = [UIColor whiteColor];
     }
     [self.notification dismissNotification];

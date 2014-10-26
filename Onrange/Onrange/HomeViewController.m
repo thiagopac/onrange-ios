@@ -12,6 +12,7 @@
 #import "MappingProvider.h"
 #import "PerfilLocalTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "MinhasCombinacoesTableViewController.h"
 
 @interface HomeViewController (){
     int raio;
@@ -73,15 +74,6 @@
 }
 
 #pragma mark - Helper methods
-/*
- * Configure the logged in versus logged out UX
- */
-- (void)sessionStateChanged:(NSNotification*)notification {
-    if (false) {
-//Tratar aqui quando usuário tiver clicado no botã ode logout
-        [self performSegueWithIdentifier:@"SegueToLogin" sender:self];
-    }
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -257,6 +249,11 @@
 {
     [super viewDidLoad];
     
+    
+    if(![LocalStorageService shared].currentUser.ID){
+        self.btnMatches.hidden = YES;
+    }
+    
     self.navigationController.navigationBar.hidden = NO;
 
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
@@ -276,12 +273,20 @@
     
     
     //btnMe
-    self.btnMe.layer.cornerRadius = 10;
+    self.btnMe.layer.cornerRadius = 7;
     self.btnMe.clipsToBounds = NO;
     self.btnMe.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.btnMe.layer.shadowOpacity = 0.2;
     self.btnMe.layer.shadowRadius = 1;
     self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
+
+    //btnMatches
+    self.btnMatches.layer.cornerRadius = 7;
+    self.btnMatches.clipsToBounds = NO;
+    self.btnMatches.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.btnMatches.layer.shadowOpacity = 0.2;
+    self.btnMatches.layer.shadowRadius = 1;
+    self.btnMatches.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
     
     // QuickBlox session creation
     QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
@@ -294,12 +299,14 @@
         
         UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
         UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+
         
-        // register for notifications
+//        PROBLEMA DE IOS 7 E IOS 8
+//        // register for notifications
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-        
-        // resister for push notifications
-        // this method will call didRegisterForRemoteNotificationsWithDeviceToken
+//
+//        // resister for push notifications
+//        // this method will call didRegisterForRemoteNotificationsWithDeviceToken
         [[UIApplication sharedApplication] registerForRemoteNotifications];
         
         // Save current user
@@ -314,6 +321,8 @@
         // Login to QuickBlox Chat
         //
         [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+            
+            self.btnMatches.hidden = NO;
             
             // hide alert after delay
             double delayInSeconds = 1.0;
@@ -362,7 +371,7 @@
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"OK", "")
                                               otherButtonTitles:nil];
-        [alert show];
+//        [alert show];
     };
 }
 
@@ -527,51 +536,57 @@
     [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
 }
 
-// QuickBlox API queries delegate
-- (void)completedWithResult:(Result *)result{
+//// QuickBlox API queries delegate
+//- (void)completedWithResult:(Result *)result{
+//    
+//    // QuickBlox session creation  result
+//    if([result isKindOfClass:[QBAAuthSessionCreationResult class]]){
+//        
+//        // Success result
+//        if(result.success){
+//            
+//            QBAAuthSessionCreationResult *res = (QBAAuthSessionCreationResult *)result;
+//            
+//            // Save current user
+//            //
+//            QBUUser *currentUser = [QBUUser user];
+//            currentUser.ID = res.session.userID;
+//            currentUser.login = self.QBUser;
+//            currentUser.password = self.QBPassword;
+//            //
+//            [[LocalStorageService shared] setCurrentUser:currentUser];
+//            
+//            // Login to QuickBlox Chat
+//            //
+//            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+//                
+//                
+//                // hide alert after delay
+//                double delayInSeconds = 1.0;
+//                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                    [self dismissViewControllerAnimated:YES completion:nil];
+//                });
+//            }];
+//            
+//        }else{
+//            NSString *errorMessage = [[result.errors description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+//            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
+//            
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
+//                                                            message:errorMessage
+//                                                           delegate:nil
+//                                                  cancelButtonTitle:@"Ok"
+//                                                  otherButtonTitles: nil];
+//            [alert show];
+//        }
+//    }
+//}
+
+- (IBAction)btnMatches:(id)sender {
+    MinhasCombinacoesTableViewController *minhasCombinacoesTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"MinhasCombinacoesTableViewController"];
     
-    // QuickBlox session creation  result
-    if([result isKindOfClass:[QBAAuthSessionCreationResult class]]){
-        
-        // Success result
-        if(result.success){
-            
-            QBAAuthSessionCreationResult *res = (QBAAuthSessionCreationResult *)result;
-            
-            // Save current user
-            //
-            QBUUser *currentUser = [QBUUser user];
-            currentUser.ID = res.session.userID;
-            currentUser.login = self.QBUser;
-            currentUser.password = self.QBPassword;
-            //
-            [[LocalStorageService shared] setCurrentUser:currentUser];
-            
-            // Login to QuickBlox Chat
-            //
-            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
-                
-                
-                // hide alert after delay
-                double delayInSeconds = 1.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                });
-            }];
-            
-        }else{
-            NSString *errorMessage = [[result.errors description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
-            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
-                                                            message:errorMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        }
-    }
+    [[self navigationController]pushViewController:minhasCombinacoesTVC animated:YES];
 }
 
 @end

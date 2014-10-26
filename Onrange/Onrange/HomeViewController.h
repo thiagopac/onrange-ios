@@ -23,6 +23,8 @@
 @property (strong, nonatomic) Local *local;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) IBOutlet UIButton *btnMe;
+@property (strong, nonatomic) IBOutlet UIButton *btnMatches;
+- (IBAction)btnMatches:(id)sender;
 @property (strong, nonatomic) NSString *QBUser;
 @property (strong, nonatomic) NSString *QBPassword;
 

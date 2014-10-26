@@ -16,5 +16,7 @@
 @property (strong, nonatomic) NSString *email_usuario;
 @property (strong, nonatomic) NSString *facebook_usuario;
 @property (assign, nonatomic) BOOL liked;
+@property (assign, nonatomic) BOOL matched;
+
 
 @end

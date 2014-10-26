@@ -12,5 +12,5 @@
 @interface MinhasCombinacoesTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeCombinacao;
-
+@property (strong, nonatomic) IBOutlet UIView *viewUnredMessages;
 @end
