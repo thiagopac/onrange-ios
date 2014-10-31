@@ -79,13 +79,26 @@ NSString *const FBMenuDataChangedNotification =
     
     CWStatusBarNotification *notification = [CWStatusBarNotification new];
     [notification setNotificationStyle:CWNotificationStyleNavigationBarNotification];
-    
     [notification setNotificationAnimationInStyle:CWNotificationAnimationStyleTop];
     [notification setNotificationAnimationOutStyle:CWNotificationAnimationStyleTop];
     notification.notificationLabelBackgroundColor = [UIColor whiteColor];
     notification.notificationLabelTextColor = [UIColor orangeColor];
     
-    [notification displayNotificationWithMessage:@"Mensagem recebida" forDuration:1.0f];
+//    NSDictionary* aps=[pushInfo objectForKey:@"aps"];
+//    NSString* msgBody=[aps objectForKey:@"alert"];
+    
+    [self mensagemParaOMundo:@"Hello World"];
+    
+    NSDictionary *aps = userInfo[@"aps"];
+    NSString *msgBody = aps[@"alert"];
+    
+    [notification displayNotificationWithMessage:msgBody forDuration:1.0f];
+}
+
+- (void) mensagemParaOMundo:(NSString *)mensagem {
+    NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
+    NSDictionary *message = [NSDictionary dictionaryWithObject:mensagem forKey:@"Mensagem"];
+    [center postNotificationName:@"MinhaNotificacao" object:self userInfo:message];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
@@ -102,7 +115,12 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+//    [[QBChat instance] logout];
+//    [QBRequest logOutWithSuccessBlock:^(QBResponse *response) {
+//        // Successful logout
+//    } errorBlock:^(QBResponse *response) {
+//        // Handle error
+//    }];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -117,8 +135,7 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // if the app is going away, we close the session object
-    [FBSession.activeSession close];
+    [[QBChat instance] logout];
 }
 
 #pragma mark - Authentication methods

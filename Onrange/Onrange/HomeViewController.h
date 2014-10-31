@@ -15,7 +15,7 @@
 
 #import "PointLocais.h"
 
-@interface HomeViewController : UIViewController<CLLocationManagerDelegate,QBChatDelegate>
+@interface HomeViewController : UIViewController<CLLocationManagerDelegate, QBChatDelegate>
 
 @property (strong, nonatomic) IBOutlet MKMapView *mapGlobal;
 @property (strong, nonatomic) NSString *profileID;
@@ -25,13 +25,11 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnMe;
 @property (strong, nonatomic) IBOutlet UIButton *btnMatches;
 - (IBAction)btnMatches:(id)sender;
-@property (strong, nonatomic) NSString *QBUser;
-@property (strong, nonatomic) NSString *QBPassword;
 
 - (IBAction)btnMe:(UIButton *)sender;
+@property (strong, nonatomic) IBOutlet UIView *viewUnredMessages;
 
 -(id)init;
--(id)initWithProfileID:(NSString *)profileID;
--(void)sessionStateChanged:(NSNotification*)notification;
+- (void) recebeNotificacao:(NSNotification *)notification;
 
 @end

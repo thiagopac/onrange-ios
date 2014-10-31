@@ -45,23 +45,20 @@
     self.QBUser = [def objectForKey:@"facebook_usuario"];
     self.QBPassword = [def objectForKey:@"facebook_usuario"];
     
-    QBSessionParameters *parameters = [QBASessionCreationRequest request];
-    parameters.userLogin = self.QBUser;
-    parameters.userPassword = self.QBPassword;
     
-    [QBRequest createSessionWithExtendedParameters:parameters successBlock:^(QBResponse *response, QBASession *session) {
-
-        NSLog(@"Criado chat com o usuário");
+    [QBRequest createSessionWithSuccessBlock:^(QBResponse *response, QBASession *session) {
+        // session created
+        
+        qbtoken = [[QBBaseModule sharedModule]token];
+        
+        NSLog(@"QB-Token: %@",qbtoken);
         
     } errorBlock:^(QBResponse *response) {
-        // error handling
-        NSLog(@"error: %@", response.error);
+        // handle errors
+        NSLog(@"%@", response.error);
     }];
     
-    qbtoken = [[QBBaseModule sharedModule]token];
-    
-    NSLog(@"QB-Token: %@",qbtoken);
-    
+    self.imgProfileUsuario.pictureCropping = FBProfilePictureCroppingSquare;
     self.imgProfileUsuario.profileID = self.usuario.facebook_usuario;
     self.lblNomeUsuario.text = self.usuario.nome_usuario;
     
@@ -70,7 +67,7 @@
     
     self.navigationController.navigationBar.topItem.title = @"•";
     
-    if ([def integerForKey:@"id_usuario"] == self.usuario.id_usuario) {
+    if (([def integerForKey:@"id_usuario"] == self.usuario.id_usuario) || self.usuario.matched == 1) {
         self.cellCurtir.hidden = YES;
     }
     if (self.usuario.liked == 1) {
@@ -87,19 +84,24 @@
 }
 
 - (IBAction)btnCurtirUsuario:(id)sender {
-    self.viewAnimatedBtn.duration = 0.5;
-    self.viewAnimatedBtn.delay    = 0.5;
-    self.viewAnimatedBtn.type     = CSAnimationTypeZoomOut;
-    [self.viewAnimatedBtn startCanvasAnimation];
     [self curtirUsuario];
+    [self botaoLoading];
 }
 
 -(void)botaoSelecionado{
+    [self.loading stopAnimating];
     [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:139/255.0f green:204/255.0f blue:0/255.0f alpha:1.0f]];
     [self.btnCurtirUsuario setTitle:@"Curtido" forState:UIControlStateNormal];
 }
 
+-(void)botaoLoading{
+    [self.loading startAnimating];
+    [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f]];
+    [self.btnCurtirUsuario setTitle:@"" forState:UIControlStateNormal];
+}
+
 -(void)botaoNaoSelecionado{
+    [self.loading stopAnimating];
     [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f]];
     [self.btnCurtirUsuario setTitle:@"Curtir" forState:UIControlStateNormal];
 }
@@ -149,7 +151,7 @@
               [self presentViewController:vc animated:YES completion:nil];
               NSLog(@"Retorno da CallAPI: %@",likeefetuado.chat);
               [self.view setNeedsLayout];
-              [self botaoSelecionado];
+              [self botaoLoading];
           }else if(likeefetuado.match == 0){
               if (likeefetuado.id_output == 4) {
                   [self botaoNaoSelecionado];

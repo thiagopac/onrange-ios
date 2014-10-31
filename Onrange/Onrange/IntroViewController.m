@@ -119,7 +119,7 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
                    parameters:nil
                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                           
-//                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
+                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
 
                           if(mappingResult != nil){
                               Usuario *userLogged = [mappingResult firstObject];
@@ -141,7 +141,6 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
 //                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
-                          NSLog(@"Erro 404");
                           [self loginUsuario];
                           NSLog(@"Error: %@", error);
                           NSLog(@"Falha ao tentar enviar dados de login");

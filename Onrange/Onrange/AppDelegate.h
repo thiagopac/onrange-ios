@@ -41,5 +41,6 @@ typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;
 - (void)closeSession;
 - (void)requestUserData:(UserDataLoadedHandler)handler;
+- (void) mensagemParaOMundo:(NSString *)mensagem;
 
 @end

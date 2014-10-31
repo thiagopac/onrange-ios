@@ -84,18 +84,6 @@
     return self;
 }
 
--(id)init {
-    return [self initWithProfileID:nil];
-}
-
--(id)initWithProfileID:(NSString *)profileID {
-    self = [super init];
-    if (self) {
-        self.profileID = profileID;
-    }
-    return self;
-}
-
 -(void)buscarLocalizacao{
     [self.locationManager requestWhenInUseAuthorization];
     if (self.locationManager == nil) {
@@ -249,22 +237,15 @@
 {
     [super viewDidLoad];
     
-    
-    if(![LocalStorageService shared].currentUser.ID){
-        self.btnMatches.hidden = YES;
-    }
-    
     self.navigationController.navigationBar.hidden = NO;
-
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    self.QBUser = [def objectForKey:@"facebook_usuario"];
-    self.QBPassword = [def objectForKey:@"facebook_usuario"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
+    
+//    chegou notificação de push
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recebeNotificacao:) name:@"MinhaNotificacao" object:nil];
     
     [self buscarLocalizacao];
 
@@ -287,64 +268,7 @@
     self.btnMatches.layer.shadowOpacity = 0.2;
     self.btnMatches.layer.shadowRadius = 1;
     self.btnMatches.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
-    
-    // QuickBlox session creation
-    QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
-    extendedAuthRequest.userLogin = self.QBUser;
-    extendedAuthRequest.userPassword = self.QBPassword;
-    //
-    [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
-        
-//        [self registerForRemoteNotifications];
-        
-        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
 
-        
-//        PROBLEMA DE IOS 7 E IOS 8
-//        // register for notifications
-        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-//
-//        // resister for push notifications
-//        // this method will call didRegisterForRemoteNotificationsWithDeviceToken
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        
-        // Save current user
-        //
-        QBUUser *currentUser = [QBUUser user];
-        currentUser.ID = session.userID;
-        currentUser.login = self.QBUser;
-        currentUser.password = self.QBPassword;
-        //
-        [[LocalStorageService shared] setCurrentUser:currentUser];
-        
-        // Login to QuickBlox Chat
-        //
-        [[ChatService instance] loginWithUser:currentUser completionBlock:^{
-            
-            self.btnMatches.hidden = NO;
-            
-            // hide alert after delay
-            double delayInSeconds = 1.0;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self dismissViewControllerAnimated:YES completion:nil];
-            });
-        }];
-        
-        
-        
-    } errorBlock:^(QBResponse *response) {
-        NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
-        errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
-                                                        message:errorMessage
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles: nil];
-        [alert show];
-    }];
 }
 
 - (void)registerForRemoteNotifications{
@@ -363,29 +287,9 @@
 #endif
 }
 
-- (void(^)(QBResponse *))handleError
-{
-    return ^(QBResponse *response) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", "")
-                                                        message:[response.error description]
-                                                       delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK", "")
-                                              otherButtonTitles:nil];
-//        [alert show];
-    };
-}
-
-// Chat delegate
--(void) chatDidLogin{
-    NSLog(@"Logou no chat!");
-}
-
-- (void)chatDidNotLogin{
-        NSLog(@"Logou no chat!");
-}
-
 -(void)viewWillAppear:(BOOL)animated{
-     self.btnMe.hidden = YES;
+
+    self.btnMe.hidden = YES;
     
     [_mapGlobal removeAnnotations:_mapGlobal.annotations];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -536,57 +440,16 @@
     [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
 }
 
-//// QuickBlox API queries delegate
-//- (void)completedWithResult:(Result *)result{
-//    
-//    // QuickBlox session creation  result
-//    if([result isKindOfClass:[QBAAuthSessionCreationResult class]]){
-//        
-//        // Success result
-//        if(result.success){
-//            
-//            QBAAuthSessionCreationResult *res = (QBAAuthSessionCreationResult *)result;
-//            
-//            // Save current user
-//            //
-//            QBUUser *currentUser = [QBUUser user];
-//            currentUser.ID = res.session.userID;
-//            currentUser.login = self.QBUser;
-//            currentUser.password = self.QBPassword;
-//            //
-//            [[LocalStorageService shared] setCurrentUser:currentUser];
-//            
-//            // Login to QuickBlox Chat
-//            //
-//            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
-//                
-//                
-//                // hide alert after delay
-//                double delayInSeconds = 1.0;
-//                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-//                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//                    [self dismissViewControllerAnimated:YES completion:nil];
-//                });
-//            }];
-//            
-//        }else{
-//            NSString *errorMessage = [[result.errors description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
-//            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
-//            
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
-//                                                            message:errorMessage
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:@"Ok"
-//                                                  otherButtonTitles: nil];
-//            [alert show];
-//        }
-//    }
-//}
-
 - (IBAction)btnMatches:(id)sender {
     MinhasCombinacoesTableViewController *minhasCombinacoesTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"MinhasCombinacoesTableViewController"];
     
     [[self navigationController]pushViewController:minhasCombinacoesTVC animated:YES];
+}
+
+- (void) recebeNotificacao:(NSNotification *)notification {
+    self.viewUnredMessages.hidden = NO;
+    [self.view setNeedsDisplay];
+    NSLog(@"A mensagem foi: %@", [notification.userInfo objectForKey:@"Mensagem"]);
 }
 
 @end

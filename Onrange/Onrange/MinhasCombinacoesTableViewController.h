@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeViewController.h"
 
 
-@interface MinhasCombinacoesTableViewController : UITableViewController
+@interface MinhasCombinacoesTableViewController : UITableViewController<QBChatDelegate>
 
+@property (strong, nonatomic) HomeViewController *HomeViewController;
 @property (strong, nonatomic) QBChatDialog *createdDialog;
+@property (strong, nonatomic) NSString *QBUser;
+@property (strong, nonatomic) NSString *QBPassword;
 
 @end

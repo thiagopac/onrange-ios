@@ -65,7 +65,7 @@
                                 </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NLQ-Lq-PAg">
-                                <rect key="frame" x="259" y="353" width="50" height="50"/>
+                                <rect key="frame" x="259" y="295" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="26"/>
@@ -78,7 +78,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZzS-G5-9UU">
-                                <rect key="frame" x="259" y="295" width="50" height="50"/>
+                                <rect key="frame" x="259" y="353" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="26"/>
@@ -90,6 +90,17 @@
                                     <action selector="btnMatches:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="AeH-0n-sXF"/>
                                 </connections>
                             </button>
+                            <view hidden="YES" contentMode="scaleToFill" id="GQY-46-Cth">
+                                <rect key="frame" x="296" y="390" width="10" height="10"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.21493055559999999" green="0.70150462960000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -113,6 +124,7 @@
                         <outlet property="btnMatches" destination="ZzS-G5-9UU" id="VYq-B7-QPh"/>
                         <outlet property="btnMe" destination="NLQ-Lq-PAg" id="RdK-09-gte"/>
                         <outlet property="mapGlobal" destination="T0S-fP-t3U" id="fia-xZ-lDB"/>
+                        <outlet property="viewUnredMessages" destination="GQY-46-Cth" id="8vX-nh-rrD"/>
                         <segue destination="YqD-IE-Kvp" kind="push" identifier="perfilLocalSegue" id="Q3q-Er-Mpo"/>
                     </connections>
                 </viewController>
@@ -142,14 +154,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="103" height="106"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="coracaoCurtido.png" id="Fop-yY-Mgq">
-                                            <rect key="frame" x="70" y="70" width="28" height="28"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
-                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="coracaoMatch.png" id="ZF4-8d-dyG">
-                                            <rect key="frame" x="70" y="70" width="28" height="28"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
                                         <view contentMode="scaleToFill" id="Cmu-LI-i8m" customClass="CSAnimationView">
                                             <rect key="frame" x="1" y="3" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -178,6 +182,14 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </view>
+                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="coracaoCurtido.png" id="Fop-yY-Mgq">
+                                            <rect key="frame" x="70" y="70" width="28" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
+                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="coracaoMatch.png" id="ZF4-8d-dyG">
+                                            <rect key="frame" x="2" y="70" width="28" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -304,39 +316,36 @@
                         <sections>
                             <tableViewSection id="cNE-2k-aFq">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="65" id="6Jg-4p-ZNg">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="52" id="6Jg-4p-ZNg">
                                         <rect key="frame" x="0.0" y="280" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Jg-4p-ZNg" id="cWS-Zb-nzm">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" id="bqG-fy-rQn" customClass="CSAnimationView">
-                                                    <rect key="frame" x="84" y="13" width="153" height="38"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OR5-B8-n1g">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OR5-B8-n1g">
-                                                            <rect key="frame" x="0.0" y="0.0" width="153" height="38"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <color key="backgroundColor" red="1" green="0.3397011861" blue="0.058565237229999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="16"/>
-                                                            <state key="normal" title="Curtir">
-                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                            </state>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                    <integer key="value" value="19"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <action selector="btnCurtirUsuario:" destination="bUK-M9-dEV" eventType="touchUpInside" id="uCk-8v-BnR"/>
-                                                            </connections>
-                                                        </button>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                                </view>
+                                                    <color key="backgroundColor" red="1" green="0.3397011861" blue="0.058565237229999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="21"/>
+                                                    <state key="normal" title="Curtir">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="0"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="btnCurtirUsuario:" destination="bUK-M9-dEV" eventType="touchUpInside" id="uCk-8v-BnR"/>
+                                                    </connections>
+                                                </button>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" id="9va-WD-2X2">
+                                                    <rect key="frame" x="150" y="16" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -353,7 +362,7 @@
                         <outlet property="cellCurtir" destination="6Jg-4p-ZNg" id="9qy-Qz-yd7"/>
                         <outlet property="imgProfileUsuario" destination="TbI-fG-U5Z" id="vjv-Mk-dpC"/>
                         <outlet property="lblNomeUsuario" destination="glQ-zg-oej" id="KdI-4Z-P0U"/>
-                        <outlet property="viewAnimatedBtn" destination="bqG-fy-rQn" id="ZW0-2L-rIE"/>
+                        <outlet property="loading" destination="9va-WD-2X2" id="yD1-dF-rV0"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DmG-3d-R6b" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -949,7 +958,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ag-WT-Vue" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="734" y="419"/>
+            <point key="canvasLocation" x="734" y="408"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="Y3m-um-BiT">
@@ -1353,8 +1362,19 @@
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="73"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" id="kCw-Ix-lXm" customClass="FBProfilePictureView">
+                                            <rect key="frame" x="8" y="16" width="42" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="21"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="NO"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="labelNomeCombinacao" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o6M-ih-aoN">
-                                            <rect key="frame" x="17" y="26" width="270" height="21"/>
+                                            <rect key="frame" x="58" y="26" width="232" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -1374,6 +1394,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="imgProfile" destination="kCw-Ix-lXm" id="ykM-Di-Qjv"/>
                                     <outlet property="lblNomeCombinacao" destination="o6M-ih-aoN" id="vuI-oA-NEG"/>
                                     <outlet property="viewUnredMessages" destination="X6K-DA-WbS" id="MQc-8o-8z4"/>
                                     <segue destination="K7S-JQ-kcf" kind="push" identifier="ShowChatViewControllerSegue" id="Eaw-vw-aBn"/>

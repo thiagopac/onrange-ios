@@ -13,4 +13,5 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeCombinacao;
 @property (strong, nonatomic) IBOutlet UIView *viewUnredMessages;
+@property (strong, nonatomic) IBOutlet FBProfilePictureView *imgProfile;
 @end

@@ -26,6 +26,6 @@
 
 - (IBAction)btnCurtirUsuario:(id)sender;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellCurtir;
-@property (strong, nonatomic) IBOutlet CSAnimationView *viewAnimatedBtn;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loading;
 
 @end
