@@ -13,6 +13,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblRadio;
 @property (strong, nonatomic) NSString *strGenero;
 @property (strong, nonatomic) IBOutlet UILabel *lblGenero;
+@property (assign, nonatomic) NSInteger status;
 
 - (IBAction)inicioToque:(UISlider *)sender;
 - (IBAction)fimToque:(UISlider *)sender;

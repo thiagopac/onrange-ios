@@ -27,8 +27,6 @@
 
 @end
 
-//---------------------------
-
 @interface ChatViewController : JSQMessagesViewController<QBActionStatusDelegate>
 
 @property (nonatomic, strong) QBChatDialog *dialog;
@@ -46,5 +44,7 @@
 @property (assign, nonatomic) NSString *oponentName;
 
 - (void)closePressed:(UIBarButtonItem *)sender;
+
+@property (assign, nonatomic) NSInteger status;
 
 @end

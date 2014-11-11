@@ -96,7 +96,13 @@
 
 -(void)botaoLoading{
     [self.loading startAnimating];
-    [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f]];
+    
+    if ([[[self.btnCurtirUsuario titleLabel]text]isEqualToString:@"Curtir"]) {
+        [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f]];
+    }else{
+        [self.btnCurtirUsuario setBackgroundColor:[UIColor colorWithRed:139/255.0f green:204/255.0f blue:0/255.0f alpha:1.0f]];
+    }
+
     [self.btnCurtirUsuario setTitle:@"" forState:UIControlStateNormal];
 }
 
@@ -133,49 +139,79 @@
     Like *like= [Like new];
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    id_usuario1 = [def integerForKey:@"id_usuario"];
-    like.id_usuario1 = id_usuario1;
     like.id_usuario2 = self.usuario.id_usuario;
-    like.id_local = self.local.id_local;
+
+    id_usuario1 = [def integerForKey:@"id_usuario"];
+    like.id_usuario1 = id_usuario1;    like.id_local = self.local.id_local;
     like.qbtoken = qbtoken;
     
     [objectManager postObject:like path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
       if(mappingResult != nil){
           NSLog(@"Dados de like enviados e recebidos com sucesso!");
           Like *likeefetuado = [mappingResult firstObject];
-          if (likeefetuado.match == 1) {
-              
-              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-              ConfirmaMatchViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaMatchViewController"];
-              vc.strNomeUsuario = self.usuario.nome_usuario;
-              [self presentViewController:vc animated:YES completion:nil];
-              NSLog(@"Retorno da CallAPI: %@",likeefetuado.chat);
-              [self.view setNeedsLayout];
-              [self botaoLoading];
-          }else if(likeefetuado.match == 0){
-              if (likeefetuado.id_output == 4) {
-                  [self botaoNaoSelecionado];
-              }else if (likeefetuado.id_output ==1){
-                  [self botaoSelecionado];
-              }else if (likeefetuado.id_output == 2){
-                  [self botaoSelecionado];
-                  [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro"];
-              }else if (likeefetuado.id_output == 3){
-                  [self botaoSelecionado];
-                  [SVProgressHUD showErrorWithStatus:@"Esta pessoa não está mais no local"];
+          
+              if (likeefetuado.match == 1) {
+                  
+                  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                  ConfirmaMatchViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaMatchViewController"];
+                  vc.strNomeUsuario = self.usuario.nome_usuario;
+                  [self presentViewController:vc animated:YES completion:nil];
+                  [self.view setNeedsLayout];
+                  [self botaoLoading];
+              }else if(likeefetuado.match == 0){
+                  if([self.btnCurtirUsuario.titleLabel.text isEqualToString:@"Curtir"]) {
+                      [self botaoSelecionado];
+                  }else{
+                      [self botaoNaoSelecionado];
+                  }
               }
-          }else{
-              NSLog(@"Ocorreu um erro ao efetuar o like");
-          }
-      }else{
-          NSLog(@"Falha ao tentar dar o like");
       }
-  }
-  failure:^(RKObjectRequestOperation *operation, NSError *error) {
-      NSLog(@"Erro 404");
-      [self curtirUsuario];
-      NSLog(@"Error: %@", error);
-      NSLog(@"Falha ao tentar enviar dados de like");
+  }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+      if(self.status == 521){
+          NSLog(@"Erro ao buscar checkin do usuario de destino.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 522){
+          NSLog(@"Usuario de destino realizou checkout.");
+          [self botaoNaoSelecionado];
+          [SVProgressHUD showErrorWithStatus:@"Erro. Esta pessoa deixou o local."];
+      }else if(self.status == 523){
+          NSLog(@"Erro ao verificar se ja existe like.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 524){
+          NSLog(@"Erro ao curtir.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 525){
+          NSLog(@"Erro ao verificar se houve match.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 526){
+          NSLog(@"Erro ao buscar ID do QB do usuario 1.");
+          [self botaoNaoSelecionado];
+      }else if(self.status == 527){
+          NSLog(@"Erro ao buscar ID do QB do usuario 2.");
+          [self botaoNaoSelecionado];
+      }else if(self.status == 528){
+          NSLog(@"Erro ao criar match.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 529){
+          NSLog(@"Erro ao descurtir.");
+          [self botaoSelecionado];
+          [self curtirUsuario];
+      }else if(self.status == 543){
+          NSLog(@"Erro ao criar chat no QB.");
+          [self botaoNaoSelecionado];
+          [self curtirUsuario];
+      }else{
+          [self curtirUsuario];
+          NSLog(@"Error: %@", error);
+          NSLog(@"Falha ao tentar enviar dados de like");
+      }
+
   }];
 }
+
 @end

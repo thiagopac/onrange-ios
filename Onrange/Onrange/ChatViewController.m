@@ -17,6 +17,10 @@
 //
 
 #import "ChatViewController.h"
+#import "RestKit.h"
+#import "MappingProvider.h"
+#import "Match.h"
+#import "MinhasCombinacoesTableViewController.h"
 
 @implementation ChatViewController
 
@@ -42,6 +46,13 @@
     
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.navigationController.navigationBar.topItem.title = @"•";
+    
+    // Make the info button use the standard icon and hook it up to work
+    UIButton *btnDeleteChat = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [btnDeleteChat setImage:[UIImage imageNamed:@"broken_heart"] forState:UIControlStateNormal];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc]
+                                   initWithImage:btnDeleteChat.currentImage style:UIBarButtonItemStylePlain target:self action:@selector(deleteChat)];
+    self.navigationItem.rightBarButtonItem = barButton;
     
 //removendo camera
 
@@ -127,8 +138,6 @@
         [self finishReceivingMessage];
     });
 }
-
-
 
 - (void)closePressed:(UIBarButtonItem *)sender
 {
@@ -398,6 +407,94 @@
                 header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender
 {
     NSLog(@"Load earlier messages!");
+}
+
+-(void)deleteChat{
+    UIActionSheet* actionDeleteChat = [[UIActionSheet alloc]
+                                       initWithTitle:[NSString stringWithFormat:@"Este chat será apagado e não será possível mais conversar com %@. Tem certeza de que deseja apagar esta conversa?", self.oponenteID]
+                                       delegate:(id<UIActionSheetDelegate>)self
+                                       cancelButtonTitle:@"Sim"
+                                       destructiveButtonTitle:@"Não"
+                                       otherButtonTitles:nil];
+    [actionDeleteChat showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:   (NSInteger)buttonIndex {
+        switch (buttonIndex) {
+            case 0: //Não
+                break;
+            case 1: //Sim
+                NSLog(@"Apagando chat");
+                [self apagaChat];
+                break;
+        }
+}
+
+-(void)apagaChat{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"id_chat", @"qbtoken", @"facebook_usuario", @"facebook_usuario2"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Match class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_output", @"desc_output"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Match class] rootKeyPath:nil method:RKRequestMethodPUT];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPUT
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Match"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"match/unmatch";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    
+    QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(self.dialog.recipientID)];
+
+
+    Match *match= [Match new];
+    
+    match.facebook_usuario = [def objectForKey:@"facebook_usuario"];
+    match.facebook_usuario2 = recipient.login;
+    match.id_chat = self.dialog.ID;
+    match.qbtoken = [[QBBaseModule sharedModule]token];
+    
+    [objectManager putObject:match path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+          if(mappingResult != nil){
+              Match *unMatchEfetuado = [mappingResult firstObject];
+              if (unMatchEfetuado.id_output == 1) {
+                  MinhasCombinacoesTableViewController *MinhasCombinacoesTVC = [self.navigationController.viewControllers objectAtIndex:1];
+                  [self.navigationController popToViewController:MinhasCombinacoesTVC animated:YES];
+              }
+              
+          }
+      }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+          self.status = operation.HTTPRequestOperation.response.statusCode;
+          
+          if(self.status == 540){
+              NSLog(@"Erro ao desfazer match");
+              [self apagaChat];
+          }else if(self.status == 544){
+              NSLog(@"Erro ao apagar chat no QB");
+              [self apagaChat];
+          }else if(self.status == 545){
+              [self apagaChat];
+              NSLog(@"Erro ao buscar ID do usuario 2");
+          }else{
+              NSLog(@"ERRO FATAL - apagaChat");
+              NSLog(@"Error: %@", error);
+              [self apagaChat];
+          }
+
+      }];
 }
 
 @end

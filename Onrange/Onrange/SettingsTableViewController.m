@@ -10,6 +10,9 @@
 #import "SlideNavigationController.h"
 #import "AppDelegate.h"
 #import "CWStatusBarNotification.h"
+#import <RestKit/RestKit.h>
+#import "MappingProvider.h"
+#import "Usuario.h"
 
 @interface SettingsTableViewController (){
     int prev;
@@ -136,8 +139,6 @@
     
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            
     if(actionSheet.tag == 1) {
         switch (buttonIndex) {
             case 0: // logout
@@ -151,9 +152,7 @@
     }else if(actionSheet.tag == 2) {
         switch (buttonIndex) {
             case 0: // apagar
-                NSLog(@"Apagando o usuário");
-                [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
-                [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+                [self apagaUsuario];
                 break;
             case 1: // cancelar
                 break;
@@ -170,6 +169,66 @@
                              otherButtonTitles:nil ];
     action2.tag = 2;
     [action2 showInView:self.view];
+}
+
+-(void)apagaUsuario{
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario"]];
+    
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_output", @"desc_output"]];
+    
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPUT];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPUT
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"Usuario"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    NSURL *url = [NSURL URLWithString:API];
+    NSString  *path= @"usuario/exclui";
+    
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
+    [objectManager addRequestDescriptor:requestDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    Usuario *usuario = [Usuario new];
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    usuario.facebook_usuario = [def objectForKey:@"facebook_usuario"];
+
+    
+    [objectManager putObject:usuario path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        if(mappingResult != nil){
+            NSLog(@"Dados do usuário enviados");
+            Usuario *usuarioRetorno = [mappingResult firstObject];
+            
+            self.status = operation.HTTPRequestOperation.response.statusCode;
+                if (usuarioRetorno.id_output == 1) {
+                    NSLog(@"Apagando o usuário");
+                    
+                    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+                    
+                    [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
+                    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+                    
+            }
+        }
+    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+          if(self.status == 542){
+              
+              NSLog(@"Erro ao apagar usuário");
+              [self apagaUsuario];
+          }else{
+              NSLog(@"FALHA GERAL - ApagaUsuario");
+              [self apagaUsuario];
+              NSLog(@"Error: %@", error);
+          }
+      }];
 }
 
 @end

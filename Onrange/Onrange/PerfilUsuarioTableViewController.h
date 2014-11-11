@@ -28,4 +28,6 @@
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellCurtir;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loading;
 
+@property (assign, nonatomic) NSInteger status;
+
 @end

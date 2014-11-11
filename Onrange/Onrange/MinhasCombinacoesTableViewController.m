@@ -200,6 +200,8 @@
     QBChatDialog *chatDialog = self.dialogs[indexPath.row];
     cell.tag  = indexPath.row;
     
+    NSLog(@"CODIGO_CHAT: %@",chatDialog.ID);
+    
     cell.detailTextLabel.text = @"private";
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(chatDialog.recipientID)];
     cell.lblNomeCombinacao.text = recipient.login == nil ? recipient.email : recipient.fullName;

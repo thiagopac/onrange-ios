@@ -18,6 +18,6 @@
 @property (nonatomic, strong) NSString *nome_chat;
 @property (nonatomic, assign) NSInteger id_output;
 @property (nonatomic, strong) NSString *qbtoken;
-@property (nonatomic, strong) NSString *chat;
+@property (nonatomic, strong) NSString *id_chat;
 
 @end

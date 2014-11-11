@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *facebook_usuario;
 @property (assign, nonatomic) BOOL liked;
 @property (assign, nonatomic) BOOL matched;
-
+@property (assign, nonatomic) NSInteger id_output;
+@property (strong, nonatomic) NSString *desc_output;
 
 @end

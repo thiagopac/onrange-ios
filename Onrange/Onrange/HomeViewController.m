@@ -396,11 +396,11 @@
     UIView *left = [[UIView alloc]initWithFrame:CGRectMake(0,0, 50.0, 65.0)];
     left.backgroundColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1.0f];
     
-    UILabel *lblqt_checkin = [[UILabel alloc] initWithFrame:CGRectMake(0, 12, 50, 25)];
+    UILabel *lblqt_checkin = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 50, 25)];
     [lblqt_checkin setText:((PointLocais *)annotation).qt_checkin];
     [lblqt_checkin setTextAlignment:NSTextAlignmentCenter];
     [lblqt_checkin setTextColor:[UIColor whiteColor]];
-    [lblqt_checkin setFont:[UIFont fontWithName: @"Brie_Medium" size: 24.0f]];
+    [lblqt_checkin setFont:[UIFont fontWithName: @"GillSans" size: 25.0f]];
     [left addSubview:lblqt_checkin];
     
     NSInteger annotationValue = [self.annotations indexOfObject:annotation];

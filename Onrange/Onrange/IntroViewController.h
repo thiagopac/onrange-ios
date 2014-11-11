@@ -14,5 +14,6 @@
 
 
 @property (strong, nonatomic) id<FBGraphUser> user;
+@property (assign, nonatomic) NSInteger status;
 
 @end

@@ -333,12 +333,11 @@
                    parameters:nil
                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                           if(mappingResult != nil){
-                                Checkin *checkinefetuado = [mappingResult firstObject];
                               
-                              NSInteger status = operation.HTTPRequestOperation.response.statusCode;
+                             Checkin *checkinefetuado = [mappingResult firstObject];
                               
                               [SVProgressHUD dismiss];
-                              if (status == 200) {
+
                                   [self carregaUsuarios];
                                   
                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -346,27 +345,21 @@
                                   vc.strNomeLocal = nome_local;
                                   [self presentViewController:vc animated:YES completion:nil];
                                   [self.view setNeedsLayout];
-                              }else if(status == 517){
+                              }
+                          }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                              NSInteger status = operation.HTTPRequestOperation.response.statusCode;
+                              if(status == 517){
                                   NSLog(@"Erro %ld. Fazendo nova tentativa...",status);
                                   [self fazCheckin];
                               }else if(status == 516){
                                   [self alert:@"O tempo mínimo para fazer um novo checkin é de 5 minutos":@"Erro"];
                                   [SVProgressHUD dismiss];
                               }else{
-                                  NSLog(@"Ocorreu um erro ao efetuar o checkin");
+                                  NSLog(@"FazCheckin - ERRO FATAL");
+                                  [self fazCheckin];
+                                  NSLog(@"Error: %@", error);
                                   [SVProgressHUD dismiss];
                               }
-                          }else{
-                              NSInteger status = operation.HTTPRequestOperation.response.statusCode;
-                              NSLog(@"Erro %ld. Fazendo nova tentativa...",status);
-                              [self fazCheckin];
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"FazCheckin - ERRO FATAL");
-                          [self fazCheckin];
-                          NSLog(@"Error: %@", error);
-                          [SVProgressHUD dismiss];
                       }];
 }
 

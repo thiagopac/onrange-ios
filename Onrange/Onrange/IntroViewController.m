@@ -118,32 +118,44 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
                          path:path
                    parameters:nil
                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          
-                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
 
-                          if(mappingResult != nil){
+                        //O app só entrará aqui se for um código 200 de retorno
+
+                        self.status = operation.HTTPRequestOperation.response.statusCode;
+
                               Usuario *userLogged = [mappingResult firstObject];
-
                               if (userLogged != nil) {
                                   NSLog(@"Login efetuado na base Onrage");
                                   NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
                                   [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
                                   [def synchronize];
                                   [self performSegueWithIdentifier:@"SegueToHome" sender:self];
-                              }else{
-                                  NSLog(@"Usuário inexistente");
-                                  [self showIntroWithCustomViewFromNib];
                               }
-                          }else{
-                              NSLog(@"Erro na resposta de LOGIN USUARIO");
-                              [self loginUsuario];
-                          }
                       }
                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                        NSInteger status = operation.HTTPRequestOperation.response.statusCode;
-                          [self loginUsuario];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de login");
+                          
+                          //Se não entrou em 200, ele pula para erro 500 e deve ser mapeado abaixo
+                          
+                          self.status = operation.HTTPRequestOperation.response.statusCode;
+                          
+                          if(self.status == 500) {
+                              NSLog(@"Usuário inexistente");
+                              //Precisamos cadastrar este usuário
+                              [self showIntroWithCustomViewFromNib];
+                          }else if(self.status == 501) {
+                              NSLog(@"Usuário bloqueado");
+                              //Precisamos avisar ao usuário que ele foi excluído. Ele precisa esclarecer o problema para que possamos avaliar sua re-integração
+                              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"O seu usuário foi bloqueado. Envie um e-mail para contato@roonants.com caso deseje voltar a usar o aplicativo." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                  [alerta show];
+                          }else if(self.status == 530) {
+                              NSLog(@"Erro ao buscar usuário");
+                              //Aqui é preciso tentar novamente
+                              [self loginUsuario];
+                          }else{
+                              NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
+                              [self loginUsuario];
+                              NSLog(@"Error: %@", error);
+                          }
                       }];
 }
 
