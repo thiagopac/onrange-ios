@@ -183,6 +183,7 @@
         myAnnotation.id_local = local.id_local;
         myAnnotation.qt_checkin = local.qt_checkin;
         myAnnotation.tipo_local = (int)local.tipo_local;
+        myAnnotation.destaque = local.destaque;
         myAnnotation.coordinate = theCoordinate;
         myAnnotation.title = [NSString stringWithFormat:@"%@",local.nome];
         [_mapGlobal addAnnotation:myAnnotation];
@@ -253,21 +254,21 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
     
-    //btnMe
-    self.btnMe.layer.cornerRadius = 7;
-    self.btnMe.clipsToBounds = NO;
-    self.btnMe.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.btnMe.layer.shadowOpacity = 0.2;
-    self.btnMe.layer.shadowRadius = 1;
-    self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
-
-    //btnMatches
-    self.btnMatches.layer.cornerRadius = 7;
-    self.btnMatches.clipsToBounds = NO;
-    self.btnMatches.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.btnMatches.layer.shadowOpacity = 0.2;
-    self.btnMatches.layer.shadowRadius = 1;
-    self.btnMatches.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
+//    //btnMe
+//    self.btnMe.layer.cornerRadius = 7;
+//    self.btnMe.clipsToBounds = NO;
+//    self.btnMe.layer.shadowColor = [[UIColor blackColor] CGColor];
+//    self.btnMe.layer.shadowOpacity = 0.2;
+//    self.btnMe.layer.shadowRadius = 1;
+//    self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
+//
+//    //btnMatches
+//    self.btnMatches.layer.cornerRadius = 7;
+//    self.btnMatches.clipsToBounds = NO;
+//    self.btnMatches.layer.shadowColor = [[UIColor blackColor] CGColor];
+//    self.btnMatches.layer.shadowOpacity = 0.2;
+//    self.btnMatches.layer.shadowRadius = 1;
+//    self.btnMatches.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
 
 }
 
@@ -326,61 +327,121 @@
     }
     
     int checkins = [((PointLocais *)annotation).qt_checkin intValue];
-    
+    int destaque = ((PointLocais *)annotation).destaque;
     int annType = ((PointLocais *)annotation).tipo_local;
     
     switch (annType)
     {
         case 1 :   //Balada
             if (checkins <10) {
-                pin.image = [UIImage imageNamed:@"pin-balada-1"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-balada-1-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-balada-1"];
             }else if(checkins >= 10 && checkins <30){
-                pin.image = [UIImage imageNamed:@"pin-balada-2"];
+                if (destaque == 1)
+                    pin.image = [UIImage imageNamed:@"pin-balada-2-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-balada-2"];
             }else if(checkins >= 30 && checkins <50){
-                pin.image = [UIImage imageNamed:@"pin-balada-3"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-balada-3-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-balada-3"];
             }else if(checkins >= 50 && checkins <99){
-                pin.image = [UIImage imageNamed:@"pin-balada-4"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-balada-4-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-balada-4"];
             }else if(checkins >= 99){
-                pin.image = [UIImage imageNamed:@"pin-balada-5"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-balada-5-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-balada-5"];
             }
             break;
         case 2 :   //Bar
             if (checkins <10) {
-                pin.image = [UIImage imageNamed:@"pin-bar-1"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-bar-1-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-bar-1"];
             }else if(checkins >= 10 && checkins <30){
-                pin.image = [UIImage imageNamed:@"pin-bar-2"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-bar-2-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-bar-2"];
             }else if(checkins >= 30 && checkins <50){
-                pin.image = [UIImage imageNamed:@"pin-bar-3"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-bar-3-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-bar-3"];
             }else if(checkins >= 50 && checkins <99){
-                pin.image = [UIImage imageNamed:@"pin-bar-4"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-bar-4-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-bar-4"];
             }else if(checkins >= 99){
-                pin.image = [UIImage imageNamed:@"pin-bar-5"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-bar-5-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-bar-5"];
             }
             break;
         case 3 :   //Festa
             if (checkins <10) {
-                pin.image = [UIImage imageNamed:@"pin-festa-1"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-festa-1-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-festa-1"];
             }else if(checkins >= 10 && checkins <30){
-                pin.image = [UIImage imageNamed:@"pin-festa-2"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-festa-2-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-festa-2"];
             }else if(checkins >= 30 && checkins <50){
-                pin.image = [UIImage imageNamed:@"pin-festa-3"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-festa-3-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-festa-3"];
             }else if(checkins >= 50 && checkins <99){
-                pin.image = [UIImage imageNamed:@"pin-festa-4"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-festa-4-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-festa-4"];
             }else if(checkins >= 99){
-                pin.image = [UIImage imageNamed:@"pin-festa-5"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-festa-5-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-festa-5"];
             }
             break;
         case 4 :   //Local público
             if (checkins <10) {
-                pin.image = [UIImage imageNamed:@"pin-publicos-1"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-publicos-1-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-publicos-1"];
             }else if(checkins >= 10 && checkins <30){
-                pin.image = [UIImage imageNamed:@"pin-publicos-2"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-publicos-2-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-publicos-2"];
             }else if(checkins >= 30 && checkins <50){
-                pin.image = [UIImage imageNamed:@"pin-publicos-3"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-publicos-3-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-publicos-3"];
             }else if(checkins >= 50 && checkins <99){
-                pin.image = [UIImage imageNamed:@"pin-publicos-4"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-publicos-4-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-publicos-4"];
             }else if(checkins >= 99){
-                pin.image = [UIImage imageNamed:@"pin-publicos-5"];
+                if (destaque == YES)
+                    pin.image = [UIImage imageNamed:@"pin-publicos-5-star"];
+                else
+                    pin.image = [UIImage imageNamed:@"pin-publicos-5"];
             }
             break;
         default :

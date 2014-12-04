@@ -14,7 +14,7 @@
 #import "Checkin.h"
 #import "ConfirmaCheckinViewController.h"
 #import <SVProgressHUD.h>
-#import "PerfilUsuarioTableViewController.h"
+#import "PerfilUsuarioViewController.h"
 
 @interface UsuariosCheckedViewController (){
     NSInteger id_local;
@@ -197,12 +197,15 @@
     UICollectionReusableView *reusableview = nil;
     if (kind == UICollectionElementKindSectionHeader) {
         UsuariosCheckinHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
+
+        UIImage *imgCheckout = [UIImage imageNamed:@"btn_checkout_quadrado"];
+        UIImage *imgCheckin = [UIImage imageNamed:@"btn_checkin_quadrado"];
         
             if (self.usuarioEstaNoLocal == YES) {
                 NSLog(@"O usuário está no local");
-                [headerView.btCheckinLocal setTitle:@"Checkout" forState: UIControlStateNormal];
+                [headerView.btCheckinLocal setImage:imgCheckout forState: UIControlStateNormal];
             }else{
-                [headerView.btCheckinLocal setTitle:@"Checkin" forState: UIControlStateNormal];
+                [headerView.btCheckinLocal setImage:imgCheckin forState: UIControlStateNormal];
             }
         
         NSString *pluralPessoas = [NSString new];
@@ -229,14 +232,14 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.usuarioEstaNoLocal == YES) {
-        PerfilUsuarioTableViewController *perfilUsuarioTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilUsuarioTableViewController"];
+        PerfilUsuarioViewController *perfilUsuarioVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilUsuarioViewController"];
         
         Usuario *usuario = [[self arrUsuarios]objectAtIndex:indexPath.item];
         
-        [perfilUsuarioTVC setUsuario:usuario];
-        [perfilUsuarioTVC setLocal:self.local];
+        [perfilUsuarioVC setUsuario:usuario];
+        [perfilUsuarioVC setLocal:self.local];
         
-        [[self navigationController]pushViewController:perfilUsuarioTVC animated:YES];
+        [[self navigationController]pushViewController:perfilUsuarioVC animated:YES];
     }else{
         [self alert:@"Faça checkin neste local para interagir com os outros usuários." :@"Aviso"];
     }

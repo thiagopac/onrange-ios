@@ -220,9 +220,9 @@
         }
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
           if(self.status == 542){
-              
               NSLog(@"Erro ao apagar usuário");
-              [self apagaUsuario];
+              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"Ocorreu um erro ao apagar o seu usuário. Por favor, tente novamente em alguns instantes." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+              [alerta show];
           }else{
               NSLog(@"FALHA GERAL - ApagaUsuario");
               [self apagaUsuario];

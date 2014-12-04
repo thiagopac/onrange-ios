@@ -18,7 +18,7 @@
 @property (strong, nonatomic) Local *local;
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeLocal;
 @property (strong, nonatomic) IBOutlet MKMapView *mapLocal;
-@property (strong, nonatomic) IBOutlet UILabel *lblCheckinCheckout;
-@property (strong, nonatomic) IBOutlet UIImageView *imgQuemEstaNoLocal;
+@property (strong, nonatomic) IBOutlet UIButton *btnCheckin;
+- (IBAction)btnCheckin:(id)sender;
 
 @end

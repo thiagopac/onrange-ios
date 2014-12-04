@@ -18,5 +18,7 @@
 @property (nonatomic, assign) NSInteger id_usuario;
 @property (nonatomic, assign) NSInteger tipo_local;
 @property (nonatomic, assign) NSInteger id_output;
+@property (nonatomic, assign) BOOL destaque;
+
 
 @end

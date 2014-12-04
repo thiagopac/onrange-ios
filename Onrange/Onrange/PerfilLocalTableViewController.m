@@ -24,6 +24,8 @@
     NSString *longitude;
     float deltaLatFor1px;
     CLLocationCoordinate2D center;
+    UIImage *imgCheckin;
+    UIImage *imgCheckout;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrUsuarios;
@@ -87,6 +89,9 @@
     CLLocationCoordinate2D referencePosition = [_mapLocal convertPoint:CGPointMake(0, 0) toCoordinateFromView:_mapLocal];
     CLLocationCoordinate2D referencePosition2 = [_mapLocal convertPoint:CGPointMake(0, 100) toCoordinateFromView:_mapLocal];
     deltaLatFor1px = (referencePosition2.latitude - referencePosition.latitude)/100;
+    
+    imgCheckin = [UIImage imageNamed:@"btn_checkin"];
+    imgCheckout = [UIImage imageNamed:@"btn_checkout"];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -176,7 +181,8 @@
                                   [self.view setNeedsLayout];
                                   
                                   self.usuarioEstaNoLocal = YES;
-                                  self.lblCheckinCheckout.text = @"Checkout";
+                                  
+                                  [self.btnCheckin setImage:imgCheckout forState:UIControlStateNormal];
                                   
                               }else if(checkinefetuado.id_output == 2){
                                   [self alert:@"Ocorreu um erro na tentativa de efetuar checkin. Tente novamente em alguns segundos":@"Erro"];
@@ -241,7 +247,9 @@
                               [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
                               if (checkoutefetuado.id_output == 1) {
                                   self.usuarioEstaNoLocal = NO;
-                                  self.lblCheckinCheckout.text = @"Checkin";
+                                  
+                                  [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
+
                               }else if(checkoutefetuado.id_output == 2){
                                   [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
                                   [SVProgressHUD dismiss];
@@ -283,7 +291,7 @@
             if (usuario.id_usuario == id_usuario) {
                 NSLog(@"O usuário está no local");
                 self.usuarioEstaNoLocal = YES;
-                self.lblCheckinCheckout.text = @"Checkout";
+                [self.btnCheckin setImage:imgCheckout forState:UIControlStateNormal];
             }
         }
         
@@ -306,43 +314,17 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    if(indexPath.section == 0 && indexPath.row == 0){     //QUEM ESTA NO LOCAL
     
-        UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
-        
-        if (_annotation) {
-            [usuariosCheckedVC setAnnotation:self.annotation];
-        }else{
-            [usuariosCheckedVC setLocal:self.local];
-        }
-        
-        if ([qt_checkin intValue]> 0) {
-            [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
-        }
-        
-    }else if(indexPath.section == 1 && indexPath.row == 0){    //CHECKIN OU CHECKOUT
-      
-        if (self.usuarioEstaNoLocal == YES){
-            UIActionSheet* actionCheckout = [[UIActionSheet alloc]
-                                             initWithTitle:[NSString stringWithFormat:@"Confirmar checkout em %@?", nome_local]
-                                             delegate:(id<UIActionSheetDelegate>)self
-                                             cancelButtonTitle:@"Sim"
-                                             destructiveButtonTitle:@"Não"
-                                             otherButtonTitles:nil];
-            [actionCheckout setTag:2];
-            [actionCheckout showInView:self.view];
-        }else{
-            UIActionSheet* actionCheckin = [[UIActionSheet alloc]
-                                            initWithTitle:[NSString stringWithFormat:@"Confirmar checkin em %@?", nome_local]
-                                        delegate:(id<UIActionSheetDelegate>)self
-                                            cancelButtonTitle:@"Sim"
-                                            destructiveButtonTitle:@"Não"
-                                            otherButtonTitles:nil];
-            [actionCheckin setTag:1];
-            [actionCheckin showInView:self.view];
-            
-        }
+    UsuariosCheckedViewController *usuariosCheckedVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"UsuariosCheckedViewController"];
+    
+    if (_annotation) {
+        [usuariosCheckedVC setAnnotation:self.annotation];
+    }else{
+        [usuariosCheckedVC setLocal:self.local];
+    }
+    
+    if ([qt_checkin intValue]> 0) {
+        [[self navigationController]pushViewController:usuariosCheckedVC animated:YES];
     }
 }
 
@@ -358,23 +340,47 @@
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"quemEstaCell"];
         
-        UIImageView *imv = [[UIImageView alloc]init];
-        imv.image = self.imgQuemEstaNoLocal.image;
-        cell.imageView.image = imv.image;
-        cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17];
+        cell.textLabel.font = [UIFont fontWithName:@"STHeitiSC-Light" size:13];
         
-        self.lblCheckinCheckout.text = @"Checkin";
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        
+        [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
+        
         [self carregaUsuarios];
         if ([qt_checkin intValue] == 0) {
            cell.textLabel.text = @"Ninguém no local";
         }else if([qt_checkin intValue] == 1){
             cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoas no local",qt_checkin];
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         }else{
             cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoas no local",qt_checkin];
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         }
     }
     
     return cell;
 }
 
+- (IBAction)btnCheckin:(id)sender {
+    if (self.usuarioEstaNoLocal == YES){
+        UIActionSheet* actionCheckout = [[UIActionSheet alloc]
+                                         initWithTitle:[NSString stringWithFormat:@"Confirmar checkout em %@?", nome_local]
+                                         delegate:(id<UIActionSheetDelegate>)self
+                                         cancelButtonTitle:@"Sim"
+                                         destructiveButtonTitle:@"Não"
+                                         otherButtonTitles:nil];
+        [actionCheckout setTag:2];
+        [actionCheckout showInView:self.view];
+    }else{
+        UIActionSheet* actionCheckin = [[UIActionSheet alloc]
+                                        initWithTitle:[NSString stringWithFormat:@"Confirmar checkin em %@?", nome_local]
+                                        delegate:(id<UIActionSheetDelegate>)self
+                                        cancelButtonTitle:@"Sim"
+                                        destructiveButtonTitle:@"Não"
+                                        otherButtonTitles:nil];
+        [actionCheckin setTag:1];
+        [actionCheckin showInView:self.view];
+        
+    }
+}
 @end

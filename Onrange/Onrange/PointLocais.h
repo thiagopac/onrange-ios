@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
 @property (assign, nonatomic) int tipo_local;
+@property (assign, nonatomic) BOOL destaque;
 
 //Tipos de local
 //  1-Balada
