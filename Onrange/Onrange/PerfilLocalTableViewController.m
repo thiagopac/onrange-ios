@@ -20,6 +20,7 @@
     NSInteger id_local;
     NSString *nome_local;
     NSString *qt_checkin;
+    BOOL destaque;
     NSString *latitude;
     NSString *longitude;
     float deltaLatFor1px;
@@ -54,22 +55,47 @@
         qt_checkin = _annotation.qt_checkin;
         latitude = _annotation.latitude;
         longitude = _annotation.longitude;
+        destaque = _annotation.destaque;
     }else if(self.local){
         id_local = self.local.id_local;
         nome_local = self.local.nome;
         qt_checkin = self.local.qt_checkin;
         latitude = self.local.latitude;
         longitude = self.local.longitude;
+        destaque = self.local.destaque;
     }
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    if (destaque == NO) {
+        
+        CGRect newFrame = self.tableView.tableHeaderView.frame;
+        newFrame.size.height = newFrame.size.height -60;
+        self.tableView.tableHeaderView.frame = newFrame;
+        
+        self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+        [self.lblDestaque removeFromSuperview];
+        self.imgStar.hidden = YES;
+        
+        CGRect frame = self.lblNomeLocal.frame;
+        frame.origin.y= self.lblNomeLocal.frame.origin.y;
+        frame.origin.x= 18;
+        self.lblNomeLocal.frame = frame;
+        
+    }
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
     
     self.navigationController.navigationBar.topItem.title = @"•";
     
     self.lblNomeLocal.text = nome_local;
     
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     id_usuario = (int)[def integerForKey:@"id_usuario"];
     
     CLLocationCoordinate2D theCoordinate;

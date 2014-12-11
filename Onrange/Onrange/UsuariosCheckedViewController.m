@@ -68,8 +68,14 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
     
     self.navigationController.navigationBar.topItem.title = @"•";
 }
@@ -83,8 +89,11 @@
     self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
     self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    UIColor *themeColor = [UIColor colorWithHexString:[def objectForKey:@"tema_cor"]];
+    self.notification.notificationLabelBackgroundColor = themeColor;
     
-    self.notification.notificationLabelBackgroundColor = [UIColor colorWithRed:244/255.0f green:97/255.0f blue:34/255.0f alpha:1.0f];
     self.notification.notificationLabelTextColor = [UIColor whiteColor];
     [self.notification displayNotificationWithMessage:msg completion:nil];
 }
@@ -175,20 +184,21 @@
     if (usuario.liked == 1 && usuario.matched == 0) {
         cell.imgLiked.hidden = NO;
         cell.imgMatch.hidden = YES;
-        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:87/255.0f blue:15/255.0f alpha:1.0f];
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithHexString:@"#FCB826"];
     }else if (usuario.liked == 1 && usuario.matched == 1) {
         cell.imgLiked.hidden = YES;
         cell.imgMatch.hidden = NO;
-        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:14/255.0f blue:1/255.0f alpha:1.0f];
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithHexString:@"#48B163"];
     }else if (usuario.liked == 0 && usuario.matched == 1) {
         cell.imgLiked.hidden = YES;
         cell.imgMatch.hidden = NO;
-        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithRed:255/255.0f green:14/255.0f blue:1/255.0f alpha:1.0f];
+        cell.viewContainerUsuarios.backgroundColor = [UIColor colorWithHexString:@"#48B163"];
     }else{
         cell.imgLiked.hidden = YES;
         cell.imgMatch.hidden = YES;
         cell.viewContainerUsuarios.backgroundColor = [UIColor whiteColor];
     }
+
     [self.notification dismissNotification];
 }
 
@@ -236,8 +246,13 @@
         
         Usuario *usuario = [[self arrUsuarios]objectAtIndex:indexPath.item];
         
+        Local *localatual = [Local new];
+        localatual.id_local = id_local;
+        localatual.nome = nome_local;
+        localatual.qt_checkin = qt_checkin;
+        
         [perfilUsuarioVC setUsuario:usuario];
-        [perfilUsuarioVC setLocal:self.local];
+        [perfilUsuarioVC setLocal:localatual];
         
         [[self navigationController]pushViewController:perfilUsuarioVC animated:YES];
     }else{

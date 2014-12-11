@@ -7,7 +7,6 @@
 //
 
 #import "IntroViewController.h"
-#import "AnimatedGif.h"
 #import <Restkit/RestKit.h>
 #import "Usuario.h"
 #import "MappingProvider.h"
@@ -30,16 +29,11 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
     [super viewDidLoad];
     rootView = self.view;
     
-    NSURL *localUrl = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"finding" ofType:@"gif"]];
-    UIImageView *localAnimation = [AnimatedGif getAnimationForGifAtUrl: localUrl];
-    
-    // For local files (that are loaded immediatly) you can request the size
-    localAnimation.frame = CGRectMake(96.0f, 194.0f, localAnimation.image.size.width, localAnimation.image.size.height);
-    
-    self.navigationController.navigationBar.hidden = YES;
-    
-    [self.view addSubview:localAnimation];
+    [self.jmImageView reloadAnimationImagesFromGifNamed:@"preloader1"];
+    self.jmImageView.animationType = JMAnimatedImageViewAnimationTypeAutomaticLinearWithoutTransition;
+    [self.jmImageView startAnimating];
 
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{

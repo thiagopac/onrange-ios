@@ -59,8 +59,15 @@
 
     meu_id_qb = [NSString stringWithFormat:@"%lu",(unsigned long)[LocalStorageService shared].currentUser.ID];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
+    
     self.navigationController.navigationBar.topItem.title = @"";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];

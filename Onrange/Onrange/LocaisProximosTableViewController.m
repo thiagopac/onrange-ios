@@ -148,8 +148,15 @@
 {
     [super viewDidLoad];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
@@ -170,8 +177,11 @@
     self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
     self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    UIColor *themeColor = [UIColor colorWithHexString:[def objectForKey:@"tema_cor"]];
+    self.notification.notificationLabelBackgroundColor = themeColor;
     
-    self.notification.notificationLabelBackgroundColor = [UIColor colorWithRed:244/255.0f green:97/255.0f blue:34/255.0f alpha:1.0f];
     self.notification.notificationLabelTextColor = [UIColor whiteColor];
     [self.notification displayNotificationWithMessage:msg completion:nil];
 }
@@ -212,18 +222,41 @@
     LocaisProximosTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if (indexPath.row == self.arrLocais.count) {
-        [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Medium" size:16]];
+        [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Medium" size:15]];
         cell.lblCell.text = @"Adicionar novo local...";
         cell.lblCell.textColor = [UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:1.0f];
-
+        
+        NSString *cor = @"#ffffff"; //branco
+        cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
+        
         return cell;
     }
     
     Local *local = [self.arrLocais objectAtIndex:indexPath.row];
     cell.lblCell.text = local.nome;
     
-    [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:16]];
-    cell.lblCell.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
+    [cell.lblCell setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:15]];
+    cell.lblCell.textColor = [UIColor scrollViewTexturedBackgroundColor];
+    
+    //Tipos de local
+    //  1-Balada
+    //  2-Bar
+    //  3-Festa
+    //  4-Locais Públicos
+    
+    NSString *cor;
+    
+    if (local.tipo_local == 1) {
+        cor = @"#ee4e30"; //vermelho
+    }else if (local.tipo_local == 2) {
+        cor = @"#fcb826"; //amarelo
+    }else if (local.tipo_local == 3) {
+        cor = @"#48b163"; //verde
+    }else{
+        cor = @"#5a8eaf"; //azul
+    }
+    
+    cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
 
     return cell;
 }

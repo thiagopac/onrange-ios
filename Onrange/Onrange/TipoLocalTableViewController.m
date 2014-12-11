@@ -34,8 +34,16 @@
     
     arrTiposLocais = @[@"Boate / Pub",@"Bar / Restaurante",@"Festa / Show",@"Locais públicos"];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
+    
     self.navigationController.navigationBar.topItem.title = @"•";
 }
 
@@ -68,6 +76,26 @@
     }
     
     [[cell lblTipoLocal]setText:[arrTiposLocais objectAtIndex:indexPath.row]];
+    
+    //Tipos de local
+    //  1-Balada
+    //  2-Bar
+    //  3-Festa
+    //  4-Locais Públicos
+    
+    NSString *cor;
+    
+    if (indexPath.row == 0) {
+        cor = @"#ee4e30"; //vermelho
+    }else if (indexPath.row == 1) {
+        cor = @"#fcb826"; //amarelo
+    }else if (indexPath.row == 2) {
+        cor = @"#48b163"; //verde
+    }else{
+        cor = @"#5a8eaf"; //azul
+    }
+    
+    cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
     
     return cell;
 }

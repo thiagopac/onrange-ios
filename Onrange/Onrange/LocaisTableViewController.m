@@ -39,8 +39,15 @@
 {
     [super viewDidLoad];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
 
     self.navigationController.navigationBar.topItem.title = @"•";
 
@@ -65,7 +72,12 @@
     self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
 
-    self.notification.notificationLabelBackgroundColor = [UIColor colorWithRed:244/255.0f green:97/255.0f blue:34/255.0f alpha:1.0f];
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    UIColor *themeColor = [UIColor colorWithHexString:[def objectForKey:@"tema_cor"]];
+    
+    self.notification.notificationLabelBackgroundColor = themeColor;
+    
     self.notification.notificationLabelTextColor = [UIColor whiteColor];
     [self.notification displayNotificationWithMessage:msg completion:nil];
 }
@@ -144,6 +156,27 @@
     
     cell.lblLocal.text = local.nome;
     cell.lblQuantidadeCheckins.text = local.qt_checkin;
+    
+    //Tipos de local
+    //  1-Balada
+    //  2-Bar
+    //  3-Festa
+    //  4-Locais Públicos
+    
+    NSString *cor;
+    
+    if (local.tipo_local == 1) {
+        cor = @"#ee4e30"; //vermelho
+    }else if (local.tipo_local == 2) {
+        cor = @"#fcb826"; //amarelo
+    }else if (local.tipo_local == 3) {
+        cor = @"#48b163"; //verde
+    }else{
+        cor = @"#5a8eaf"; //azul
+    }
+    
+    cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
+    cell.lblQuantidadeCheckins.textColor = [UIColor colorWithHexString:cor];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

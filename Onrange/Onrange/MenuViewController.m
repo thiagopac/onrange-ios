@@ -24,9 +24,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.userProfilePictureView.layer.cornerRadius = 2;
-    self.userProfilePictureView.layer.masksToBounds = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
                                               object:nil];
@@ -38,7 +35,8 @@
     
     self.user = [def objectForKey:@"graph_usuario"];
     self.userProfilePictureView.profileID = [self.user objectForKey:@"id"];
-    self.userNameLabel.text = [self.user objectForKey:@"first_name"];
+    self.userNameLabel.text = [[self.user objectForKey:@"first_name"] uppercaseString];
+    
 }
 
 - (void)didReceiveMemoryWarning

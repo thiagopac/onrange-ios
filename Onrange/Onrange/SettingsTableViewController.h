@@ -14,10 +14,10 @@
 @property (strong, nonatomic) NSString *strGenero;
 @property (strong, nonatomic) IBOutlet UILabel *lblGenero;
 @property (assign, nonatomic) NSInteger status;
+@property (strong, nonatomic) IBOutlet UILabel *lblTema;
 
 - (IBAction)inicioToque:(UISlider *)sender;
 - (IBAction)fimToque:(UISlider *)sender;
 - (IBAction)fimToqueFora:(UISlider *)sender;
-- (IBAction)btnTestes:(id)sender;
 
 @end

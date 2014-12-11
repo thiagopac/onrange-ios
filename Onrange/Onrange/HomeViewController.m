@@ -249,9 +249,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recebeNotificacao:) name:@"MinhaNotificacao" object:nil];
     
     [self buscarLocalizacao];
-
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+
+    self.navigationController.navigationBar.barTintColor = navcolor;
     
     
 //    //btnMe
@@ -454,8 +462,27 @@
     [detailButton setImage:[UIImage imageNamed:@"seta"] forState:UIControlStateNormal];
     detailButton.frame = CGRectMake(0,0, 40.0, 45.0);
     
+    //Tipos de local
+    //  1-Balada
+    //  2-Bar
+    //  3-Festa
+    //  4-Locais Públicos
+    
+    NSString *cor;
+    
+    if (((PointLocais *)annotation).tipo_local == 1) {
+        cor = @"#ee4e30"; //vermelho
+    }else if (((PointLocais *)annotation).tipo_local == 2) {
+        cor = @"#fcb826"; //amarelo
+    }else if (((PointLocais *)annotation).tipo_local == 3) {
+        cor = @"#48b163"; //verde
+    }else{
+        cor = @"#5a8eaf"; //azul
+    }
+    
     UIView *left = [[UIView alloc]initWithFrame:CGRectMake(0,0, 50.0, 65.0)];
-    left.backgroundColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1.0f];
+//    left.backgroundColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1.0f];
+    left.backgroundColor = [UIColor colorWithHexString:cor];
     
     UILabel *lblqt_checkin = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 50, 25)];
     [lblqt_checkin setText:((PointLocais *)annotation).qt_checkin];

@@ -122,8 +122,14 @@
     self.imgProfileUsuario.profileID = self.usuario.facebook_usuario;
     self.lblNomeUsuario.text = self.usuario.nome_usuario;
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
     
     self.navigationController.navigationBar.topItem.title = @"•";
     
@@ -200,11 +206,16 @@
     like.id_usuario2 = self.usuario.id_usuario;
 
     id_usuario1 = [def integerForKey:@"id_usuario"];
-    like.id_usuario1 = id_usuario1;    like.id_local = self.local.id_local;
+    like.id_usuario1 = id_usuario1;
+    like.id_local = self.local.id_local;
     like.qbtoken = qbtoken;
     
     [objectManager postObject:like path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-      if(mappingResult != nil){
+        
+        //O app só entrará aqui se for um código 200 de retorno
+
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        if(mappingResult != nil){
           NSLog(@"Dados de like enviados e recebidos com sucesso!");
           Like *likeefetuado = [mappingResult firstObject];
           
@@ -223,51 +234,52 @@
                       [self botaoNaoSelecionado];
                   }
               }
-      }
+        }
   }failure:^(RKObjectRequestOperation *operation, NSError *error) {
-      if(self.status == 521){
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        if(self.status == 521){
           NSLog(@"Erro ao buscar checkin do usuario de destino.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 522){
+        }else if(self.status == 522){
           NSLog(@"Usuario de destino realizou checkout.");
           [self botaoNaoSelecionado];
           [SVProgressHUD showErrorWithStatus:@"Erro. Esta pessoa deixou o local."];
-      }else if(self.status == 523){
+        }else if(self.status == 523){
           NSLog(@"Erro ao verificar se ja existe like.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 524){
+        }else if(self.status == 524){
           NSLog(@"Erro ao curtir.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 525){
+        }else if(self.status == 525){
           NSLog(@"Erro ao verificar se houve match.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 526){
+        }else if(self.status == 526){
           NSLog(@"Erro ao buscar ID do QB do usuario 1.");
           [self botaoNaoSelecionado];
-      }else if(self.status == 527){
+        }else if(self.status == 527){
           NSLog(@"Erro ao buscar ID do QB do usuario 2.");
           [self botaoNaoSelecionado];
-      }else if(self.status == 528){
+        }else if(self.status == 528){
           NSLog(@"Erro ao criar match.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 529){
+        }else if(self.status == 529){
           NSLog(@"Erro ao descurtir.");
           [self botaoSelecionado];
           [self curtirUsuario];
-      }else if(self.status == 543){
+        }else if(self.status == 543){
           NSLog(@"Erro ao criar chat no QB.");
           [self botaoNaoSelecionado];
           [self curtirUsuario];
-      }else{
+        }else{
           [self curtirUsuario];
           NSLog(@"Error: %@", error);
           NSLog(@"Falha ao tentar enviar dados de like");
-      }
+        }
 
   }];
 }

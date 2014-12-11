@@ -11,6 +11,7 @@
 @interface TopLocaisComCheckinCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *lblLocal;
 @property (strong, nonatomic) IBOutlet UILabel *lblQuantidadeCheckins;
+@property (strong, nonatomic) IBOutlet UIView *viewCorTipoLocal;
 
 
 

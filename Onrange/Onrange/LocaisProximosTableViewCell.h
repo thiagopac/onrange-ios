@@ -11,5 +11,6 @@
 @interface LocaisProximosTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lblCell;
+@property (strong, nonatomic) IBOutlet UIView *viewCorTipoLocal;
 
 @end

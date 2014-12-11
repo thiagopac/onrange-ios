@@ -23,5 +23,6 @@
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (weak, nonatomic) Local *local;
 - (IBAction)btCheckinLocal:(id)sender;
+@property(nonatomic, readonly, copy) NSString *reuseIdentifier;
 
 @end

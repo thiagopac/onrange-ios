@@ -11,7 +11,6 @@
 #import "Usuario.h"
 #import "MappingProvider.h"
 #import "AppDelegate.h"
-#import "SignUpViewController.h"
 #import "CWStatusBarNotification.h"
 
 
@@ -57,6 +56,16 @@ NSString *const FBMenuDataChangedNotification =
 #ifndef DEBUG
     [QBApplication sharedApplication].productionEnvironmentForPushesEnabled = YES;
 #endif
+    
+//tema
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    if ([def objectForKey:@"tema_cor"] == nil) {
+        [def setObject:@"#F46122" forKey:@"tema_cor"];
+        [def setObject:@"icone_nav.png" forKey:@"tema_img"];
+        
+        [def synchronize];
+    }
     
     return YES;
 }
@@ -348,11 +357,6 @@ NSString *const FBMenuDataChangedNotification =
                               [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
 
                               [def synchronize];
-                              
-                              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                              SignUpViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
-                              [self.window makeKeyAndVisible];
-                              [self.window.rootViewController presentViewController:vc animated:YES completion:NULL];
                               
                           }else{
                               NSLog(@"Falha ao tentar logar na base Onrange");

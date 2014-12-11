@@ -10,5 +10,6 @@
 
 @interface TipoLocalTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *lblTipoLocal;
+@property (strong, nonatomic) IBOutlet UIView *viewCorTipoLocal;
 
 @end

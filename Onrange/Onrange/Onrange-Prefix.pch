@@ -36,6 +36,7 @@ PODFILE
     #import "LocalStorageService.h"
     #import "ChatService.h"
     #import "CharactersEscapeService.h"
+    #import "HexColor.h"
 #endif
 
 #define kShowChatViewControllerSegue @"ShowChatViewControllerSegue"

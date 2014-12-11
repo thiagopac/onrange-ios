@@ -16,5 +16,6 @@
 + (RKMapping *)checkinMapping;
 + (RKMapping *)likeMapping;
 + (RKMapping *)matchMapping;
++ (RKMapping *)promoMapping;
 
 @end

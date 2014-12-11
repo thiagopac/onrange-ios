@@ -12,6 +12,7 @@
 #import "Checkin.h"
 #import "Like.h"
 #import "Match.h"
+#import "Promo.h"
 
 @implementation MappingProvider
 
@@ -42,6 +43,12 @@
 +(RKMapping *)matchMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Match class]];
     [mapping addAttributeMappingsFromArray:@[@"id_match", @"id_usuario", @"nome_usuario", @"facebook_usuario", @"id_qb", @"email_usuario", @"chat", @"qbtoken"]];
+    return mapping;
+}
+
++(RKMapping *)promoMapping {
+    RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Promo class]];
+    [mapping addAttributeMappingsFromArray:@[@"id_promo", @"local", @"nome", @"descricao", @"dt_inicio", @"dt_fim", @"lote", @"codigo_promo", @"dt_utilizacao", @"dt_visualizacao"]];
     return mapping;
 }
 

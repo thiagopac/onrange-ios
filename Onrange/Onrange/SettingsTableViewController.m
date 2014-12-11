@@ -52,8 +52,6 @@
     self.lblRadio.shadowColor = [UIColor whiteColor];
     self.lblRadio.shadowOffset = CGSizeMake(0.0, 1.0);
     
-
-    
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     if ([def integerForKey:@"userRange"])
         [[self sliderRaio]setValue:[def integerForKey:@"userRange"]];
@@ -61,14 +59,28 @@
         [[self sliderRaio]setValue:20];
 
     [self alterarLabelRaio];
+
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+  
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     
-    UIImage *image = [UIImage imageNamed:@"icone_nav.png"];
+    NSString *tema_img = [def objectForKey:@"tema_img"];
+    NSString *tema_cor = [def objectForKey:@"tema_cor"];
+    
+    UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
+    
+    UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
+    self.navigationController.navigationBar.barTintColor = navcolor;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
     self.strGenero = [def objectForKey:@"genero"];
     
     if (self.strGenero == nil) {
@@ -79,6 +91,12 @@
         self.lblGenero.text = @"Homens";
     }else if([self.strGenero isEqualToString:@"F"]){
         self.lblGenero.text = @"Mulheres";
+    }
+    
+    if ([[def objectForKey:@"tema_cor"]isEqualToString:@"#F46122"]) { //DIA
+        self.lblTema.text = @"Dia";
+    } else if ([[def objectForKey:@"tema_cor"]isEqualToString:@"#2C3E50"]) { //NOITE
+        self.lblTema.text = @"Noite";
     }
 }
 
@@ -110,18 +128,6 @@
 - (IBAction)fimToqueFora:(UISlider *)sender {
     NSLog(@"fim toque");
     [SlideNavigationController sharedInstance].enableSwipeGesture = YES;
-}
-
-- (IBAction)btnTestes:(id)sender {
-    CWStatusBarNotification *notification = [CWStatusBarNotification new];
-    [notification setNotificationStyle:CWNotificationStyleNavigationBarNotification];
-    
-    [notification setNotificationAnimationInStyle:CWNotificationAnimationStyleTop];
-    [notification setNotificationAnimationOutStyle:CWNotificationAnimationStyleTop];
-    notification.notificationLabelBackgroundColor = [UIColor whiteColor];
-    notification.notificationLabelTextColor = [UIColor orangeColor];
-    
-    [notification displayNotificationWithMessage:@"Mensagem recebida de Paulo Felipe" forDuration:1.0f];
 }
 
 - (IBAction)btnLogout:(id)sender {
