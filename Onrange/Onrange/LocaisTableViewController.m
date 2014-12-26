@@ -175,6 +175,12 @@
         cor = @"#5a8eaf"; //azul
     }
     
+    if (local.destaque == 1) {
+        cell.imgDestaque.hidden = NO;
+    }else{
+        cell.imgDestaque.hidden = YES;
+    }
+    
     cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
     cell.lblQuantidadeCheckins.textColor = [UIColor colorWithHexString:cor];
 }

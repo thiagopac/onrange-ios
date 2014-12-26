@@ -24,5 +24,6 @@
 @property (strong, nonatomic) NSString *latitude;
 @property (strong, nonatomic) NSString *longitude;
 @property (nonatomic, strong) ControleTeclado *controleTeclado;
+@property (assign, nonatomic) NSInteger status;
 
 @end

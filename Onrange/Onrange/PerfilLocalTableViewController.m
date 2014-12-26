@@ -191,47 +191,37 @@
     checkin.id_usuario = id_usuario;
     checkin.id_local = id_local;
     
-    [objectManager postObject:checkin
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Dados de checkin enviados e recebidos com sucesso!");
-                              Checkin *checkinefetuado = [mappingResult firstObject];
-                              [SVProgressHUD dismiss];
-                              if (checkinefetuado.id_output == 1) {
-                                  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                  ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
-                                  vc.strNomeLocal = nome_local;
-                                  [self presentViewController:vc animated:YES completion:nil];
-                                  [self.view setNeedsLayout];
-                                  
-                                  self.usuarioEstaNoLocal = YES;
-                                  
-                                  [self.btnCheckin setImage:imgCheckout forState:UIControlStateNormal];
-                                  
-                              }else if(checkinefetuado.id_output == 2){
-                                  [self alert:@"Ocorreu um erro na tentativa de efetuar checkin. Tente novamente em alguns segundos":@"Erro"];
-                                  [SVProgressHUD dismiss];
-                              }else if(checkinefetuado.id_output == 3){
-                                  [self alert:@"O tempo mínimo para fazer um novo checkin é de 5 minutos":@"Erro"];
-                                  [SVProgressHUD dismiss];
-                              }else{
-                                  NSLog(@"Ocorreu um erro ao efetuar o checkin");
-                                  [SVProgressHUD dismiss];
-                              }
-                          }else{
-                              NSLog(@"Falha ao tentar fazer checkin");
-                              [SVProgressHUD dismiss];
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self fazCheckin];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de checkin");
-                          [SVProgressHUD dismiss];
-                      }];
+    [objectManager postObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+
+      Checkin *checkinefetuado = [mappingResult firstObject];
+      [SVProgressHUD dismiss];
+
+      UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+      ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
+      vc.strNomeLocal = nome_local;
+      [self presentViewController:vc animated:YES completion:nil];
+      [self.view setNeedsLayout];
+      
+      self.usuarioEstaNoLocal = YES;
+      
+      [self.btnCheckin setImage:imgCheckout forState:UIControlStateNormal];
+
+    }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+      
+      if(self.status == 516) { //Checkin anterior em menos de 5 minutos
+         [self alert:@"Você deve aguardar alguns minutos para fazer checkin novamente.":@"Erro"];
+      }else if(self.status == 517) { //Erro ao fazer checkin
+          [self fazCheckin];
+      }else{
+          [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+      }
+      NSLog(@"Error: %@", error);
+      [SVProgressHUD dismiss];
+  }];
 }
 
 -(void)fazCheckout{

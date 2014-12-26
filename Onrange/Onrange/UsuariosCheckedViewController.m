@@ -130,17 +130,25 @@
                                                                         responseDescriptors:@[responseDescriptor]];
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
         self.arrUsuarios = [NSMutableArray arrayWithArray:mappingResult.array];
         qt_checkin = [NSString stringWithFormat:@"%d",(int)[self.arrUsuarios count]];
         [self verificaUsuarioNoLocal];
         [self.collectionView reloadData];
+        
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self carregaUsuarios];
+
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 531) {
+            [self carregaUsuarios];
+        }else{
+            [self alert:@"Erro ao carregar usuários no local. Tente novamente em alguns minutos.":@"Erro"];
+        }
+
         [self.notification  dismissNotification];
         NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
     }];
     
     [operation start];
@@ -346,39 +354,38 @@
     checkin.id_usuario = id_usuario;
     checkin.id_local = id_local;
     
-    [objectManager postObject:checkin
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              
-                             Checkin *checkinefetuado = [mappingResult firstObject];
-                              
-                              [SVProgressHUD dismiss];
+    [objectManager postObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+      if(mappingResult != nil){
+          
+         Checkin *checkinefetuado = [mappingResult firstObject];
+          
+          [SVProgressHUD dismiss];
 
-                                  [self carregaUsuarios];
-                                  
-                                  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                  ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
-                                  vc.strNomeLocal = nome_local;
-                                  [self presentViewController:vc animated:YES completion:nil];
-                                  [self.view setNeedsLayout];
-                              }
-                          }failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                              NSInteger status = operation.HTTPRequestOperation.response.statusCode;
-                              if(status == 517){
-                                  NSLog(@"Erro %ld. Fazendo nova tentativa...",status);
-                                  [self fazCheckin];
-                              }else if(status == 516){
-                                  [self alert:@"O tempo mínimo para fazer um novo checkin é de 5 minutos":@"Erro"];
-                                  [SVProgressHUD dismiss];
-                              }else{
-                                  NSLog(@"FazCheckin - ERRO FATAL");
-                                  [self fazCheckin];
-                                  NSLog(@"Error: %@", error);
-                                  [SVProgressHUD dismiss];
-                              }
-                      }];
+              [self carregaUsuarios];
+              
+              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+              ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
+              vc.strNomeLocal = nome_local;
+              [self presentViewController:vc animated:YES completion:nil];
+              [self.view setNeedsLayout];
+          }
+      }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+          
+          self.status = operation.HTTPRequestOperation.response.statusCode;
+          
+          if(self.status == 516) { //Checkin anterior em menos de 5 minutos
+              [self alert:@"Você deve aguardar alguns minutos para fazer checkin novamente.":@"Erro"];
+          }else if(self.status == 517) { //Erro ao fazer checkin
+              [self fazCheckin];
+          }else{
+              [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+          }
+          NSLog(@"Error: %@", error);
+          [SVProgressHUD dismiss];
+  }];
 }
 
 -(void)fazCheckout{
@@ -409,37 +416,36 @@
     
     checkin.id_usuario = id_usuario;
     
-    [objectManager putObject:checkin
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
-                              Checkin *checkoutefetuado = [mappingResult firstObject];
-                              [SVProgressHUD dismiss];
-                              [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
-                              if (checkoutefetuado.id_output == 1) {
-                                  self.usuarioEstaNoLocal = NO;
-                                  [self carregaUsuarios];
-                                  
-                                  [self.view setNeedsLayout];
-                              }else if(checkoutefetuado.id_output == 2){
-                                  [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
-                              }else{
-                                  NSLog(@"Ocorreu um erro ao efetuar o checkout");
-                              }
-                          }else{
-                              NSLog(@"Falha ao tentar fazer checkout");
-                              [SVProgressHUD dismiss];
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self fazCheckout];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de checkout");
-                          [SVProgressHUD dismiss];
-                      }];
+    [objectManager putObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+
+      Checkin *checkoutefetuado = [mappingResult firstObject];
+
+      [SVProgressHUD dismiss];
+      
+      [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
+      
+      if (checkoutefetuado.id_output == 1) {
+          self.usuarioEstaNoLocal = NO;
+          [self carregaUsuarios];
+          
+          [self.view setNeedsLayout];
+      }
+  }
+  failure:^(RKObjectRequestOperation *operation, NSError *error) {
+      
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+      
+      if(self.status == 533) {
+          [self fazCheckout];
+      }else{
+          [self alert:@"Erro ao fazer checkout. Tente novamente em alguns minutos.":@"Erro"];
+      }
+
+      NSLog(@"Error: %@", error);
+      [SVProgressHUD dismiss];
+  }];
 }
 
 - (void) alert:(NSString *)msg :(NSString *)title

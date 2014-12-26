@@ -24,5 +24,6 @@
 @property (weak, nonatomic) Local *local;
 - (IBAction)btCheckinLocal:(id)sender;
 @property(nonatomic, readonly, copy) NSString *reuseIdentifier;
+@property (assign, nonatomic) NSInteger status;
 
 @end

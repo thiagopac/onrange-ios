@@ -250,39 +250,39 @@ didChangeDragState:(MKAnnotationViewDragState)newState
     local.longitude = self.longitude;
     local.tipo_local = self.tipoLocal;
     
-    [objectManager postObject:local
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Dados do local enviados e recebidos com sucesso!");
-                              Local *localcriado = [mappingResult firstObject];
-                              [SVProgressHUD dismiss];
-                              if (localcriado.id_output == 1) {
-                                  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                  ConfirmaAdicaoViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaAdicaoViewController"];
-                                  vc.strNomeLocal = localcriado.nome;
-                                  [self presentViewController:vc animated:YES completion:nil];
-                                  [self.view setNeedsLayout];
-                                  
-                                  LocaisProximosTableViewController *locaisProximosTVC = [self.navigationController.viewControllers objectAtIndex:1];
-                                  [self.navigationController popToViewController:locaisProximosTVC animated:YES];
+    [objectManager postObject:local path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                          
+      self.status = operation.HTTPRequestOperation.response.statusCode;
+      
+      if(mappingResult != nil){
+          Local *localcriado = [mappingResult firstObject];
+          [SVProgressHUD dismiss];
 
-                              }else if(localcriado.id_output == 2){
-                                  [self alert:@"Ocorreu um erro na tentativa de criar local. Tente novamente em alguns segundos":@"Erro"];
-                              }else{
-                                  NSLog(@"Ocorreu um erro ao criar o local");
-                              }
-                          }else{
-                              NSLog(@"Falha ao tentar fazer checkin");
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self criaLocal];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de checkin");
-                      }];
+          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+          ConfirmaAdicaoViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaAdicaoViewController"];
+          vc.strNomeLocal = localcriado.nome;
+          [self presentViewController:vc animated:YES completion:nil];
+          [self.view setNeedsLayout];
+          
+          LocaisProximosTableViewController *locaisProximosTVC = [self.navigationController.viewControllers objectAtIndex:1];
+          [self.navigationController popToViewController:locaisProximosTVC animated:YES];
+
+        }
+  }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+
+        if(self.status == 503) {
+          [self criaLocal];
+        }else if(self.status == 558) {
+          [self alert:@"Você deve aguardar alguns minutos para criar um novo local.":@"Erro"];
+        }else{
+          [self alert:@"Erro ao adicionar o local. Tente novamente em alguns minutos.":@"Erro"];
+        }
+        [SVProgressHUD dismiss];
+        NSLog(@"Error: %@", error);
+        NSLog(@"Falha ao tentar enviar dados de checkin");
+    }];
 }
 
 - (void) alert:(NSString *)msg :(NSString *)title
@@ -305,7 +305,8 @@ didChangeDragState:(MKAnnotationViewDragState)newState
 
 - (IBAction)btnConfirmar:(UIButton *)sender {
     if (self.txtNomeLocal.text && self.lblCategoria != nil) {
-            [self criaLocal];
+        [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
+        [self criaLocal];
     }else{
         [self alert:@"Preencha o campo de nome e a categoria":@"Erro"];
     }

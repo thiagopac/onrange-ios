@@ -15,10 +15,12 @@
 
 
 NSString *const FBSessionStateChangedNotification =
-@"com.facebook.samples.SocialCafe:FBSessionStateChangedNotification";
+@"com.facebook.samples. SocialCafe:FBSessionStateChangedNotification";
 
 NSString *const FBMenuDataChangedNotification =
 @"com.facebook.samples.SocialCafe:FBMenuDataChangedNotification";
+
+int contErros = 0;
 
 @implementation AppDelegate
 
@@ -93,10 +95,7 @@ NSString *const FBMenuDataChangedNotification =
     notification.notificationLabelBackgroundColor = [UIColor whiteColor];
     notification.notificationLabelTextColor = [UIColor orangeColor];
     
-//    NSDictionary* aps=[pushInfo objectForKey:@"aps"];
-//    NSString* msgBody=[aps objectForKey:@"alert"];
-    
-    [self mensagemParaOMundo:@"Hello World"];
+//    [self mensagemParaOMundo:@"Hello World"];
     
     NSDictionary *aps = userInfo[@"aps"];
     NSString *msgBody = aps[@"alert"];
@@ -104,11 +103,11 @@ NSString *const FBMenuDataChangedNotification =
     [notification displayNotificationWithMessage:msgBody forDuration:1.0f];
 }
 
-- (void) mensagemParaOMundo:(NSString *)mensagem {
-    NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-    NSDictionary *message = [NSDictionary dictionaryWithObject:mensagem forKey:@"Mensagem"];
-    [center postNotificationName:@"MinhaNotificacao" object:self userInfo:message];
-}
+//- (void) mensagemParaOMundo:(NSString *)mensagem {
+//    NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
+//    NSDictionary *message = [NSDictionary dictionaryWithObject:mensagem forKey:@"Mensagem"];
+//    [center postNotificationName:@"MinhaNotificacao" object:self userInfo:message];
+//}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     // register for push notifications
@@ -286,33 +285,66 @@ NSString *const FBMenuDataChangedNotification =
 
     usuario.facebook_usuario = _facebook_usuario;
     
-    [objectManager postObject:usuario
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              Usuario *userLogged = [mappingResult firstObject];
-                              if (userLogged != nil) {
-                                  NSLog(@"Login efetuado na base Onrage");
-                                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
-                                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
-                                  
-                                  [def synchronize];
-                              }else{
-                                  NSLog(@"Usuário inexistente");
-                                  [self adicionaUsuario];
-                              }
-                          }else{
-                              NSLog(@"Erro na resposta de LOGIN USUARIO");
-                              [self loginUsuario];
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self loginUsuario];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de login");
-                      }];
+    [objectManager postObject:usuario path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+          if(mappingResult != nil){
+              Usuario *userLogged = [mappingResult firstObject];
+              if (userLogged != nil) {
+                  NSLog(@"Login efetuado na base Onrage");
+                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
+                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
+                  
+                  [def synchronize];
+              }else{
+                  NSLog(@"Usuário inexistente");
+                  [self adicionaUsuario];
+              }
+          }else{
+              NSLog(@"Erro na resposta de LOGIN USUARIO");
+              [self loginUsuario];
+          }
+      }
+      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+          
+          self.status = operation.HTTPRequestOperation.response.statusCode;
+          
+          if(self.status == 500) { //Usuário inexistente
+              
+              [self adicionaUsuario];
+              
+          }else if(self.status == 501) { //Usuário bloqueado
+             
+              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do aplicativo. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+              [alerta show];
+              
+          }else if(self.status == 530) { //Erro ao buscar usuario.
+              
+              [self loginUsuario];
+              
+          }else if(self.status == 546) { //Erro ao remover data de exclusao do usuario.
+              
+              [self loginUsuario];
+              
+          }else{
+              
+              contErros++;
+              
+              if (contErros < 30) {
+                  
+                  [self loginUsuario];
+                  
+                  NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
+                  NSLog(@"Error: %@", error);
+
+              }else{
+                  
+                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"O servidor está inacessível. Tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                  [alerta show];
+
+              }
+              
+          }
+
+      }];
 }
 
 -(void)adicionaUsuario{

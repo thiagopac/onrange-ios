@@ -22,5 +22,6 @@
 - (IBAction)btnCheckin:(id)sender;
 @property (strong, nonatomic) IBOutlet UILabel *lblDestaque;
 @property (strong, nonatomic) IBOutlet UIImageView *imgStar;
+@property (assign, nonatomic) NSInteger status;
 
 @end

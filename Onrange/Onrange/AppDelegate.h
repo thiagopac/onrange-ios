@@ -30,6 +30,7 @@ typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 @property (strong, nonatomic) NSURL *openedURL;
 @property (strong, nonatomic) id<FBGraphUser> user;
 @property (strong, nonatomic) MenuViewController *menu;
+@property (assign, nonatomic) NSInteger status;
 
 //usuário na base
 @property (strong, nonatomic) NSString *nome_usuario;
@@ -41,6 +42,5 @@ typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;
 - (void)closeSession;
 - (void)requestUserData:(UserDataLoadedHandler)handler;
-- (void) mensagemParaOMundo:(NSString *)mensagem;
 
 @end

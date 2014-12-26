@@ -13,6 +13,7 @@
 #import "PerfilLocalTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MinhasCombinacoesTableViewController.h"
+#import "PromoCaixaEntradaTableViewController.h"
 
 @interface HomeViewController (){
     int raio;
@@ -310,6 +311,7 @@
     if ([def integerForKey:@"id_usuario"]) {
         int id_usuario = (int)[def integerForKey:@"id_usuario"];
             [self ondeEstou:id_usuario];
+            [self verificaPromosNaoLidos:id_usuario];
     }
 }
 
@@ -535,9 +537,47 @@
 }
 
 - (void) recebeNotificacao:(NSNotification *)notification {
-    self.viewUnredMessages.hidden = NO;
+    [self.btnMatches setImage:[UIImage imageNamed:@"btn_minhascombinacoes2"] forState:UIControlStateNormal];
     [self.view setNeedsDisplay];
     NSLog(@"A mensagem foi: %@", [notification.userInfo objectForKey:@"Mensagem"]);
+}
+
+- (IBAction)btnOnrangeClub:(UIButton *)sender {
+    PromoCaixaEntradaTableViewController *promoCaixaEntradaTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PromoCaixaEntradaTableViewController"];
+    
+    [[self navigationController]pushViewController:promoCaixaEntradaTVC animated:YES];
+}
+
+- (void)verificaPromosNaoLidos:(int)id_usuario{
+    
+    NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKMapping *mapping = [MappingProvider promoMapping];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Promo" statusCodes:statusCodeSet];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/verificapromosnaolidos/%d",API,id_usuario]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request responseDescriptors:@[responseDescriptor]];
+    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        
+        self.promo = [mappingResult firstObject];
+        
+        if (self.promo.nao_lido == 1) {
+            UIImage *imgBtn = [UIImage imageNamed:@"btn_onrangeclub2.png"];
+            [self.btnOnrangeClub setImage:imgBtn forState:UIControlStateNormal];
+        }else{
+            UIImage *imgBtn = [UIImage imageNamed:@"btn_onrangeclub.png"];
+            [self.btnOnrangeClub setImage:imgBtn forState:UIControlStateNormal];
+        }
+        
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Erro 404");
+        [self ondeEstou:id_usuario];
+        NSLog(@"ERROR: %@", error);
+        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar local",nil));
+    }];
+    
+    [operation start];
 }
 
 @end

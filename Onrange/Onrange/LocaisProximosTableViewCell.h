@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *lblCell;
 @property (strong, nonatomic) IBOutlet UIView *viewCorTipoLocal;
+@property (strong, nonatomic) IBOutlet UIImageView *imgDestaque;
 
 @end

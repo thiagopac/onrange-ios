@@ -15,6 +15,7 @@
 #import "LocaisProximosTableViewCell.h"
 #import "SVProgressHUD.h"
 
+
 @interface LocaisProximosTableViewController (){
     int raio;
     NSString *latitude;
@@ -76,6 +77,7 @@
     NSLog(@"Foi minimizado");
     [self.locationManager stopUpdatingLocation];
 }
+
 -(void)appWillTerminate:(NSNotification*)note
 {
     NSLog(@"Foi fechado");
@@ -212,6 +214,11 @@
     return self.arrLocais.count +1;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Locais próximos";
+}
+
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
 //    return @"Lista de locais mais próximos";
 //}
@@ -256,6 +263,13 @@
         cor = @"#5a8eaf"; //azul
     }
     
+    if (local.destaque == 1) {
+        cell.imgDestaque.hidden = NO;
+    }else{
+        cell.imgDestaque.hidden = YES;
+    }
+
+    
     cell.viewCorTipoLocal.backgroundColor = [UIColor colorWithHexString:cor];
 
     return cell;
@@ -278,6 +292,5 @@
         [[self navigationController]pushViewController:perfilLocalTVC animated:YES];
     }
 }
-
 
 @end

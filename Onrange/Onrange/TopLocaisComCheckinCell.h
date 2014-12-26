@@ -12,6 +12,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblLocal;
 @property (strong, nonatomic) IBOutlet UILabel *lblQuantidadeCheckins;
 @property (strong, nonatomic) IBOutlet UIView *viewCorTipoLocal;
+@property (strong, nonatomic) IBOutlet UIImageView *imgDestaque;
 
 
 

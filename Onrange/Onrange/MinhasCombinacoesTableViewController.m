@@ -167,7 +167,8 @@
         // get dialogs
         [QBChat dialogsWithExtendedRequest:nil delegate:self];
         [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-        self.HomeViewController.viewUnredMessages.hidden = YES;
+         UIImage *imgBtn = [UIImage imageNamed:@"btn_minhascombinacoes.png"];
+        [self.HomeViewController.btnMatches setImage:imgBtn forState:UIControlStateNormal];
     }
 }
 

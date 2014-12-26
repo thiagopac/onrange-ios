@@ -75,4 +75,11 @@
     [[SlideNavigationController sharedInstance] switchToViewController:LocaisProximosTableViewController withCompletion:nil];
 }
 
+- (IBAction)onrangeClubButtonClicked:(UIButton *)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+                                                             bundle: nil];
+    UITableViewController *PromoCaixaEntradaTableViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"PromoCaixaEntradaTableViewController"];
+    [[SlideNavigationController sharedInstance] switchToViewController:PromoCaixaEntradaTableViewController withCompletion:nil];
+}
+
 @end

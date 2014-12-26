@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import <SlideNavigationController.h>
 #import "Local.h"
+#import "Promo.h"
 
 #import "PointLocais.h"
 
@@ -21,13 +22,15 @@
 @property (strong, nonatomic) NSString *profileID;
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (strong, nonatomic) Local *local;
+@property (strong, nonatomic) Promo *promo;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) IBOutlet UIButton *btnMe;
 @property (strong, nonatomic) IBOutlet UIButton *btnMatches;
 - (IBAction)btnMatches:(id)sender;
 
 - (IBAction)btnMe:(UIButton *)sender;
-@property (strong, nonatomic) IBOutlet UIView *viewUnredMessages;
+@property (strong, nonatomic) IBOutlet UIButton *btnOnrangeClub;
+- (IBAction)btnOnrangeClub:(UIButton *)sender;
 
 -(id)init;
 - (void) recebeNotificacao:(NSNotification *)notification;

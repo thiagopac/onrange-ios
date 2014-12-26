@@ -36,7 +36,7 @@
 
 +(RKMapping *)likeMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Like class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match",@"id_output",@"nome_chat", @"chat", @"qbtoken"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match",@"id_output", @"chat", @"qbtoken"]];
     return mapping;
 }
 
@@ -48,7 +48,7 @@
 
 +(RKMapping *)promoMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Promo class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_promo", @"local", @"nome", @"descricao", @"dt_inicio", @"dt_fim", @"lote", @"codigo_promo", @"dt_utilizacao", @"dt_visualizacao"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_promo", @"local", @"nome", @"descricao", @"dt_inicio", @"dt_fim", @"lote", @"codigo_promo", @"dt_utilizacao",@"dt_promo", @"dt_visualizacao",@"id_codigo_promo",@"nao_lido"]];
     return mapping;
 }
 

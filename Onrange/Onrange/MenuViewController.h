@@ -23,6 +23,7 @@
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (IBAction)inicioButtonClicked:(UIButton *)sender;
 - (IBAction)fazerCheckinButtonClicked:(UIButton *)sender;
+- (IBAction)onrangeClubButtonClicked:(UIButton *)sender;
 
 
 @end
