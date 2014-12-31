@@ -16,6 +16,8 @@ static NSString * const sampleDescription2 = @"Página 2. Aqui terá deverá apr
 static NSString * const sampleDescription3 = @"Página 3. Aqui vamos mostrar um pouco do aplicativo, podemos fazer propaganda e mostrar algumas imagens de uso do app.";
 static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuário, vamos apresentar uma forma dele nos contactar e podemos dar dicas iniciais sobre o uso do aplicativo, para ele aproveitar ao máximo a sua experiência.";
 
+int contErros = 0;
+
 @interface IntroViewController (){
     UIView *rootView;
 }
@@ -89,7 +91,7 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Usuario"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/login";
@@ -139,16 +141,34 @@ static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuári
                           }else if(self.status == 501) {
                               NSLog(@"Usuário bloqueado");
                               //Precisamos avisar ao usuário que ele foi excluído. Ele precisa esclarecer o problema para que possamos avaliar sua re-integração
-                              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"O seu usuário foi bloqueado. Envie um e-mail para contato@roonants.com caso deseje voltar a usar o aplicativo." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do Onrange. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                                   [alerta show];
                           }else if(self.status == 530) {
                               NSLog(@"Erro ao buscar usuário");
                               //Aqui é preciso tentar novamente
                               [self loginUsuario];
-                          }else{
-                              NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
+                          }else if(self.status == 546) { //Erro ao remover data de exclusao do usuario.
+                              
                               [self loginUsuario];
-                              NSLog(@"Error: %@", error);
+                              
+                          }else{
+                              
+                              if (error.code == -1009) { //erro de conexão com a internet
+                                  
+                                  NSLog(@"Codigo erro restkit: %ld",error.code);
+                                  
+                                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está sem conexão com a internet, tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                  [alerta show];
+                                  
+                              }else{
+                                  
+                                  [self loginUsuario];
+                                  
+                                  NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
+                                  NSLog(@"Error: %@", error);
+
+                                  
+                              }
                           }
                       }];
 }

@@ -117,7 +117,7 @@
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider promoMapping];
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:@"Promos" statusCodes:statusCodeSet];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/listaPromosUsuario/%d",API,id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];

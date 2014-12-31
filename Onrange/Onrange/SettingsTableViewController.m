@@ -190,7 +190,7 @@
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPUT
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Usuario"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/exclui";

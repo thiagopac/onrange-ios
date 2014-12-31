@@ -443,7 +443,7 @@
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPUT
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Match"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"match/unmatch";

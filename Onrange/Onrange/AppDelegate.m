@@ -20,8 +20,6 @@ NSString *const FBSessionStateChangedNotification =
 NSString *const FBMenuDataChangedNotification =
 @"com.facebook.samples.SocialCafe:FBMenuDataChangedNotification";
 
-int contErros = 0;
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -270,7 +268,7 @@ int contErros = 0;
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Usuario"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/login";
@@ -313,7 +311,7 @@ int contErros = 0;
               
           }else if(self.status == 501) { //Usuário bloqueado
              
-              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do aplicativo. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do Onrange. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
               [alerta show];
               
           }else if(self.status == 530) { //Erro ao buscar usuario.
@@ -326,20 +324,20 @@ int contErros = 0;
               
           }else{
               
-              contErros++;
-              
-              if (contErros < 30) {
+              if (error.code == -1009) { //erro de conexão com a internet
+                  
+                  NSLog(@"Codigo erro restkit: %ld",error.code);
+                  
+                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está sem conexão com a internet, tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                  [alerta show];
+                  
+              }else{
                   
                   [self loginUsuario];
                   
                   NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
                   NSLog(@"Error: %@", error);
-
-              }else{
                   
-                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"O servidor está inacessível. Tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                  [alerta show];
-
               }
               
           }
@@ -360,7 +358,7 @@ int contErros = 0;
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Usuario"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/adicionausuario";

@@ -228,7 +228,7 @@ didChangeDragState:(MKAnnotationViewDragState)newState
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Local"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString *path= @"local/adicionalocal";

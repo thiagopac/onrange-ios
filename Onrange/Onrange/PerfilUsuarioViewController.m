@@ -176,6 +176,28 @@
     [self.btnCurtirUsuario setImage:imgCurtir forState:UIControlStateNormal];
 }
 
+- (void)sendPushNotificationWithMessage:(NSString *)message toUser:(NSString *)quickbloxUserID{
+    if (quickbloxUserID == nil) {
+        return;
+    }
+    NSMutableDictionary *payload = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
+    aps[QBMPushMessageSoundKey] = @"default";
+    aps[QBMPushMessageAlertKey] = message;
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    aps[@"id"] = [def objectForKey:@"facebook_usuario"];
+    aps[@"quickbloxID"] = @"1152618";
+
+    payload[QBMPushMessageApsKey] = aps;
+    QBMPushMessage *pushMessage = [[QBMPushMessage alloc] initWithPayload:payload];
+
+    [QBRequest sendPush:pushMessage toUsers:quickbloxUserID  successBlock:^(QBResponse *response, QBMEvent *event) {
+        NSLog(@"Entrou no sucesso!!!");
+    } errorBlock:^(QBError *error) {
+        NSLog(@"Entrou no erro!!!");
+    }];
+}
+
 -(void)curtirUsuario{
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
@@ -189,10 +211,12 @@
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
                                                                                             method:RKRequestMethodPOST
                                                                                        pathPattern:nil
-                                                                                           keyPath:@"Like"
+                                                                                           keyPath:nil
                                                                                        statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"like/adicionalike";
+    
+    [self sendPushNotificationWithMessage:@"Push ao curtir um usuário!" toUser:@"1152618"];
     
     RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
     [objectManager addRequestDescriptor:requestDescriptor];
