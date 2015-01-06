@@ -13,5 +13,6 @@
 @interface LocaisTableViewController : UITableViewController
 
 @property (strong, nonatomic) CWStatusBarNotification *notification;
+@property (assign, nonatomic) NSInteger status;
 
 @end

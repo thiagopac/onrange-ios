@@ -142,7 +142,7 @@
         self.status = operation.HTTPRequestOperation.response.statusCode;
         
         if(self.status == 547) {
-            NSLog(@"Erro ao buscar promos");
+            NSLog(@"Erro da API: %ld",self.status);
             [self carregaPromos]; //é preciso tentar novamente e implementar contador de tentativas
         }else{
             NSLog(@"ERRO FATAL - carregaPromos - Erro: %ld",self.status);

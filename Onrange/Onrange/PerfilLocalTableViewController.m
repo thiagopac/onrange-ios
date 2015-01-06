@@ -252,39 +252,35 @@
     
     checkin.id_usuario = id_usuario;
     
-    [objectManager putObject:checkin
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
-                              Checkin *checkoutefetuado = [mappingResult firstObject];
-                              [SVProgressHUD dismiss];
-                              [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
-                              if (checkoutefetuado.id_output == 1) {
-                                  self.usuarioEstaNoLocal = NO;
-                                  
-                                  [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
+    [objectManager putObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        
+      NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
+      [SVProgressHUD dismiss];
+      [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
 
-                              }else if(checkoutefetuado.id_output == 2){
-                                  [self alert:@"Ocorreu um erro na tentativa de efetuar checkout. Tente novamente em alguns segundos":@"Erro"];
-                                  [SVProgressHUD dismiss];
-                              }else{
-                                  NSLog(@"Ocorreu um erro ao efetuar o checkout");
-                                  [SVProgressHUD dismiss];
-                              }
-                          }else{
-                              NSLog(@"Falha ao tentar fazer checkout");
-                              [SVProgressHUD dismiss];
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self fazCheckout];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de checkout");
-                          [SVProgressHUD dismiss];
-                      }];
+          self.usuarioEstaNoLocal = NO;
+          
+          [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
+
+      }
+      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+          
+          self.status = operation.HTTPRequestOperation.response.statusCode;
+          
+          if(self.status == 532) { //Erro ao buscar checkin.
+              NSLog(@"Erro na API: %ld",self.status);
+              [self fazCheckout];
+          }else if(self.status == 533) { //Erro ao fazer checkout.
+              NSLog(@"Erro na API: %ld",self.status);
+              [self fazCheckout];
+              [SVProgressHUD dismiss];
+          }else{
+              NSLog(@"ERRO FATAL - fazCheckout");
+              NSLog(@"Erro na API: %ld",self.status);
+              NSLog(@"Error: %@", error);
+              [SVProgressHUD dismiss];
+          }
+      }];
 }
 
 - (void)carregaUsuarios {
@@ -312,11 +308,18 @@
         }
         
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self carregaUsuarios];
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 531) { //Erro na listagem de usuarios.
+            NSLog(@"Erro %ld",self.status);
+            [self carregaUsuarios];
+        }else{
+            NSLog(@"Erro %ld",self.status);
+            [self alert:@"Erro ao carregar usuários no local. Tente novamente em alguns minutos.":@"Erro"];
+        }
+    
         NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
+
     }];
     
     [operation start];

@@ -142,8 +142,10 @@
         self.status = operation.HTTPRequestOperation.response.statusCode;
         
         if(self.status == 531) {
+              NSLog(@"Erro %ld",self.status);
             [self carregaUsuarios];
         }else{
+              NSLog(@"Erro %ld",self.status);
             [self alert:@"Erro ao carregar usuários no local. Tente novamente em alguns minutos.":@"Erro"];
         }
 
@@ -377,10 +379,13 @@
           self.status = operation.HTTPRequestOperation.response.statusCode;
           
           if(self.status == 516) { //Checkin anterior em menos de 5 minutos
+              NSLog(@"Erro %ld",self.status);
               [self alert:@"Você deve aguardar alguns minutos para fazer checkin novamente.":@"Erro"];
           }else if(self.status == 517) { //Erro ao fazer checkin
+              NSLog(@"Erro %ld",self.status);
               [self fazCheckin];
           }else{
+              NSLog(@"Erro %ld",self.status);
               [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
           }
           NSLog(@"Error: %@", error);
@@ -438,8 +443,10 @@
       self.status = operation.HTTPRequestOperation.response.statusCode;
       
       if(self.status == 533) {
+          NSLog(@"Erro %ld",self.status);
           [self fazCheckout];
       }else{
+          NSLog(@"Erro %ld",self.status);
           [self alert:@"Erro ao fazer checkout. Tente novamente em alguns minutos.":@"Erro"];
       }
 

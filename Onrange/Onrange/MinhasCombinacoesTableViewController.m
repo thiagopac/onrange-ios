@@ -15,7 +15,7 @@
 #import "ChatViewController.h"
 
 @interface MinhasCombinacoesTableViewController ()<QBActionStatusDelegate>{
-    NSString *meu_id_qb;
+NSString *meu_id_qb;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrCombinacoes;
@@ -28,48 +28,48 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
-	return YES;
+    return YES;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+    // Custom initialization
     }
     return self;
 }
 
 - (void)menuAbriu:(NSNotification *)notification {
     if([[SlideNavigationController sharedInstance] isMenuOpen]){
-        self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = NO;
     }else{
-        self.tableView.scrollEnabled = YES;
+    self.tableView.scrollEnabled = YES;
     }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
+
     self.QBUser = [def objectForKey:@"facebook_usuario"];
     self.QBPassword = [def objectForKey:@"facebook_usuario"];
 
     meu_id_qb = [NSString stringWithFormat:@"%lu",(unsigned long)[LocalStorageService shared].currentUser.ID];
-    
+
     NSString *tema_img = [def objectForKey:@"tema_img"];
     NSString *tema_cor = [def objectForKey:@"tema_cor"];
-    
+
     UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
-    
+
     UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
     self.navigationController.navigationBar.barTintColor = navcolor;
-    
+
     self.navigationController.navigationBar.topItem.title = @"";
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
 
     if([LocalStorageService shared].currentUser == nil){
@@ -80,59 +80,64 @@
         extendedAuthRequest.userPassword = self.QBPassword;
         //
         [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
+
+        [self registerForRemoteNotifications];
             
-            //        [self registerForRemoteNotifications];
-            
-            UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-            UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-            
-            //        PROBLEMA DE IOS 7 E IOS 8
-            //        // register for notifications
-            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-            //
-            //        // resister for push notifications
-            //        // this method will call didRegisterForRemoteNotificationsWithDeviceToken
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-            
-            // Save current user
-            //
-            QBUUser *currentUser = [QBUUser user];
-            currentUser.ID = session.userID;
-            currentUser.login = self.QBUser;
-            currentUser.password = self.QBPassword;
-            //
-            [[LocalStorageService shared] setCurrentUser:currentUser];
-            
-            // Login to QuickBlox Chat
-            //
-            [[ChatService instance] loginWithUser:currentUser completionBlock:^{
-                
-                [QBChat dialogsWithExtendedRequest:nil delegate:self];
-                
-                // hide alert after delay
-                double delayInSeconds = 1.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                });
-            }];
-            
-            
-            
+        // Save current user
+        //
+        QBUUser *currentUser = [QBUUser user];
+        currentUser.ID = session.userID;
+        currentUser.login = self.QBUser;
+        currentUser.password = self.QBPassword;
+        //
+        [[LocalStorageService shared] setCurrentUser:currentUser];
+
+        // Login to QuickBlox Chat
+        //
+        [[ChatService instance] loginWithUser:currentUser completionBlock:^{
+
+        [QBChat dialogsWithExtendedRequest:nil delegate:self];
+
+        // hide alert after delay
+        double delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+
+
+
         } errorBlock:^(QBResponse *response) {
-            NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
-            errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors"
-                                                            message:errorMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles: nil];
-            [alert show];
-            [SVProgressHUD dismiss];
+        NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
+
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors" message:errorMessage
+        delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+
+        [alert show];
+        
+        [SVProgressHUD dismiss];
         }];
     }
 
+}
+
+- (void)registerForRemoteNotifications{
+    
+    if ([[UIApplication sharedApplication]respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+    {
+        // iOS 8 Notifications
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else
+    {
+        // iOS < 8 Notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
 }
 
 
@@ -140,10 +145,7 @@
 {
     return ^(QBResponse *response) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", "")
-                                                        message:[response.error description]
-                                                       delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK", "")
-                                              otherButtonTitles:nil];
+        message:[response.error description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", "") otherButtonTitles:nil];
         [alert show];
         [SVProgressHUD dismiss];
     };
@@ -161,13 +163,13 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     if([LocalStorageService shared].currentUser != nil){
-//        [self.activityIndicator startAnimating];
-//        loading carregando usuário
-        
+        //        [self.activityIndicator startAnimating];
+        //        loading carregando usuário
+
         // get dialogs
         [QBChat dialogsWithExtendedRequest:nil delegate:self];
         [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-         UIImage *imgBtn = [UIImage imageNamed:@"btn_minhascombinacoes.png"];
+        UIImage *imgBtn = [UIImage imageNamed:@"btn_minhascombinacoes.png"];
         [self.HomeViewController.btnMatches setImage:imgBtn forState:UIControlStateNormal];
     }
 }
@@ -177,7 +179,7 @@
 
     QBChatDialog *dialog = self.dialogs[((UITableViewCell *)sender).tag];
     destinationViewController.dialog = dialog;
-    
+
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(dialog.recipientID)];
     destinationViewController.oponentName = recipient.login == nil ? recipient.email : recipient.fullName;
 }
@@ -197,42 +199,42 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.dialogs count];
+    return [self.dialogs count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"combinacaoCell";
     MinhasCombinacoesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+
     QBChatDialog *chatDialog = self.dialogs[indexPath.row];
     cell.tag  = indexPath.row;
-    
+
     NSLog(@"CODIGO_CHAT: %@",chatDialog.ID);
-    
+
     cell.detailTextLabel.text = @"private";
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(chatDialog.recipientID)];
     cell.lblNomeCombinacao.text = recipient.login == nil ? recipient.email : recipient.fullName;
-    
-//    if (recipient.ID == [match.id_qb intValue]) {
-//        cell.userProfilePictureView.profileID = match.facebook_usuario;
-//    }
+
+    //    if (recipient.ID == [match.id_qb intValue]) {
+    //        cell.userProfilePictureView.profileID = match.facebook_usuario;
+    //    }
     cell.imgProfile.pictureCropping = FBProfilePictureCroppingSquare;
     cell.imgProfile.profileID = recipient.login;
-    
+
     [cell.lblNomeCombinacao setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:17]];
 
     NSString *qtdMsgsNaoLidas = [NSString stringWithFormat:@"%lu",(unsigned long)chatDialog.unreadMessagesCount];
-    
+
     if ([qtdMsgsNaoLidas isEqualToString:@"0"]) {
         cell.viewUnredMessages.hidden = YES;
     }
-    
-// contagem de mensagens não-lidas
-//     [ NSString stringWithFormat:@"%lu",(unsigned long)chatDialog.unreadMessagesCount]
-    
+
+    // contagem de mensagens não-lidas
+    //     [ NSString stringWithFormat:@"%lu",(unsigned long)chatDialog.unreadMessagesCount]
+
     cell.lblNomeCombinacao.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
-    
+
     return cell;
 }
 
@@ -244,14 +246,14 @@
 // QuickBlox API queries delegate
 - (void)completedWithResult:(Result *)result{
     if (result.success && [result isKindOfClass:[QBDialogsPagedResult class]]) {
-        
+
         [SVProgressHUD dismiss];
-        
+
         QBDialogsPagedResult *pagedResult = (QBDialogsPagedResult *)result;
         //
         NSArray *dialogs = pagedResult.dialogs;
         self.dialogs = [dialogs mutableCopy];
-        
+
         // Get dialogs users
         PagedRequest *pagedRequest = [PagedRequest request];
         pagedRequest.perPage = 100;
@@ -259,13 +261,13 @@
         NSSet *dialogsUsersIDs = pagedResult.dialogsUsersIDs;
         //
         [QBUsers usersWithIDs:[[dialogsUsersIDs allObjects] componentsJoinedByString:@","] pagedRequest:pagedRequest delegate:self];
-        
+
         [self.tableView reloadData];
-        
+
     }else if (result.success && [result isKindOfClass:[QBUUserPagedResult class]]) {
 
         [SVProgressHUD dismiss];
-        
+
         QBUUserPagedResult *res = (QBUUserPagedResult *)result;
         [LocalStorageService shared].users = res.users;
         //

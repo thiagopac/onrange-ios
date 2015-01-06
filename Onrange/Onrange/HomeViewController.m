@@ -34,21 +34,40 @@
 {
     NSLog(@"didFailWithError: %@", error);
     UIAlertView *errorAlert = [[UIAlertView alloc]
-                               initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                               initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Tentar novamente?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim",nil];
     [errorAlert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) //SIM
+    {
+        [self buscarLocalizacao];
+    }
+    else //NÃO
+    {
+        UIAlertView *errorAlert = [[UIAlertView alloc]
+                                   initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Nenhum local será mapeado." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [errorAlert show];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     CLLocation *currentLocation = newLocation;
+
     if (currentLocation != nil) {
+    
+        latitude = [NSString stringWithFormat:@"%.6f",currentLocation.coordinate.latitude];
+        longitude = [NSString stringWithFormat:@"%.6f",currentLocation.coordinate.longitude];
+    
+//guardando o local atualizado nas preferências para que tenha sempre algo a apresentar ao usuário
+        NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+        [def setObject:latitude forKey:@"userLatitude"];
         
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-        [def setObject:[NSString stringWithFormat:@"%.6f", currentLocation.coordinate.latitude] forKey:@"userLatitude"];
-        
-        [def setObject:[NSString stringWithFormat:@"%.6f", currentLocation.coordinate.longitude] forKey:@"userLongitude"];
+        [def setObject:longitude forKey:@"userLongitude"];
         
         [def synchronize];
+        
     }
 }
 
@@ -97,18 +116,13 @@
     [self.locationManager startUpdatingLocation];
 }
 
-- (void)populateUserDetails {
-
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate requestUserData:^(id sender, id<FBGraphUser> user) {
-
-    }];
-}
-
 - (void)carregaLocais {
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    latitude = [def objectForKey:@"userLatitude"];
-    longitude = [def objectForKey:@"userLongitude"];
+    
+    if (latitude == nil || longitude == nil) {
+        latitude = [def objectForKey:@"userLatitude"];
+        longitude = [def objectForKey:@"userLongitude"];
+    }
 
     raio = (int)[def integerForKey:@"userRange"];
     
@@ -127,12 +141,21 @@
         
         self.arrLocais = [NSMutableArray arrayWithArray:mappingResult.array];
         [self montarMapaWithArray:self.arrLocais];
+        
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self carregaLocais];
-        NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar locais",nil));
+
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 502) { //Erro na listagem de locais
+            NSLog(@"Erro %ld",self.status);
+            [self carregaLocais];
+        }else{
+            NSLog(@"ERRO FATAL - CarregaLocais");
+            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+            [self carregaLocais];
+        }
     }];
     
     [operation start];
@@ -155,13 +178,19 @@
             self.btnMe.hidden = NO;
         }
         
-        NSLog(@"usuario está no local: %d",(int)self.localOndeEstou.id_local);
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self ondeEstou:id_usuario];
-        NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar local",nil));
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 537) { //Erro ao buscar local
+            NSLog(@"Erro %ld",self.status);
+            [self ondeEstou:id_usuario];
+        }else{
+            NSLog(@"ERRO FATAL - ondeEstou");
+            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+            [self ondeEstou:id_usuario];
+        }
     }];
     
     [operation start];
@@ -261,41 +290,10 @@
     UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
 
     self.navigationController.navigationBar.barTintColor = navcolor;
-    
-    
-//    //btnMe
-//    self.btnMe.layer.cornerRadius = 7;
-//    self.btnMe.clipsToBounds = NO;
-//    self.btnMe.layer.shadowColor = [[UIColor blackColor] CGColor];
-//    self.btnMe.layer.shadowOpacity = 0.2;
-//    self.btnMe.layer.shadowRadius = 1;
-//    self.btnMe.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
-//
-//    //btnMatches
-//    self.btnMatches.layer.cornerRadius = 7;
-//    self.btnMatches.clipsToBounds = NO;
-//    self.btnMatches.layer.shadowColor = [[UIColor blackColor] CGColor];
-//    self.btnMatches.layer.shadowOpacity = 0.2;
-//    self.btnMatches.layer.shadowRadius = 1;
-//    self.btnMatches.layer.shadowOffset = CGSizeMake(-2.0f,2.0f);
 
 }
 
-- (void)registerForRemoteNotifications{
-    
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
-    else{
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
-    }
-#else
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
-#endif
-}
+
 
 -(void)viewWillAppear:(BOOL)animated{
 
@@ -570,11 +568,18 @@
         }
         
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self ondeEstou:id_usuario];
-        NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro ao carregar local",nil));
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 547) { //Erro ao buscar local
+            NSLog(@"Erro %ld",self.status);
+            [self verificaPromosNaoLidos:id_usuario];
+        }else{
+            NSLog(@"ERRO FATAL - verificaPromosNaoLidos");
+            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+            [self verificaPromosNaoLidos:id_usuario];
+        }
     }];
     
     [operation start];

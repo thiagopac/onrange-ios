@@ -185,7 +185,7 @@
     aps[QBMPushMessageSoundKey] = @"default";
     aps[QBMPushMessageAlertKey] = message;
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    aps[@"id"] = [def objectForKey:@"facebook_usuario"];
+    aps[@"id"] = @"2495884";
     aps[@"quickbloxID"] = @"1152618";
 
     payload[QBMPushMessageApsKey] = aps;

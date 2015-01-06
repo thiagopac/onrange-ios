@@ -57,6 +57,8 @@ NSString *const FBMenuDataChangedNotification =
     [QBApplication sharedApplication].productionEnvironmentForPushesEnabled = YES;
 #endif
     
+       
+    
 //tema
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     

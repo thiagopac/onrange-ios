@@ -102,13 +102,22 @@
         [self.refreshControl performSelector:@selector(endRefreshing)];
         [self.tableView reloadData];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSLog(@"Erro 404");
-        [self carregaLocais];
-        [self.refreshControl performSelector:@selector(endRefreshing)];
-        [self.notification dismissNotification];
-        NSLog(@"ERROR: %@", error);
-        NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-        NSLog(NSLocalizedString(@"Ocorreu um erro",nil));
+        
+        self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        if(self.status == 502) { //Erro na listagem de locais
+            NSLog(@"Erro %ld",self.status);
+            [self carregaLocais];
+        }else{
+            [self.refreshControl performSelector:@selector(endRefreshing)];
+            [self.notification dismissNotification];
+            NSLog(@"ERRO FATAL - carregaLocais");
+            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
+            [self carregaLocais];
+        }
+        
     }];
     
     [operation start];

@@ -14,5 +14,6 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CWStatusBarNotification *notification;
+@property (assign, nonatomic) NSInteger status;
 
 @end

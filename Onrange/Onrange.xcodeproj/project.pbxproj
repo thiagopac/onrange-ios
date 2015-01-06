@@ -123,6 +123,7 @@
 		6E662CE119F0226B00C897C9 /* IntroPage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E662CE019F0226B00C897C9 /* IntroPage.xib */; };
 		6E662CE719F1524300C897C9 /* FBIntegrationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E662CE619F1524300C897C9 /* FBIntegrationView.m */; };
 		6E662CED19F17BDF00C897C9 /* finding.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6E662CEC19F17BDF00C897C9 /* finding.gif */; };
+		6E691FF11A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E691FF01A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m */; };
 		6E6DF74A19088F3700DF8D76 /* stickman.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6DF74919088F3700DF8D76 /* stickman.png */; };
 		6E8B8080192593300006DABE /* ControleTeclado.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8B807E192593300006DABE /* ControleTeclado.m */; };
 		6E8B8081192593300006DABE /* ControleTeclado.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E8B807F192593300006DABE /* ControleTeclado.xib */; };
@@ -156,7 +157,6 @@
 		6EACD5FF196CD24700719003 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD5FE196CD24700719003 /* SystemConfiguration.framework */; };
 		6EACD601196CD25100719003 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EACD600196CD25100719003 /* MobileCoreServices.framework */; };
 		6EAD7324197F1550006436E9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD7323197F1550006436E9 /* ChatViewController.m */; };
-		6EAF7DF81973F03D007CCC7C /* MinhasCombinacoesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */; };
 		6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */; };
 		6EAF7E0319740694007CCC7C /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7E0219740694007CCC7C /* Match.m */; };
 		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
@@ -364,6 +364,7 @@
 		6E662CE519F1524300C897C9 /* FBIntegrationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBIntegrationView.h; sourceTree = "<group>"; };
 		6E662CE619F1524300C897C9 /* FBIntegrationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBIntegrationView.m; sourceTree = "<group>"; };
 		6E662CEC19F17BDF00C897C9 /* finding.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finding.gif; sourceTree = "<group>"; };
+		6E691FF01A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewController.m; sourceTree = "<group>"; };
 		6E6DF74919088F3700DF8D76 /* stickman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stickman.png; sourceTree = "<group>"; };
 		6E8B807D192593300006DABE /* ControleTeclado.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControleTeclado.h; sourceTree = "<group>"; };
 		6E8B807E192593300006DABE /* ControleTeclado.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControleTeclado.m; sourceTree = "<group>"; };
@@ -410,7 +411,6 @@
 		6EAD7322197F1550006436E9 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		6EAD7323197F1550006436E9 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		6EAF7DF61973F03D007CCC7C /* MinhasCombinacoesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinhasCombinacoesTableViewController.h; sourceTree = "<group>"; };
-		6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.html; };
 		6EAF7DFE1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinhasCombinacoesTableViewCell.h; sourceTree = "<group>"; };
 		6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewCell.m; sourceTree = "<group>"; };
 		6EAF7E0119740694007CCC7C /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
@@ -846,7 +846,7 @@
 			isa = PBXGroup;
 			children = (
 				6EAF7DF61973F03D007CCC7C /* MinhasCombinacoesTableViewController.h */,
-				6EAF7DF71973F03D007CCC7C /* MinhasCombinacoesTableViewController.m */,
+				6E691FF01A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m */,
 				6EAF7DFE1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.h */,
 				6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */,
 			);
@@ -1476,7 +1476,6 @@
 				6EB6C61F18C025B000240B6B /* Usuario.m in Sources */,
 				6EC1E416192E1A470095693F /* PerfilLocalTableViewController.m in Sources */,
 				6EF4314C18B17755007F7D79 /* AppDelegate.m in Sources */,
-				6EAF7DF81973F03D007CCC7C /* MinhasCombinacoesTableViewController.m in Sources */,
 				6EF4314818B17755007F7D79 /* main.m in Sources */,
 				6E8B8080192593300006DABE /* ControleTeclado.m in Sources */,
 				6E428D7D1957B0430031B7F2 /* GenerosTableViewCell.m in Sources */,
@@ -1505,6 +1504,7 @@
 				6E2ABFDC1924DE7E00C8CE36 /* TipoLocalTableViewCell.m in Sources */,
 				6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */,
 				6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */,
+				6E691FF11A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m in Sources */,
 				6E4B15E118C810FB00A6BBE2 /* UsuariosCheckedViewController.m in Sources */,
 				6E9810C01A39E86C00D352D0 /* PromoTableViewCell.m in Sources */,
 			);
@@ -1740,7 +1740,7 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = Onrange;
-				PROVISIONING_PROFILE = "8e738aaa-a1cd-48b5-b7bd-2a0ba9f1a92d";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "Pods/**";
 				WRAPPER_EXTENSION = app;
 			};
