@@ -1,19 +1,9 @@
 //
-//  Created by Jesse Squires
-//  http://www.hexedbits.com
+//  ChatViewController.h
+//  Onrange
 //
-//
-//  Documentation
-//  http://cocoadocs.org/docsets/JSQMessagesViewController
-//
-//
-//  GitHub
-//  https://github.com/jessesquires/JSQMessagesViewController
-//
-//
-//  License
-//  Copyright (c) 2014 Jesse Squires
-//  Released under an MIT license: http://opensource.org/licenses/MIT
+//  Created by Thiago Castro on 16/10/14.
+//  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
 
 #import "JSQMessages.h"

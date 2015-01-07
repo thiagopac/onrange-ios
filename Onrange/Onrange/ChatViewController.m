@@ -1,19 +1,10 @@
-    //
-//  Created by Jesse Squires
-//  http://www.hexedbits.com
 //
+//  ChatViewController.m
+//  Onrange
 //
-//  Documentation
-//  http://cocoadocs.org/docsets/JSQMessagesViewController
+//  Created by Thiago Castro on 16/10/14.
+//  Copyright (c) 2014 Thiago Castro. All rights reserved.
 //
-//
-//  GitHub
-//  https://github.com/jessesquires/JSQMessagesViewController
-//
-//
-//  License
-//  Copyright (c) 2014 Jesse Squires
-//  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
 #import "ChatViewController.h"
@@ -36,7 +27,7 @@
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
 //configurando nome do usuário e oponente
-    self.me = [NSString stringWithFormat:@"%d",[LocalStorageService shared].currentUser.ID];
+    self.me = [NSString stringWithFormat:@"%lu",(unsigned long)[LocalStorageService shared].currentUser.ID];
 
     self.sender = self.me;
     
@@ -86,13 +77,22 @@
                                                  name:kNotificationDidReceiveNewMessage object:nil];
     
     if (self.delegateModal) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                                                                              target:self
-                                                                                              action:@selector(closePressed:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(closePressed:)];
     }
 
     // get messages history
-    [QBChat messagesWithDialogID:self.dialog.ID extendedRequest:nil delegate:self];
+    NSMutableDictionary *extendedRequest = [NSMutableDictionary new];
+//    extendedRequest[@"limit"] = @(100);
+//    extendedRequest[@"skip"] = @(100);
+//    extendedRequest[@"sort_asc"] = @"last_message_date_sent";
+    NSDate *now = [NSDate date];
+    extendedRequest[@"date_sent[lte]"]= @([now timeIntervalSince1970]);
+    extendedRequest[@"sort_desc"]= @"date_sent";
+    
+    //get the most recent 50 messages
+    extendedRequest[@"limit"] = @(100);
+
+    [QBChat messagesWithDialogID:self.dialog.ID extendedRequest:extendedRequest delegate:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -229,11 +229,14 @@
             QBChatAbstractMessage *msgQb = [messages objectAtIndex:i];
             JSQMessage *msgJSQ = [JSQMessage new];
             msgJSQ.text = msgQb.text;
-            msgJSQ.sender = [NSString stringWithFormat:@"%d",msgQb.senderID];
+            msgJSQ.sender = [NSString stringWithFormat:@"%lu",(unsigned long)msgQb.senderID];
             msgJSQ.date  = msgQb.datetime;
             [self.messages addObject:msgJSQ];
         }
+         NSArray *ordemTrocada = [[self.messages reverseObjectEnumerator] allObjects];
+        self.messages = [NSMutableArray arrayWithArray:ordemTrocada];
     }
+    
     [self finishSendingMessage];
     [self finishReceivingMessage];
 }

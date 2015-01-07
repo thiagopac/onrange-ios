@@ -54,6 +54,8 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     CLLocation *currentLocation = newLocation;
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
 
     if (currentLocation != nil) {
     
@@ -61,14 +63,24 @@
         longitude = [NSString stringWithFormat:@"%.6f",currentLocation.coordinate.longitude];
     
 //guardando o local atualizado nas preferências para que tenha sempre algo a apresentar ao usuário
-        NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+
         [def setObject:latitude forKey:@"userLatitude"];
         
         [def setObject:longitude forKey:@"userLongitude"];
         
         [def synchronize];
         
+    }else{
+
+        latitude = [def objectForKey:@"userLatitude"];
+        longitude = [def objectForKey:@"userLongitude"];
+
     }
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self carregaLocais];
+    });
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
@@ -118,11 +130,6 @@
 
 - (void)carregaLocais {
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    if (latitude == nil || longitude == nil) {
-        latitude = [def objectForKey:@"userLatitude"];
-        longitude = [def objectForKey:@"userLongitude"];
-    }
 
     raio = (int)[def integerForKey:@"userRange"];
     
@@ -300,10 +307,9 @@
     self.btnMe.hidden = YES;
     
     [_mapGlobal removeAnnotations:_mapGlobal.annotations];
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        [self carregaLocais];
-    });
+    
+
+    [self buscarLocalizacao];
     
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     if ([def integerForKey:@"id_usuario"]) {
