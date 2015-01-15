@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSString *QBPassword;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeUsuario;
+@property (assign, nonatomic) NSUInteger ID_QB1;
+@property (assign, nonatomic) NSUInteger ID_QB2;
 @property (strong, nonatomic) IBOutlet UIButton *btnCurtirUsuario;
 
 - (IBAction)btnCurtirUsuario:(id)sender;
@@ -29,5 +31,6 @@
 
 @property (assign, nonatomic) NSInteger status;
 @property (strong, nonatomic) IBOutlet UIView *viewColoredHeader;
+
 
 @end

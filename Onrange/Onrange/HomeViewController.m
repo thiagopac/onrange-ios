@@ -39,15 +39,15 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) //SIM
-    {
-        [self buscarLocalizacao];
-    }
-    else //NÃO
+    if (buttonIndex == 0) //NÃO
     {
         UIAlertView *errorAlert = [[UIAlertView alloc]
                                    initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Nenhum local será mapeado." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [errorAlert show];
+    }
+    else //SIM
+    {
+        [self buscarLocalizacao];
     }
 }
 
@@ -154,11 +154,11 @@
         self.status = operation.HTTPRequestOperation.response.statusCode;
         
         if(self.status == 502) { //Erro na listagem de locais
-            NSLog(@"Erro %ld",self.status);
+            NSLog(@"Erro %ld",(long)self.status);
             [self carregaLocais];
         }else{
             NSLog(@"ERRO FATAL - CarregaLocais");
-            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"Erro da API: %ld",(long)self.status);
             NSLog(@"ERROR: %@", error);
             NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
             [self carregaLocais];
@@ -168,13 +168,13 @@
     [operation start];
 }
 
-- (void)ondeEstou:(int)id_usuario{
+- (void)ondeEstou:(Usuario *)usuario{
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/verificaCheckinUsuario/%d",API,id_usuario]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/verificaCheckinUsuario/%ld",API,(long)usuario.id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -189,14 +189,14 @@
         self.status = operation.HTTPRequestOperation.response.statusCode;
         
         if(self.status == 537) { //Erro ao buscar local
-            NSLog(@"Erro %ld",self.status);
-            [self ondeEstou:id_usuario];
+            NSLog(@"Erro %ld",(long)self.status);
+            [self ondeEstou:usuario];
         }else{
             NSLog(@"ERRO FATAL - ondeEstou");
-            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"Erro da API: %ld",(long)self.status);
             NSLog(@"ERROR: %@", error);
             NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-            [self ondeEstou:id_usuario];
+            [self ondeEstou:usuario];
         }
     }];
     
@@ -297,6 +297,10 @@
     UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
 
     self.navigationController.navigationBar.barTintColor = navcolor;
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
 
 }
 
@@ -310,13 +314,12 @@
     
 
     [self buscarLocalizacao];
+
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
     
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    if ([def integerForKey:@"id_usuario"]) {
-        int id_usuario = (int)[def integerForKey:@"id_usuario"];
-            [self ondeEstou:id_usuario];
-            [self verificaPromosNaoLidos:id_usuario];
-    }
+    [self ondeEstou:usuario];
+    [self verificaPromosNaoLidos:usuario];
 }
 
 - (void)didReceiveMemoryWarning
@@ -552,13 +555,13 @@
     [[self navigationController]pushViewController:promoCaixaEntradaTVC animated:YES];
 }
 
-- (void)verificaPromosNaoLidos:(int)id_usuario{
+- (void)verificaPromosNaoLidos:(Usuario *)usuario{
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider promoMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/verificapromosnaolidos/%d",API,id_usuario]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/verificapromosnaolidos/%ld",API,(long)usuario.id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request responseDescriptors:@[responseDescriptor]];
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -577,14 +580,14 @@
         self.status = operation.HTTPRequestOperation.response.statusCode;
         
         if(self.status == 547) { //Erro ao buscar local
-            NSLog(@"Erro %ld",self.status);
-            [self verificaPromosNaoLidos:id_usuario];
+            NSLog(@"Erro %ld",(long)self.status);
+            [self verificaPromosNaoLidos:usuario];
         }else{
             NSLog(@"ERRO FATAL - verificaPromosNaoLidos");
-            NSLog(@"Erro da API: %ld",self.status);
+            NSLog(@"Erro da API: %ld",(long)self.status);
             NSLog(@"ERROR: %@", error);
             NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-            [self verificaPromosNaoLidos:id_usuario];
+            [self verificaPromosNaoLidos:usuario];
         }
     }];
     

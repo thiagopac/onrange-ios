@@ -16,7 +16,7 @@
 #import <SVProgressHUD.h>
 
 @interface PerfilLocalTableViewController (){
-    int id_usuario;
+    Usuario *usuarioDispositivo;
     NSInteger id_local;
     NSString *nome_local;
     NSString *qt_checkin;
@@ -96,7 +96,7 @@
     
     self.lblNomeLocal.text = nome_local;
     
-    id_usuario = (int)[def integerForKey:@"id_usuario"];
+    usuarioDispositivo = [Usuario carregarPreferenciasUsuario];
     
     CLLocationCoordinate2D theCoordinate;
     theCoordinate.latitude = [latitude doubleValue];
@@ -172,11 +172,8 @@
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Checkin class] rootKeyPath:nil method:RKRequestMethodPOST];
     
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping method:RKRequestMethodPOST pathPattern:nil keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
     NSURL *url = [NSURL URLWithString:API];
     NSString *path= @"checkin/adicionacheckin";
     
@@ -188,7 +185,7 @@
     
     Checkin *checkin= [Checkin new];
     
-    checkin.id_usuario = id_usuario;
+    checkin.id_usuario = usuarioDispositivo.id_usuario;
     checkin.id_local = id_local;
     
     [objectManager postObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -234,11 +231,8 @@
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Checkin class] rootKeyPath:nil method:RKRequestMethodPUT];
     
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPUT
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping method:RKRequestMethodPUT pathPattern:nil keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
     NSURL *url = [NSURL URLWithString:API];
     NSString *path= @"checkin/fazcheckout";
     
@@ -250,7 +244,7 @@
     
     Checkin *checkin= [Checkin new];
     
-    checkin.id_usuario = id_usuario;
+    checkin.id_usuario = usuarioDispositivo.id_usuario;
     
     [objectManager putObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
@@ -289,7 +283,7 @@
     RKMapping *mapping = [MappingProvider usuarioMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF/%d",API,(int)id_local,(int)id_usuario]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@checkin/listaUsuariosCheckin/%d/MF/%d",API,(int)id_local,(int)usuarioDispositivo.id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -300,7 +294,7 @@
         for (int i=0; i<[self.arrUsuarios count]; i++) {
             Usuario *usuario = [self.arrUsuarios objectAtIndex:i];
             
-            if (usuario.id_usuario == id_usuario) {
+            if (usuario.id_usuario == usuarioDispositivo.id_usuario) {
                 NSLog(@"O usuário está no local");
                 self.usuarioEstaNoLocal = YES;
                 [self.btnCheckin setImage:imgCheckout forState:UIControlStateNormal];

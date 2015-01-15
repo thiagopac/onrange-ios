@@ -13,12 +13,13 @@
 #import "Like.h"
 #import "Match.h"
 #import "Promo.h"
+#import "ErroQB.h"
 
 @implementation MappingProvider
 
 +(RKMapping *)usuarioMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"liked", @"matched"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario", @"erro", @"liked", @"matched"]];
     return mapping;
 }
 
@@ -36,7 +37,7 @@
 
 +(RKMapping *)likeMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Like class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match",@"id_output", @"chat", @"qbtoken"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario1", @"id_usuario2", @"id_local", @"id_like", @"match", @"chat", @"qbtoken"]];
     return mapping;
 }
 
@@ -49,6 +50,12 @@
 +(RKMapping *)promoMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Promo class]];
     [mapping addAttributeMappingsFromArray:@[@"id_promo", @"local", @"nome", @"descricao", @"dt_inicio", @"dt_fim", @"lote", @"codigo_promo", @"dt_utilizacao",@"dt_promo", @"dt_visualizacao",@"id_codigo_promo",@"nao_lido"]];
+    return mapping;
+}
+
++(RKMapping *)erroQBMapping {
+    RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[ErroQB class]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"erro", @"funcao", @"plataforma"]];
     return mapping;
 }
 

@@ -12,10 +12,11 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "MinhasCombinacoesTableViewCell.h"
 #import "Match.h"
+#import "Usuario.h"
 #import "ChatViewController.h"
 
 @interface MinhasCombinacoesTableViewController ()<QBActionStatusDelegate>{
-NSString *meu_id_qb;
+    NSString *meu_id_qb;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrCombinacoes;
@@ -42,47 +43,49 @@ NSString *meu_id_qb;
 
 - (void)menuAbriu:(NSNotification *)notification {
     if([[SlideNavigationController sharedInstance] isMenuOpen]){
-    self.tableView.scrollEnabled = NO;
+        self.tableView.scrollEnabled = NO;
     }else{
-    self.tableView.scrollEnabled = YES;
+        self.tableView.scrollEnabled = YES;
     }
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-
-    self.QBUser = [def objectForKey:@"facebook_usuario"];
-    self.QBPassword = [def objectForKey:@"facebook_usuario"];
-
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:YES];
+    
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
+    
+    self.QBUser = usuario.facebook_usuario;
+    self.QBPassword = usuario.facebook_usuario;
+    
     meu_id_qb = [NSString stringWithFormat:@"%lu",(unsigned long)[LocalStorageService shared].currentUser.ID];
-
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
     NSString *tema_img = [def objectForKey:@"tema_img"];
     NSString *tema_cor = [def objectForKey:@"tema_cor"];
-
+    
     UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
-
+    
     UIColor *navcolor = [UIColor colorWithHexString:tema_cor];
     self.navigationController.navigationBar.barTintColor = navcolor;
-
+    
     self.navigationController.navigationBar.topItem.title = @"";
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
-
-    if([LocalStorageService shared].currentUser == nil){
-        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-        // QuickBlox session creation
-        QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
-        extendedAuthRequest.userLogin = self.QBUser;
-        extendedAuthRequest.userPassword = self.QBPassword;
-        //
-        [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
-
+    
+    //    if([LocalStorageService shared].currentUser == nil){
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    // QuickBlox session creation
+    QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
+    extendedAuthRequest.userLogin = self.QBUser;
+    extendedAuthRequest.userPassword = self.QBPassword;
+    //
+    [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
+        
         [self registerForRemoteNotifications];
-            
+        
         // Save current user
         //
         QBUUser *currentUser = [QBUUser user];
@@ -91,36 +94,36 @@ NSString *meu_id_qb;
         currentUser.password = self.QBPassword;
         //
         [[LocalStorageService shared] setCurrentUser:currentUser];
-
+        
         // Login to QuickBlox Chat
         //
         [[ChatService instance] loginWithUser:currentUser completionBlock:^{
-
-        [QBChat dialogsWithExtendedRequest:nil delegate:self];
-
-        // hide alert after delay
-        double delayInSeconds = 1.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self dismissViewControllerAnimated:YES completion:nil];
-            });
+            
+            [QBChat dialogsWithExtendedRequest:nil delegate:self];
+            
         }];
-
-
-
-        } errorBlock:^(QBResponse *response) {
+        
+    } errorBlock:^(QBResponse *response) {
         NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
         errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
-
+        
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors" message:errorMessage
-        delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-
+                                                       delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+        
         [alert show];
         
         [SVProgressHUD dismiss];
-        }];
-    }
+    }];
+    //    }
+}
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)registerForRemoteNotifications{
@@ -159,19 +162,6 @@ NSString *meu_id_qb;
 
 - (void)chatDidNotLogin{
     NSLog(@"Não logou no chat!");
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    if([LocalStorageService shared].currentUser != nil){
-        //        [self.activityIndicator startAnimating];
-        //        loading carregando usuário
-
-        // get dialogs
-        [QBChat dialogsWithExtendedRequest:nil delegate:self];
-        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-        UIImage *imgBtn = [UIImage imageNamed:@"btn_minhascombinacoes.png"];
-        [self.HomeViewController.btnMatches setImage:imgBtn forState:UIControlStateNormal];
-    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -256,7 +246,7 @@ NSString *meu_id_qb;
 
         // Get dialogs users
         PagedRequest *pagedRequest = [PagedRequest request];
-        pagedRequest.perPage = 100;
+        pagedRequest.perPage = 200;
         //
         NSSet *dialogsUsersIDs = pagedResult.dialogsUsersIDs;
         //
@@ -274,5 +264,39 @@ NSString *meu_id_qb;
         [self.tableView reloadData];
     }
 }
+
+-(void)appWillTerminate:(NSNotification*)note
+{
+    NSLog(@"Foi fechado");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
+}
+
+-(void)appDidBecomeActive:(NSNotification*)note
+{
+    NSLog(@"Foi aberto");
+    [self viewDidAppear:YES];
+}
+
+-(void)appWillResignActive:(NSNotification*)note
+{
+    NSLog(@"Foi minimizado");
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
+}
+
+//-(void)viewDidDisappear:(BOOL)animated{
+//    
+//    if([[QBChat instance] isLoggedIn]){
+//        [[QBChat instance] logout];
+//    }
+//}
 
 @end

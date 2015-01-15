@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Usuario.h"
+#import "Local.h"
 
 @interface Like : NSObject
 
@@ -15,8 +17,10 @@
 @property (nonatomic, assign) NSInteger id_local;
 @property (nonatomic, assign) NSInteger id_like;
 @property (nonatomic, assign) BOOL match;
-@property (nonatomic, assign) NSInteger id_output;
 @property (nonatomic, strong) NSString *qbtoken;
-@property (nonatomic, strong) NSString *id_chat;
+
+@property (assign, nonatomic) NSInteger status;
+
+-(void)curtirUsuario:(Usuario *)usuario2 noLocal:(Local *)local comQBToken:(NSString *)qbtoken;
 
 @end

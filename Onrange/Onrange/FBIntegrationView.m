@@ -38,14 +38,8 @@
         self.viewContainer.hidden = NO;
         self.lblNomeUsuario.hidden = NO;
 
-        
-        NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-        [def setObject:user forKey:@"graph_usuario"];
-        [def synchronize];
-        
-        self.user = [def objectForKey:@"graph_usuario"];
-        self.imgProfileUsuario.profileID = [self.user objectForKey:@"id"];
-        self.lblNomeUsuario.text = [self.user objectForKey:@"first_name"];
+        self.imgProfileUsuario.profileID = user.id;
+        self.lblNomeUsuario.text = user.first_name;
     }];
 }
 

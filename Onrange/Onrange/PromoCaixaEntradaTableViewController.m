@@ -14,11 +14,10 @@
 #import "MappingProvider.h"
 #import "Promo.h"
 #import "PromoController.h"
+#import "Usuario.h"
 
 
-@interface PromoCaixaEntradaTableViewController (){
-    int id_usuario;
-}
+@interface PromoCaixaEntradaTableViewController ()
 
 @property (nonatomic, strong) NSMutableArray *arrPromos;
 
@@ -37,9 +36,7 @@
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     NSString *tema_img = [def objectForKey:@"tema_img"];
     NSString *tema_cor = [def objectForKey:@"tema_cor"];
-    
-    id_usuario = (int)[def integerForKey:@"id_usuario"];
-    
+
     UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
@@ -54,10 +51,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+ 
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
     
-    [refresh addTarget:self action:@selector(carregaPromos) forControlEvents:UIControlEventValueChanged];
+    [refresh addTarget:self action:@selector(viewWillAppear:) forControlEvents:UIControlEventValueChanged];
     
     self.refreshControl = refresh;
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
 }
 
 -(void)statusBarCustomizadaWithMsg:(NSString *)msg{
@@ -75,10 +79,14 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
+    
     [self statusBarCustomizadaWithMsg:@"Carregando seu Onrange Club..."];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
-        [self carregaPromos];
+        [self carregaPromosParaUsuario:usuario];
     });
 }
 
@@ -113,13 +121,13 @@
     }
 }
 
-- (void)carregaPromos {
+- (void)carregaPromosParaUsuario:(Usuario *)usuario {
     
     NSIndexSet *statusCodeSet = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKMapping *mapping = [MappingProvider promoMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/listaPromosUsuario/%d",API,id_usuario]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@promo/listaPromosUsuario/%ld",API,(long)usuario.id_usuario]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -143,10 +151,10 @@
         
         if(self.status == 547) {
             NSLog(@"Erro da API: %ld",self.status);
-            [self carregaPromos]; //é preciso tentar novamente e implementar contador de tentativas
+            [self carregaPromosParaUsuario:usuario]; //é preciso tentar novamente e implementar contador de tentativas
         }else{
             NSLog(@"ERRO FATAL - carregaPromos - Erro: %ld",self.status);
-            [self carregaPromos];
+            [self carregaPromosParaUsuario:usuario];
             NSLog(@"Error: %@", error);
             
             [self.refreshControl performSelector:@selector(endRefreshing)];

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HomeViewController.h"
+#import "Usuario.h"
 
 
 @interface MinhasCombinacoesTableViewController : UITableViewController<QBChatDelegate>
@@ -16,5 +17,6 @@
 @property (strong, nonatomic) QBChatDialog *createdDialog;
 @property (strong, nonatomic) NSString *QBUser;
 @property (strong, nonatomic) NSString *QBPassword;
+@property (strong, nonatomic) Usuario *usuario;
 
 @end

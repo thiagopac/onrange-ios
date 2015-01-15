@@ -17,5 +17,6 @@
 + (RKMapping *)likeMapping;
 + (RKMapping *)matchMapping;
 + (RKMapping *)promoMapping;
++ (RKMapping *)erroQBMapping;
 
 @end

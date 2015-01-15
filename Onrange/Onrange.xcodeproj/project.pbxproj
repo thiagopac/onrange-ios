@@ -122,7 +122,6 @@
 		6E662CDD19F01A6800C897C9 /* title4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E662CCE19F01A6800C897C9 /* title4@2x.png */; };
 		6E662CE119F0226B00C897C9 /* IntroPage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E662CE019F0226B00C897C9 /* IntroPage.xib */; };
 		6E662CE719F1524300C897C9 /* FBIntegrationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E662CE619F1524300C897C9 /* FBIntegrationView.m */; };
-		6E662CED19F17BDF00C897C9 /* finding.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6E662CEC19F17BDF00C897C9 /* finding.gif */; };
 		6E691FF11A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E691FF01A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m */; };
 		6E6DF74A19088F3700DF8D76 /* stickman.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6DF74919088F3700DF8D76 /* stickman.png */; };
 		6E8B8080192593300006DABE /* ControleTeclado.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8B807E192593300006DABE /* ControleTeclado.m */; };
@@ -159,6 +158,7 @@
 		6EAD7324197F1550006436E9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAD7323197F1550006436E9 /* ChatViewController.m */; };
 		6EAF7E001973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */; };
 		6EAF7E0319740694007CCC7C /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF7E0219740694007CCC7C /* Match.m */; };
+		6EB1AA631A64007C008DA4BC /* ErroQB.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB1AA621A64007C008DA4BC /* ErroQB.m */; };
 		6EB6C61518C0199E00240B6B /* Local.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61418C0199E00240B6B /* Local.m */; };
 		6EB6C61918C01ED400240B6B /* PontoLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB6C61818C01ED400240B6B /* PontoLocal.m */; };
 		6EB6C61B18C020F800240B6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB6C61A18C020F800240B6B /* MapKit.framework */; };
@@ -363,7 +363,6 @@
 		6E662CE019F0226B00C897C9 /* IntroPage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPage.xib; sourceTree = "<group>"; };
 		6E662CE519F1524300C897C9 /* FBIntegrationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBIntegrationView.h; sourceTree = "<group>"; };
 		6E662CE619F1524300C897C9 /* FBIntegrationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBIntegrationView.m; sourceTree = "<group>"; };
-		6E662CEC19F17BDF00C897C9 /* finding.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finding.gif; sourceTree = "<group>"; };
 		6E691FF01A5C2E83009A6228 /* MinhasCombinacoesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewController.m; sourceTree = "<group>"; };
 		6E6DF74919088F3700DF8D76 /* stickman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stickman.png; sourceTree = "<group>"; };
 		6E8B807D192593300006DABE /* ControleTeclado.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControleTeclado.h; sourceTree = "<group>"; };
@@ -415,6 +414,8 @@
 		6EAF7DFF1973FDAC007CCC7C /* MinhasCombinacoesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinhasCombinacoesTableViewCell.m; sourceTree = "<group>"; };
 		6EAF7E0119740694007CCC7C /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		6EAF7E0219740694007CCC7C /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
+		6EB1AA611A64007C008DA4BC /* ErroQB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErroQB.h; sourceTree = "<group>"; };
+		6EB1AA621A64007C008DA4BC /* ErroQB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErroQB.m; sourceTree = "<group>"; };
 		6EB6C61318C0199E00240B6B /* Local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Local.h; sourceTree = "<group>"; };
 		6EB6C61418C0199E00240B6B /* Local.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Local.m; sourceTree = "<group>"; };
 		6EB6C61718C01ED400240B6B /* PontoLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PontoLocal.h; sourceTree = "<group>"; };
@@ -724,7 +725,6 @@
 				6EC4FCE01A365DEF00A09379 /* broken_heart@2x.png */,
 				6E1F45A019F6BCDA005CA242 /* btn_matches.png */,
 				6E1F45A119F6BCDA005CA242 /* btn_matches@2x.png */,
-				6E662CEC19F17BDF00C897C9 /* finding.gif */,
 				6E662CB719F00A3800C897C9 /* icone_512.png */,
 				6E662CB819F00A3800C897C9 /* icone_512@2x.png */,
 				6ED68C2718F5C843005F4FCA /* logo_splash.png */,
@@ -899,6 +899,15 @@
 			name = Match;
 			sourceTree = "<group>";
 		};
+		6EB1AA641A640094008DA4BC /* ErroQB */ = {
+			isa = PBXGroup;
+			children = (
+				6EB1AA611A64007C008DA4BC /* ErroQB.h */,
+				6EB1AA621A64007C008DA4BC /* ErroQB.m */,
+			);
+			name = ErroQB;
+			sourceTree = "<group>";
+		};
 		6EB6C61118C0196600240B6B /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -908,6 +917,7 @@
 				6E433635194E74D5005FB4A8 /* Like */,
 				6EAF7E04197406A7007CCC7C /* Match */,
 				6E9810B81A39D31600D352D0 /* Promo */,
+				6EB1AA641A640094008DA4BC /* ErroQB */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1329,7 +1339,6 @@
 				6E662CD219F01A6800C897C9 /* bigLogo@2x.png in Resources */,
 				6E653F4319E6F46D003EC56B /* camera.png in Resources */,
 				6E4D8E141A34DADB003D1B09 /* pin-festa-4-star@2x.png in Resources */,
-				6E662CED19F17BDF00C897C9 /* finding.gif in Resources */,
 				6E433638194E9445005FB4A8 /* heart.png in Resources */,
 				6E662CCF19F01A6800C897C9 /* icon1@2x.png in Resources */,
 				6E653F4219E6F46D003EC56B /* bubble_tailless@2x.png in Resources */,
@@ -1466,6 +1475,7 @@
 				6EECED801919C9750054F6F0 /* TipoLocalTableViewController.m in Sources */,
 				6E516FE318C4C63D00C8A929 /* SettingsTableViewController.m in Sources */,
 				6E36D750191AF722003598C4 /* LocaisProximosTableViewCell.m in Sources */,
+				6EB1AA631A64007C008DA4BC /* ErroQB.m in Sources */,
 				6E43363C194E94C1005FB4A8 /* ConfirmaMatchViewController.m in Sources */,
 				6E211F5E18DFBE3F008DCC1F /* LocaisProximosTableViewController.m in Sources */,
 				6EE440C818C02C870033D95B /* MappingProvider.m in Sources */,
@@ -1573,8 +1583,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1614,8 +1624,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1638,8 +1648,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1695,8 +1705,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

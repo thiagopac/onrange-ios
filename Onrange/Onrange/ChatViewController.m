@@ -12,6 +12,7 @@
 #import "MappingProvider.h"
 #import "Match.h"
 #import "MinhasCombinacoesTableViewController.h"
+#import "Usuario.h"
 
 @implementation ChatViewController
 
@@ -22,6 +23,11 @@
 {
     [super viewDidLoad];
     self.messages = [[NSMutableArray alloc]init];
+    
+//Configurar momentos do aplicativo para fechar conexão com o chat
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
@@ -457,15 +463,13 @@
     
     objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(self.dialog.recipientID)];
 
-
     Match *match= [Match new];
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
     
-    match.facebook_usuario = [def objectForKey:@"facebook_usuario"];
+    match.facebook_usuario = usuario.facebook_usuario;
     match.facebook_usuario2 = recipient.login;
     match.id_chat = self.dialog.ID;
     match.qbtoken = [[QBBaseModule sharedModule]token];
@@ -498,6 +502,45 @@
           }
 
       }];
+}
+
+-(void)appWillTerminate:(NSNotification*)note
+{
+    NSLog(@"Foi fechado");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
+}
+
+-(void)appDidBecomeActive:(NSNotification*)note
+{
+    NSLog(@"Foi aberto");
+}
+
+-(void)appWillResignActive:(NSNotification*)note
+{
+    NSLog(@"Foi minimizado");
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
+    
+    MinhasCombinacoesTableViewController *MinhasCombinacoesTVC = [self.navigationController.viewControllers objectAtIndex:1];
+    [self.navigationController popToViewController:MinhasCombinacoesTVC animated:YES];
+    
+//    HomeViewController *HomeVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"HomeViewController"];
+//    
+//    [[self navigationController]pushViewController:HomeVC animated:YES];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
 }
 
 @end

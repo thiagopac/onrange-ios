@@ -181,6 +181,10 @@
     [refresh addTarget:self action:@selector(carregaLocais) forControlEvents:UIControlEventValueChanged];
     
     self.refreshControl = refresh;
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
 }
 
 -(void)statusBarCustomizadaWithMsg:(NSString *)msg{

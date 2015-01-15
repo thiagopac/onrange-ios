@@ -13,6 +13,7 @@
 #import <RestKit/RestKit.h>
 #import "PointLocais.h"
 #import "Local.h"
+#import "Usuario.h";
 
 @interface AdicionaLocalTableViewController ()<ControleTecladoDelegate>
 
@@ -239,12 +240,11 @@ didChangeDragState:(MKAnnotationViewDragState)newState
     
     objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    int id_usuario = [def integerForKey:@"id_usuario"];
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
     
     Local *local= [Local new];
-    local.id_usuario = id_usuario;
+    local.id_usuario = usuario.id_usuario;
     local.nome = self.txtNomeLocal.text;
     local.latitude = self.latitude;
     local.longitude = self.longitude;

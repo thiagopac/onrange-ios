@@ -59,7 +59,10 @@
         [[self sliderRaio]setValue:20];
 
     [self alterarLabelRaio];
-
+    
+    if([[QBChat instance] isLoggedIn]){
+        [[QBChat instance] logout];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -203,28 +206,23 @@
     
     Usuario *usuario = [Usuario new];
     
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    usuario.facebook_usuario = [def objectForKey:@"facebook_usuario"];
-
+    usuario = [Usuario carregarPreferenciasUsuario];
     
     [objectManager putObject:usuario path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         if(mappingResult != nil){
-            NSLog(@"Dados do usuário enviados");
-            Usuario *usuarioRetorno = [mappingResult firstObject];
+
+            NSLog(@"Apagando o usuário");
             
-            self.status = operation.HTTPRequestOperation.response.statusCode;
-                if (usuarioRetorno.id_output == 1) {
-                    NSLog(@"Apagando o usuário");
-                    
-                    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-                    
-                    [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
-                    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-                    
-            }
+            NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+            
+            [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
+            [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];            
+
         }
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+         self.status = operation.HTTPRequestOperation.response.statusCode;
+        
           if(self.status == 542){
               NSLog(@"Erro ao apagar usuário");
               UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"Ocorreu um erro ao apagar o seu usuário. Por favor, tente novamente em alguns instantes." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

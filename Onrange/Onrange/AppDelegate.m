@@ -12,6 +12,9 @@
 #import "MappingProvider.h"
 #import "AppDelegate.h"
 #import "CWStatusBarNotification.h"
+#import "MinhasCombinacoesTableViewController.h"
+#import "MPGNotification.h"
+#import "ErroQB.h"
 
 
 NSString *const FBSessionStateChangedNotification =
@@ -91,32 +94,72 @@ NSString *const FBMenuDataChangedNotification =
     
     [[NSNotificationCenter defaultCenter]  postNotificationName:kPushDidReceive object:nil userInfo:pushInfo];
     
-    CWStatusBarNotification *notification = [CWStatusBarNotification new];
-    [notification setNotificationStyle:CWNotificationStyleNavigationBarNotification];
-    [notification setNotificationAnimationInStyle:CWNotificationAnimationStyleTop];
-    [notification setNotificationAnimationOutStyle:CWNotificationAnimationStyleTop];
-    notification.notificationLabelBackgroundColor = [UIColor whiteColor];
-    notification.notificationLabelTextColor = [UIColor orangeColor];
-    
-//    [self mensagemParaOMundo:@"Hello World"];
-    
     NSDictionary *aps = userInfo[@"aps"];
     NSString *msgBody = aps[@"alert"];
     
-    [notification displayNotificationWithMessage:msgBody forDuration:1.0f];
+    NSString *nome;
+    NSString *msg;
+    
+    NSArray *tempArray = [msgBody componentsSeparatedByString:@":"];
+    
+    if([tempArray count]==2){
+        nome = [tempArray objectAtIndex:0];
+        msg = [tempArray objectAtIndex:1];
+    }
+
+    NSArray *buttonArray = [NSArray arrayWithObjects:@"Ver", nil];
+    
+    MPGNotification *notification = [MPGNotification new];
+    
+    if (nome != nil && msg != nil) {
+        
+        notification = [MPGNotification notificationWithTitle:nome subtitle:msg backgroundColor:[UIColor colorWithRed:41.0/255.0 green:128.0/255.0 blue:255.0/255.0 alpha:1.0] iconImage:[UIImage imageNamed:@"ChatIcon"]];
+        [notification setButtonConfiguration:buttonArray.count withButtonTitles:buttonArray];
+    
+    }else{  
+        notification = [MPGNotification notificationWithTitle:@"Aviso" subtitle:msgBody backgroundColor:[UIColor colorWithRed:41.0/255.0 green:128.0/255.0 blue:255.0/255.0 alpha:1.0] iconImage:[UIImage imageNamed:@"ChatIcon"]];
+    
+    }
+    
+    notification.duration = 3.0;
+    notification.swipeToDismissEnabled = YES;
+    [notification setAnimationType:MPGNotificationAnimationTypeLinear];
+
+    [notification setButtonHandler:^(MPGNotification *notification, NSInteger buttonIndex) {
+
+        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        
+        MinhasCombinacoesTableViewController *controller = (MinhasCombinacoesTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"MinhasCombinacoesTableViewController"];
+        
+        [navigationController pushViewController:controller animated:YES];
+
+    }];
+    
+    [notification show];
 }
 
-//- (void) mensagemParaOMundo:(NSString *)mensagem {
-//    NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-//    NSDictionary *message = [NSDictionary dictionaryWithObject:mensagem forKey:@"Mensagem"];
-//    [center postNotificationName:@"MinhaNotificacao" object:self userInfo:message];
-//}
-
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
+    
     // register for push notifications
     [QBRequest registerSubscriptionForDeviceToken:deviceToken successBlock:^(QBResponse *response, NSArray *subscriptions) {
         // successfully subscribed
-    } errorBlock:nil];
+    } errorBlock:^(QBError *error) {
+        // Handle error
+        NSString *erroResponse = [NSString stringWithFormat:@"%@",[error.reasons objectForKey:@"errors"]];
+        
+        ErroQB *erroQB = [ErroQB new];
+        erroQB.id_usuario = usuario.id_usuario;
+        erroQB.erro = erroResponse;
+        erroQB.funcao = @"didRegisterForRemoteNotificationsWithDeviceToken";
+        erroQB.plataforma = @"iOS";
+        
+        [erroQB adicionaErroQB:erroQB];
+    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -126,7 +169,7 @@ NSString *const FBMenuDataChangedNotification =
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-//    [[QBChat instance] logout];
+    [[QBChat instance] logout];
 //    [QBRequest logOutWithSuccessBlock:^(QBResponse *response) {
 //        // Successful logout
 //    } errorBlock:^(QBResponse *response) {
@@ -238,171 +281,36 @@ NSString *const FBMenuDataChangedNotification =
                  self.menu.profileID = user.id;
                  // Save the user data
                  self.user = user;
+                                  
+                 Usuario *usuario = [Usuario new];
                  
-                 //cadastra usuário ou valida
-                 _nome_usuario = user.first_name;
-                 _email_usuario = [user objectForKey:@"email"];
-                 _facebook_usuario = user.id;
-                 NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
-                 [def setObject:user.id forKey:@"facebook_usuario"];
+                 usuario.nome_usuario = user.first_name;
+                 usuario.sobrenome_usuario = user.last_name;
+                 usuario.email_usuario = [user objectForKey:@"email"];
+                 usuario.facebook_usuario = user.id;
+                 usuario.idioma_usuario = [user objectForKey:@"locale"];
+                 usuario.aniversario_usuario = user.birthday;
+                 
+                 NSArray *tempArray = [[user objectForKey:@"location"][@"name"] componentsSeparatedByString:@","];
+                 usuario.cidade_usuario = [tempArray objectAtIndex:0];
+                 usuario.pais_usuario = [tempArray objectAtIndex:1];
+                 
                  _valida_sexo = [user objectForKey:@"gender"];
                  if ([_valida_sexo isEqualToString:@"male"]) {
-                     _sexo_usuario = @"M";
+                     usuario.sexo_usuario = @"M";
                  }else if([_valida_sexo isEqualToString:@"female"]) {
-                     _sexo_usuario = @"F";
+                     usuario.sexo_usuario = @"F";
                  }
-                 [self loginUsuario];
+                 
+                 [Usuario salvarPreferenciasUsuario:usuario];
+                
+                 [usuario loginUsuarioDelegate:usuario];
                  if (handler) {
                      handler(self, self.user);
                  }
              }
          }];
     }
-}
-
--(void)loginUsuario{
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario"]];
-    
-    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
-    
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    NSURL *url = [NSURL URLWithString:API];
-    NSString  *path= @"usuario/login";
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
-    [objectManager addRequestDescriptor:requestDescriptor];
-    [objectManager addResponseDescriptor:responseDescriptor];
-    
-    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
-    
-    Usuario *usuario = [Usuario new];
-
-    usuario.facebook_usuario = _facebook_usuario;
-    
-    [objectManager postObject:usuario path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-          if(mappingResult != nil){
-              Usuario *userLogged = [mappingResult firstObject];
-              if (userLogged != nil) {
-                  NSLog(@"Login efetuado na base Onrage");
-                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
-                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
-                  
-                  [def synchronize];
-              }else{
-                  NSLog(@"Usuário inexistente");
-                  [self adicionaUsuario];
-              }
-          }else{
-              NSLog(@"Erro na resposta de LOGIN USUARIO");
-              [self loginUsuario];
-          }
-      }
-      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-          
-          self.status = operation.HTTPRequestOperation.response.statusCode;
-          
-          if(self.status == 500) { //Usuário inexistente
-              
-              [self adicionaUsuario];
-              
-          }else if(self.status == 501) { //Usuário bloqueado
-             
-              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do Onrange. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-              [alerta show];
-              
-          }else if(self.status == 530) { //Erro ao buscar usuario.
-              
-              [self loginUsuario];
-              
-          }else if(self.status == 546) { //Erro ao remover data de exclusao do usuario.
-              
-              [self loginUsuario];
-              
-          }else{
-              
-              if (error.code == -1009) { //erro de conexão com a internet
-                  
-                  NSLog(@"Codigo erro restkit: %ld",error.code);
-                  
-                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está sem conexão com a internet, tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                  [alerta show];
-                  
-              }else{
-                  
-                  [self loginUsuario];
-                  
-                  NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
-                  NSLog(@"Error: %@", error);
-                  
-              }
-              
-          }
-
-      }];
-}
-
--(void)adicionaUsuario{
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario"]];
-    
-    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
-    
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    NSURL *url = [NSURL URLWithString:API];
-    NSString  *path= @"usuario/adicionausuario";
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
-    [objectManager addRequestDescriptor:requestDescriptor];
-    [objectManager addResponseDescriptor:responseDescriptor];
-    
-    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
-    
-    Usuario *usuario = [Usuario new];
-    
-    usuario.nome_usuario = _nome_usuario;
-    usuario.sexo_usuario = _sexo_usuario;
-    usuario.email_usuario = _email_usuario;
-    usuario.facebook_usuario = _facebook_usuario;
-    
-    [objectManager postObject:usuario
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                          if(mappingResult != nil){
-                              NSLog(@"Login efetuado na base Onrage");
-                              Usuario *userLogged = [mappingResult firstObject];
-                              NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
-                              [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
-
-                              [def synchronize];
-                              
-                          }else{
-                              NSLog(@"Falha ao tentar logar na base Onrange");
-                          }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          NSLog(@"Erro 404");
-                          [self adicionaUsuario];
-                          NSLog(@"Error: %@", error);
-                          NSLog(@"Falha ao tentar enviar dados de login");
-                      }];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -412,7 +320,5 @@ NSString *const FBMenuDataChangedNotification =
     // to work.
     return [FBSession.activeSession handleOpenURL:url];
 }
-
-
 
 @end

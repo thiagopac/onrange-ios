@@ -36,12 +36,33 @@ int contErros = 0;
     [self.jmImageView startAnimating];
 
     self.navigationController.navigationBar.hidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLoginNotification:) name:@"loginNotification" object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:NO];
-//    [self showIntroWithCustomViewFromNib];
-    [self loginUsuario];
+
+    [self tentaLogin];
+
+}
+
+-(void)tentaLogin{
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
+    
+    if (usuario == nil) {
+        [self showIntroWithCustomViewFromNib];
+    }else{
+        
+        [usuario loginUsuario:usuario];
+    }
+}
+
+- (void)receiveLoginNotification:(NSNotification *) notification{
+    NSDictionary *userInfo = notification.userInfo;
+//    Usuario *usuario = [userInfo objectForKey:@"usuario"];
+   [self performSegueWithIdentifier:@"SegueToHome" sender:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,103 +99,10 @@ int contErros = 0;
 
 }
 
--(void)loginUsuario{
-    
-    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario"]];
-    
-    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"nome_usuario", @"sexo_usuario", @"facebook_usuario", @"email_usuario", @"id_usuario"]];
-    
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
-    
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    NSURL *url = [NSURL URLWithString:API];
-    NSString  *path= @"usuario/login";
-    
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:url];
-    [objectManager addRequestDescriptor:requestDescriptor];
-    [objectManager addResponseDescriptor:responseDescriptor];
-    
-    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
-    
+- (void)introDidFinish:(EAIntroView *)introView {    
     Usuario *usuario = [Usuario new];
-    
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    self.user = [def objectForKey:@"graph_usuario"];
-    
-    usuario.facebook_usuario = [self.user objectForKey:@"id"];
-    
-    [objectManager postObject:usuario
-                         path:path
-                   parameters:nil
-                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-
-                        //O app só entrará aqui se for um código 200 de retorno
-
-                        self.status = operation.HTTPRequestOperation.response.statusCode;
-
-                              Usuario *userLogged = [mappingResult firstObject];
-                              if (userLogged != nil) {
-                                  NSLog(@"Login efetuado na base Onrage");
-                                  NSUserDefaults  *def = [NSUserDefaults standardUserDefaults];
-                                  [def setInteger:userLogged.id_usuario forKey:@"id_usuario"];
-                                  [def synchronize];
-                                  [self performSegueWithIdentifier:@"SegueToHome" sender:self];
-                              }
-                      }
-                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                          
-                          //Se não entrou em 200, ele pula para erro 500 e deve ser mapeado abaixo
-                          
-                          self.status = operation.HTTPRequestOperation.response.statusCode;
-                          
-                          if(self.status == 500) {
-                              NSLog(@"Usuário inexistente");
-                              //Precisamos cadastrar este usuário
-                              [self showIntroWithCustomViewFromNib];
-                          }else if(self.status == 501) {
-                              NSLog(@"Usuário bloqueado");
-                              //Precisamos avisar ao usuário que ele foi excluído. Ele precisa esclarecer o problema para que possamos avaliar sua re-integração
-                              UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está temporariamente impossibilitado de acessar o aplicativo por alguns problemas que vão contra a política de uso do Onrange. Se deseja ter seu acesso liberado novamente, por favor entre em contato pelo e-mail contato@onrange.com.br" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                  [alerta show];
-                          }else if(self.status == 530) {
-                              NSLog(@"Erro ao buscar usuário");
-                              //Aqui é preciso tentar novamente
-                              [self loginUsuario];
-                          }else if(self.status == 546) { //Erro ao remover data de exclusao do usuario.
-                              
-                              [self loginUsuario];
-                              
-                          }else{
-                              
-                              if (error.code == -1009) { //erro de conexão com a internet
-                                  
-                                  NSLog(@"Codigo erro restkit: %ld",error.code);
-                                  
-                                  UIAlertView *alerta = [[UIAlertView alloc]initWithTitle:@"Aviso" message:@"Você está sem conexão com a internet, tente novamente em alguns minutos." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                  [alerta show];
-                                  
-                              }else{
-                                  
-                                  [self loginUsuario];
-                                  
-                                  NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",self.status);
-                                  NSLog(@"Error: %@", error);
-
-                                  
-                              }
-                          }
-                      }];
-}
-
-- (void)introDidFinish:(EAIntroView *)introView {
-    [self loginUsuario];
+    usuario = [Usuario carregarPreferenciasUsuario];
+    [usuario loginUsuario:usuario];
 }
 
 @end

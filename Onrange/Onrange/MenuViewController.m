@@ -9,6 +9,7 @@
 #import "MenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HomeViewController.h"
+#import "Usuario.h";
 
 @implementation MenuViewController
 
@@ -31,11 +32,12 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:NO];
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    self.user = [def objectForKey:@"graph_usuario"];
-    self.userProfilePictureView.profileID = [self.user objectForKey:@"id"];
-    self.userNameLabel.text = [[self.user objectForKey:@"first_name"] uppercaseString];
+
+    Usuario *usuario = [Usuario new];
+    usuario = [Usuario carregarPreferenciasUsuario];
+
+    self.userProfilePictureView.profileID = usuario.facebook_usuario;
+    self.userNameLabel.text = [[usuario nome_usuario] uppercaseString];
     
 }
 
