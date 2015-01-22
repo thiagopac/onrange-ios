@@ -117,7 +117,11 @@
 }
 
 -(void)buscarLocalizacao{
-    [self.locationManager requestWhenInUseAuthorization];
+// Checar se é iOS 8. Sem isso, vai dar crash pq é iOS 7
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    
     if (self.locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -276,6 +280,10 @@
     [super viewDidLoad];
     
     self.navigationController.navigationBar.hidden = NO;
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];

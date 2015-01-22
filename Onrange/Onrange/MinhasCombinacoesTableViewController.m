@@ -14,8 +14,10 @@
 #import "Match.h"
 #import "Usuario.h"
 #import "ChatViewController.h"
+#import "UIScrollView+EmptyDataSet.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
-@interface MinhasCombinacoesTableViewController ()<QBActionStatusDelegate>{
+@interface MinhasCombinacoesTableViewController ()<QBActionStatusDelegate,DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>{
     NSString *meu_id_qb;
 }
 
@@ -52,6 +54,9 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:YES];
     
+    [self.dialogs removeAllObjects];
+    [self.tableView reloadData];
+    
     Usuario *usuario = [Usuario new];
     usuario = [Usuario carregarPreferenciasUsuario];
     
@@ -65,6 +70,8 @@
     NSString *tema_img = [def objectForKey:@"tema_img"];
     NSString *tema_cor = [def objectForKey:@"tema_cor"];
     
+    [self statusBarCustomizadaWithMsg:@"Carregando suas combinações..."];
+    
     UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
@@ -75,8 +82,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
-    //    if([LocalStorageService shared].currentUser == nil){
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+//    if([LocalStorageService shared].currentUser == nil){
+
     // QuickBlox session creation
     QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
     extendedAuthRequest.userLogin = self.QBUser;
@@ -105,16 +112,26 @@
         
     } errorBlock:^(QBResponse *response) {
         NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
-        errorMessage = [errorMessage stringByReplacingOccurrencesOfString:@")" withString:@""];
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errors" message:errorMessage
-                                                       delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+        [self.notification dismissNotification];
         
-        [alert show];
-        
-        [SVProgressHUD dismiss];
+        [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro. Tente novamente em alguns segundos."];
     }];
-    //    }
+//    }
+}
+
+-(void)statusBarCustomizadaWithMsg:(NSString *)msg{
+    self.notification = [CWStatusBarNotification new];
+    self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
+    self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    UIColor *themeColor = [UIColor colorWithHexString:[def objectForKey:@"tema_cor"]];
+    self.notification.notificationLabelBackgroundColor = themeColor;
+    
+    self.notification.notificationLabelTextColor = [UIColor whiteColor];
+    [self.notification displayNotificationWithMessage:msg completion:nil];
 }
 
 - (void)viewDidLoad
@@ -124,6 +141,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    self.tableView.emptyDataSetSource = nil;
+    self.tableView.emptyDataSetDelegate = self;
+    
+    // A little trick for removing the cell separators
+    self.tableView.tableFooterView = [UIView new];
 }
 
 - (void)registerForRemoteNotifications{
@@ -147,10 +170,8 @@
 - (void(^)(QBResponse *))handleError
 {
     return ^(QBResponse *response) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", "")
-        message:[response.error description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", "") otherButtonTitles:nil];
-        [alert show];
-        [SVProgressHUD dismiss];
+        [SVProgressHUD showErrorWithStatus:@"Ocorreu um erro. Tente novamente em alguns segundos."];
+        [self.notification dismissNotification];
     };
 }
 
@@ -182,6 +203,11 @@
 
 #pragma mark - Table view data source
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Minhas combinações";
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -192,15 +218,24 @@
     return [self.dialogs count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
+- (BOOL)emptyDataSetShouldDisplay:(UIScrollView *)scrollView {
+    
+    return YES;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     static NSString *CellIdentifier = @"combinacaoCell";
     MinhasCombinacoesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
     QBChatDialog *chatDialog = self.dialogs[indexPath.row];
     cell.tag  = indexPath.row;
-
-    NSLog(@"CODIGO_CHAT: %@",chatDialog.ID);
 
     cell.detailTextLabel.text = @"private";
     QBUUser *recipient = [LocalStorageService shared].usersAsDictionary[@(chatDialog.recipientID)];
@@ -209,8 +244,12 @@
     //    if (recipient.ID == [match.id_qb intValue]) {
     //        cell.userProfilePictureView.profileID = match.facebook_usuario;
     //    }
-    cell.imgProfile.pictureCropping = FBProfilePictureCroppingSquare;
-    cell.imgProfile.profileID = recipient.login;
+    
+    cell.imgFotoUsuario.layer.cornerRadius = 21.0f;
+    cell.imgFotoUsuario.layer.masksToBounds = YES;
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=84&height=84",recipient.login];
+    [cell.imgFotoUsuario sd_setImageWithURL:[NSURL URLWithString:strURL] placeholderImage:[UIImage imageNamed:@"fb-medal2.png"]];
 
     [cell.lblNomeCombinacao setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:17]];
 
@@ -237,13 +276,18 @@
 - (void)completedWithResult:(Result *)result{
     if (result.success && [result isKindOfClass:[QBDialogsPagedResult class]]) {
 
-        [SVProgressHUD dismiss];
+        [self.notification dismissNotification];
 
         QBDialogsPagedResult *pagedResult = (QBDialogsPagedResult *)result;
         //
         NSArray *dialogs = pagedResult.dialogs;
         self.dialogs = [dialogs mutableCopy];
-
+        
+        if ([self.dialogs count]<1) {
+            self.tableView.emptyDataSetSource = self;
+            [self.tableView setUserInteractionEnabled:NO];
+        }
+        
         // Get dialogs users
         PagedRequest *pagedRequest = [PagedRequest request];
         pagedRequest.perPage = 200;
@@ -256,13 +300,38 @@
 
     }else if (result.success && [result isKindOfClass:[QBUUserPagedResult class]]) {
 
-        [SVProgressHUD dismiss];
+        [self.notification dismissNotification];
 
         QBUUserPagedResult *res = (QBUUserPagedResult *)result;
         [LocalStorageService shared].users = res.users;
         //
         [self.tableView reloadData];
     }
+}
+
+//- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
+//    
+//    NSString *text = @"Você não tem nenhuma combinação :(";
+//    
+//    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0],
+//                                 NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+//    
+//    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+//}
+
+- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
+    
+    NSString *text = @"Você ainda não tem nenhuma combinação.\n:(";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:22.0],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor],
+                                 NSParagraphStyleAttributeName: paragraph};
+    
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 -(void)appWillTerminate:(NSNotification*)note
@@ -292,11 +361,8 @@
     }
 }
 
-//-(void)viewDidDisappear:(BOOL)animated{
-//    
-//    if([[QBChat instance] isLoggedIn]){
-//        [[QBChat instance] logout];
-//    }
-//}
+-(void)viewDidDisappear:(BOOL)animated{
+    [self.notification dismissNotification];
+}
 
 @end

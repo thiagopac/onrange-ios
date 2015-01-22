@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "HomeViewController.h"
 #import "Usuario.h"
-
+#import "CWStatusBarNotification/CWStatusBarNotification.h"
 
 @interface MinhasCombinacoesTableViewController : UITableViewController<QBChatDelegate>
 
 @property (strong, nonatomic) HomeViewController *HomeViewController;
+@property (strong, nonatomic) CWStatusBarNotification *notification;
 @property (strong, nonatomic) QBChatDialog *createdDialog;
 @property (strong, nonatomic) NSString *QBUser;
 @property (strong, nonatomic) NSString *QBPassword;

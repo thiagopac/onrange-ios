@@ -14,7 +14,7 @@
 
 @interface PerfilUsuarioViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet FBProfilePictureView *imgProfileUsuario;
+@property (strong, nonatomic) IBOutlet UIImageView *imgFotoUsuario;
 
 @property (strong, nonatomic) Usuario *usuario;
 @property (strong, nonatomic) Local *local;

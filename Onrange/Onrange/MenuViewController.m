@@ -9,7 +9,8 @@
 #import "MenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HomeViewController.h"
-#import "Usuario.h";
+#import "Usuario.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation MenuViewController
 
@@ -25,9 +26,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sessionStateChanged:) name:FBSessionStateChangedNotification
-                                              object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -35,8 +33,13 @@
 
     Usuario *usuario = [Usuario new];
     usuario = [Usuario carregarPreferenciasUsuario];
+    
+    self.imgFotoUsuario.layer.cornerRadius = 50.0f;
+    self.imgFotoUsuario.layer.masksToBounds = YES;
 
-    self.userProfilePictureView.profileID = usuario.facebook_usuario;
+    NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=200&height=200",usuario.facebook_usuario];
+    [self.imgFotoUsuario sd_setImageWithURL:[NSURL URLWithString:strURL] placeholderImage:[UIImage imageNamed:@"fb-medal2.png"]];
+    
     self.userNameLabel.text = [[usuario nome_usuario] uppercaseString];
     
 }

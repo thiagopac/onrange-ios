@@ -10,11 +10,13 @@
 #import <FacebookSDK.h>
 
 @interface FBIntegrationView : UIView
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @property (strong, nonatomic) IBOutlet UIView *viewContainer;
-@property (strong, nonatomic) IBOutlet FBProfilePictureView *imgProfileUsuario;
-@property (strong, nonatomic) IBOutlet UILabel *lblNomeUsuario;
+
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (strong, nonatomic) IBOutlet UIButton *btnFB;
+@property (strong, nonatomic) IBOutlet UIImageView *imgFBmedal;
+@property (strong, nonatomic) IBOutlet UILabel *lblNomeUsuario;
+@property (strong, nonatomic) IBOutlet UIImageView *imgFotoUsuario;
 
 @end

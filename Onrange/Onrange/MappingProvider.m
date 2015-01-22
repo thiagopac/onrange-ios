@@ -19,7 +19,7 @@
 
 +(RKMapping *)usuarioMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario", @"erro", @"liked", @"matched"]];
+    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"facebook_usuario", @"quickblox_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario", @"erro", @"liked", @"matched"]];
     return mapping;
 }
 
@@ -55,7 +55,7 @@
 
 +(RKMapping *)erroQBMapping {
     RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[ErroQB class]];
-    [mapping addAttributeMappingsFromArray:@[@"id_usuario", @"erro", @"funcao", @"plataforma"]];
+    [mapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"erro", @"funcao", @"plataforma"]];
     return mapping;
 }
 

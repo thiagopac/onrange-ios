@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *sexo_usuario;
 @property (strong, nonatomic) NSString *email_usuario;
 @property (strong, nonatomic) NSString *facebook_usuario;
+@property (strong, nonatomic) NSString *quickblox_usuario;
 @property (assign, nonatomic) BOOL liked;
 @property (assign, nonatomic) BOOL matched;
 @property (strong, nonatomic) NSString *cidade_usuario;
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) NSString *idioma_usuario;
 
 @property (assign, nonatomic) NSInteger status;
+
+typedef void(^completo)(BOOL);
 
 +(void)salvarPreferenciasUsuario:(Usuario *)usuario;
 +(Usuario *)carregarPreferenciasUsuario;

@@ -1,3 +1,4 @@
+source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, "7.0"
 pod 'RestKit', '~>  0.20.0'
 pod 'SVProgressHUD'
@@ -12,3 +13,5 @@ pod 'EAIntroView', '~> 2.6'
 pod 'HexColors', '~> 2.2'
 pod 'JMAnimatedImageView', '~> 0.2'
 pod 'MPGNotification', '~> 1.1'
+pod 'DZNEmptyDataSet', '~> 1.5'
+pod 'SDWebImage', '~> 3.7'

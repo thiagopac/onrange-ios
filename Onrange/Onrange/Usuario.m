@@ -23,6 +23,7 @@
     [encoder encodeObject:self.sexo_usuario forKey:@"sexo_usuario"];
     [encoder encodeObject:self.email_usuario forKey:@"email_usuario"];
     [encoder encodeObject:self.facebook_usuario forKey:@"facebook_usuario"];
+    [encoder encodeObject:self.quickblox_usuario forKey:@"quickblox_usuario"];
     [encoder encodeObject:self.cidade_usuario forKey:@"cidade_usuario"];
     [encoder encodeObject:self.pais_usuario forKey:@"pais_usuario"];
     [encoder encodeObject:self.aniversario_usuario forKey:@"aniversario_usuario"];
@@ -38,6 +39,7 @@
         self.sexo_usuario = [decoder decodeObjectForKey:@"sexo_usuario"];
         self.email_usuario = [decoder decodeObjectForKey:@"email_usuario"];
         self.facebook_usuario = [decoder decodeObjectForKey:@"facebook_usuario"];
+        self.quickblox_usuario = [decoder decodeObjectForKey:@"quickblox_usuario"];
         self.cidade_usuario = [decoder decodeObjectForKey:@"cidade_usuario"];
         self.pais_usuario = [decoder decodeObjectForKey:@"pais_usuario"];
         self.aniversario_usuario = [decoder decodeObjectForKey:@"aniversario_usuario"];
@@ -67,7 +69,7 @@
     [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"quickblox_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
     
@@ -98,7 +100,7 @@
         
         if(self.status == 500) { //Usuário inexistente
             
-            [self adicionaUsuario:usuario];
+            [self cadastraUsuarioNoQB:usuario];
             
         }else if(self.status == 501) { //Usuário bloqueado
             
@@ -142,7 +144,7 @@
     [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"quickblox_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
     
@@ -170,7 +172,7 @@
         
         if(self.status == 500) { //Usuário inexistente
             
-            [self adicionaUsuario:usuario];
+            [self cadastraUsuarioNoQB:usuario];
             
         }else if(self.status == 501) { //Usuário bloqueado
             
@@ -198,7 +200,7 @@
                 
                 [self loginUsuario:usuario];
                 
-                NSLog(@"ERRO FATAL - loginUsuario - Erro: %ld",(long)self.status);
+                NSLog(@"ERRO FATAL - loginUsuarioDelegate - Erro: %ld",(long)self.status);
                 NSLog(@"Error: %@", error);
                 
             }
@@ -211,18 +213,15 @@
 -(void)adicionaUsuario:(Usuario *)usuario{
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
+    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"quickblox_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Usuario class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"facebook_usuario", @"quickblox_usuario", @"nome_usuario", @"sobrenome_usuario", @"sexo_usuario", @"email_usuario", @"cidade_usuario", @"pais_usuario", @"aniversario_usuario", @"idioma_usuario"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[Usuario class] rootKeyPath:nil method:RKRequestMethodPOST];
     
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
-                                                                                            method:RKRequestMethodPOST
-                                                                                       pathPattern:nil
-                                                                                           keyPath:nil
-                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping method:RKRequestMethodPOST pathPattern:nil keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
     NSURL *url = [NSURL URLWithString:API];
     NSString  *path= @"usuario/adicionausuario";
     
@@ -239,27 +238,6 @@
         
         [Usuario salvarPreferenciasUsuario:userLogged];
         
-        QBUUser *user = [QBUUser user];
-        user.login = userLogged.facebook_usuario;
-        user.password = userLogged.facebook_usuario;
-        
-        [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
-            NSLog(@"Cadastrado base QuickBlox");
-            
-        } errorBlock:^(QBResponse *response) {
-            NSLog(@"Erro ao cadastrar na base QuickBlox");
-            NSLog(@"error: %@", response.error);
-            
-            NSString *erroResponse = [NSString stringWithFormat:@"%@",[response.error.reasons objectForKey:@"errors"]];
-            
-            ErroQB *erroQB = [ErroQB new];
-            erroQB.id_usuario = userLogged.id_usuario;
-            erroQB.erro = erroResponse;
-            erroQB.funcao = @"adicionaUsuario";
-            erroQB.plataforma = @"iOS";
-            
-            [erroQB adicionaErroQB:erroQB];
-        }];
     }failure:^(RKObjectRequestOperation *operation, NSError *error) {
           
           self.status = operation.HTTPRequestOperation.response.statusCode;
@@ -276,6 +254,62 @@
           }
           
       }];
+}
+
+-(void)cadastraUsuarioNoQB:(Usuario *)usuario{
+
+    QBUUser *user = [QBUUser user];
+    user.login = usuario.facebook_usuario;
+    user.password = usuario.facebook_usuario;
+    user.fullName = usuario.nome_usuario;
+    user.email = usuario.email_usuario;
+    user.facebookID = usuario.facebook_usuario;
+
+    [QBRequest createSessionWithSuccessBlock:^(QBResponse *response, QBASession *session) {
+        // session created
+    
+        [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
+            NSLog(@"Cadastrado base QuickBlox");
+            
+            //adicionando ao campo quickblox_usuario o ID que o quickblox acaba de me retornar
+            usuario.quickblox_usuario = [NSString stringWithFormat:@"%ld",user.ID];
+            
+            [self adicionaUsuario:usuario];
+            
+        } errorBlock:^(QBResponse *response) {
+            NSLog(@"Erro ao cadastrar na base QuickBlox");
+            NSLog(@"error: %@", response.error);
+            
+            [self adicionaUsuario:usuario];
+            
+            NSString *erroResponse = [NSString stringWithFormat:@"%@",[response.error.reasons objectForKey:@"errors"]];
+            
+            ErroQB *erroQB = [ErroQB new];
+            erroQB.facebook_usuario = usuario.facebook_usuario;
+            erroQB.erro = erroResponse;
+            erroQB.funcao = @"adicionaUsuario";
+            erroQB.plataforma = @"iOS";
+            
+            [erroQB adicionaErroQB:erroQB];
+
+        }];
+        
+    }errorBlock:^(QBResponse *response) {
+        NSLog(@"Erro ao criar sessão para cadastrar na base QuickBlox");
+        NSLog(@"error: %@", response.error);
+        
+        [self adicionaUsuario:usuario];
+        
+        NSString *erroResponse = [NSString stringWithFormat:@"%@",[response.error.reasons objectForKey:@"errors"]];
+        
+        ErroQB *erroQB = [ErroQB new];
+        erroQB.facebook_usuario = usuario.facebook_usuario;
+        erroQB.erro = erroResponse;
+        erroQB.funcao = @"criarSessao-adicionaUsuario";
+        erroQB.plataforma = @"iOS";
+        
+        [erroQB adicionaErroQB:erroQB];
+    }];
 }
 
 @end

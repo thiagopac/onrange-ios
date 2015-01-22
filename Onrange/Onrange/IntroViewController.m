@@ -1,5 +1,5 @@
 //
-//  LoadingViewController.m
+//  IntroViewController.m
 //  Onrange
 //
 //  Created by Thiago Castro on 16/10/14.
@@ -10,13 +10,7 @@
 #import <Restkit/RestKit.h>
 #import "Usuario.h"
 #import "MappingProvider.h"
-
-static NSString * const sampleDescription1 = @"Pagina 1. Aqui vai o texto explicativo do que é o Onrange, que ele usa mapas, que ele possibilita visualizar os locais com as baladas mais bacanas da cidade.";
-static NSString * const sampleDescription2 = @"Página 2. Aqui terá deverá apresentar o botão para link com facebook, pois já faremos o cadastro dele na base Onrange e também no Quickblox";
-static NSString * const sampleDescription3 = @"Página 3. Aqui vamos mostrar um pouco do aplicativo, podemos fazer propaganda e mostrar algumas imagens de uso do app.";
-static NSString * const sampleDescription4 = @"Página 4. Boas-vindas ao usuário, vamos apresentar uma forma dele nos contactar e podemos dar dicas iniciais sobre o uso do aplicativo, para ele aproveitar ao máximo a sua experiência.";
-
-int contErros = 0;
+#import "AppDelegate.h"
 
 @interface IntroViewController (){
     UIView *rootView;
@@ -30,6 +24,20 @@ int contErros = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     rootView = self.view;
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
+    //tema
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    
+    if ([def objectForKey:@"tema_cor"] == nil) {
+        [def setObject:@"#F46122" forKey:@"tema_cor"];
+        [def setObject:@"icone_nav.png" forKey:@"tema_img"];
+        
+        [def synchronize];
+    }
     
     [self.jmImageView reloadAnimationImagesFromGifNamed:@"preloader1"];
     self.jmImageView.animationType = JMAnimatedImageViewAnimationTypeAutomaticLinearWithoutTransition;
@@ -65,34 +73,28 @@ int contErros = 0;
    [self performSegueWithIdentifier:@"SegueToHome" sender:self];
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"loginNotification" object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (void)showIntroWithCustomViewFromNib {
-    EAIntroPage *page1 = [EAIntroPage page];
-    page1.title = @"Bem-vindo ao Onrange!";
-    page1.desc = sampleDescription1;
-    page1.bgImage = [UIImage imageNamed:@"bg1"];
-    page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title1"]];
     
-    EAIntroPage *page2 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage"];
-    page2.bgImage = [UIImage imageNamed:@"bg2"];
+    EAIntroPage *page1 = [EAIntroPage pageWithCustomViewFromNibNamed:@"FirstScreenView"];
     
-    EAIntroPage *page3 = [EAIntroPage page];
-    page3.title = @"Onde irei esta noite?";
-    page3.desc = sampleDescription3;
-    page3.bgImage = [UIImage imageNamed:@"bg3"];
-    page3.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title3"]];
+    EAIntroPage *page2 = [EAIntroPage pageWithCustomViewFromNibNamed:@"FBIntegrationView"];
     
-    EAIntroPage *page4 = [EAIntroPage page];
-    page4.title = @"Aproveite sua experiência";
-    page4.desc = sampleDescription4;
-    page4.bgImage = [UIImage imageNamed:@"bg4"];
-    page4.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title4"]];
+    EAIntroPage *page3 = [EAIntroPage pageWithCustomViewFromNibNamed:@"PushPermissionView"];
     
-    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4]];
+    EAIntroPage *page4 = [EAIntroPage pageWithCustomViewFromNibNamed:@"LocationPermissionView"];
+    
+    EAIntroPage *page5 = [EAIntroPage pageWithCustomViewFromNibNamed:@"LastScreenView"];
+
+    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:@[page1,page2,page3,page4,page5]];
     [intro setDelegate:self];
     
     [intro showInView:rootView animateDuration:0.3];
@@ -102,6 +104,11 @@ int contErros = 0;
 - (void)introDidFinish:(EAIntroView *)introView {    
     Usuario *usuario = [Usuario new];
     usuario = [Usuario carregarPreferenciasUsuario];
+    
+    if (usuario.id_usuario == 0) {
+        [self showIntroWithCustomViewFromNib];
+    }
+    
     [usuario loginUsuario:usuario];
 }
 

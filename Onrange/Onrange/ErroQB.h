@@ -10,7 +10,7 @@
 
 @interface ErroQB : NSObject
 
-@property (assign, nonatomic) NSInteger id_usuario;
+@property (strong, nonatomic) NSString *facebook_usuario;
 @property (strong, nonatomic) NSString *erro;
 @property (strong, nonatomic) NSString *funcao;
 @property (strong, nonatomic) NSString *plataforma;

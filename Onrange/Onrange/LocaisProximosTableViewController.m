@@ -110,7 +110,7 @@
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/80.0/distancia",API,latitude,longitude]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/0.5/distancia",API,latitude,longitude]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -290,6 +290,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (indexPath.row == self.arrLocais.count) {
        
         AdicionaLocalTableViewController *adicionaLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"AdicionaLocalTableViewController"];

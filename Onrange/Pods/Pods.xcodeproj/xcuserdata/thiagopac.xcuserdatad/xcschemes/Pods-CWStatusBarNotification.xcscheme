@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "16CA1FFF5E02D8AA05133998"
+               BlueprintIdentifier = "FDAD42B606A7F919DC3F9571"
                BuildableName = "libPods-CWStatusBarNotification.a"
                BlueprintName = "Pods-CWStatusBarNotification"
                ReferencedContainer = "container:Pods.xcodeproj">

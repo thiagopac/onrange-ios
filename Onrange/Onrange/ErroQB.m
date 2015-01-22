@@ -16,10 +16,10 @@
 -(void)adicionaErroQB:(ErroQB *)erroQB {
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
-    [requestMapping addAttributeMappingsFromArray:@[@"id_usuario", @"erro", @"funcao", @"plataforma"]];
+    [requestMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"erro", @"funcao", @"plataforma"]];
     
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[ErroQB class]];
-    [responseMapping addAttributeMappingsFromArray:@[@"id_usuario", @"erro", @"funcao", @"plataforma"]];
+    [responseMapping addAttributeMappingsFromArray:@[@"facebook_usuario", @"erro", @"funcao", @"plataforma"]];
     
     RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:requestMapping objectClass:[ErroQB class] rootKeyPath:nil method:RKRequestMethodPOST];
     

@@ -196,6 +196,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PerfilLocalTableViewController *perfilLocalTVC = [[self storyboard]instantiateViewControllerWithIdentifier:@"PerfilLocalTableViewController"];
     

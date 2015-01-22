@@ -16,9 +16,7 @@
 @class HomeViewController;
 @class MenuViewController;
 
-
 extern NSString *const FBSessionStateChangedNotification;
-extern NSString *const FBMenuDataChangedNotification;
 
 typedef void(^UserDataLoadedHandler)(id sender, id<FBGraphUser> user);
 

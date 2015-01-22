@@ -42,9 +42,19 @@
     return self;
 }
 
+- (void)menuAbriu:(NSNotification *)notification {
+    if([[SlideNavigationController sharedInstance] isMenuOpen]){
+        self.tableView.scrollEnabled = NO;
+    }else{
+        self.tableView.scrollEnabled = YES;
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
     self.lblRadio.frame = CGRectMake(250, -25 , 50, 20);
     self.lblRadio.backgroundColor = [UIColor clearColor];
@@ -147,11 +157,19 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:   (NSInteger)buttonIndex {
     
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(actionSheet.tag == 1) {
         switch (buttonIndex) {
             case 0: // logout
                 NSLog(@"Fazendo logout do usuário");
+                //finalizando sessão do facebook se tiver alguma
+                
+                if (FBSession.activeSession.isOpen || FBSession.activeSession.state ||FBSessionStateCreatedTokenLoaded || FBSession.activeSession.state == FBSessionStateCreatedOpening){
+                
+                        [appDelegate closeSession];
+                }
+                
                 [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
                 [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
                 break;
@@ -214,6 +232,13 @@
             NSLog(@"Apagando o usuário");
             
             NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            if (FBSession.activeSession.isOpen || FBSession.activeSession.state ||FBSessionStateCreatedTokenLoaded || FBSession.activeSession.state == FBSessionStateCreatedOpening){
+                
+                [appDelegate closeSession];
+            }
             
             [self performSegueWithIdentifier:@"SegueToLogout" sender:self];
             [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];            

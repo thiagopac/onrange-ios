@@ -2,6 +2,7 @@ PODS:
   - AFNetworking (1.3.4)
   - Canvas (0.1.2)
   - CWStatusBarNotification (2.1.1)
+  - DZNEmptyDataSet (1.5)
   - EAIntroView (2.6.4)
   - Facebook-iOS-SDK (3.12.0)
   - HexColors (2.2.1)
@@ -27,6 +28,9 @@ PODS:
   - RestKit/ObjectMapping (0.20.3)
   - RestKit/Support (0.20.3):
     - TransitionKit (= 1.1.1)
+  - SDWebImage (3.7.1):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.7.1)
   - SOCKit (1.1)
   - SVProgressHUD (1.0)
   - TPKeyboardAvoiding (1.2.4)
@@ -35,6 +39,7 @@ PODS:
 DEPENDENCIES:
   - Canvas (~> 0.1)
   - CWStatusBarNotification (~> 2.1)
+  - DZNEmptyDataSet (~> 1.5)
   - EAIntroView (~> 2.6)
   - Facebook-iOS-SDK (~> 3.12.0)
   - HexColors (~> 2.2)
@@ -44,6 +49,7 @@ DEPENDENCIES:
   - MPGNotification (~> 1.1)
   - QuickBlox
   - RestKit (~> 0.20.0)
+  - SDWebImage (~> 3.7)
   - SVProgressHUD
   - TPKeyboardAvoiding
 
@@ -51,6 +57,7 @@ SPEC CHECKSUMS:
   AFNetworking: 80c4e0652b08eb34e25b9c0ff3c82556fe5967b4
   Canvas: ae2faca05a15c4d6659fb3ae5e2a14817df4449a
   CWStatusBarNotification: 90989a73615aceb90c2da393d926ab76d8ea6a6d
+  DZNEmptyDataSet: 15b1425ebba29e5a04d2fac9623a7384e3eaf775
   EAIntroView: 8f66dc6b79f2d52db26af8fc5476a05ffc549d4c
   Facebook-iOS-SDK: 91763fa21b97c175dc072b5278a606b2aff62366
   HexColors: 01384d2bbe8dc4ffa43c3b4135db6e976952d153
@@ -61,6 +68,7 @@ SPEC CHECKSUMS:
   MPGNotification: 0b93e5466a007593228595a10e8dd7b9848185ca
   QuickBlox: 5a31f72824caa1903d2a3a893fec3cf1ed53591a
   RestKit: 7f9490e709ee745e166c4d2aa7a8d132831275b0
+  SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
   SOCKit: d8d0dd3688ae1026c12367570da8fa8e1a6980fb
   SVProgressHUD: 5034c6e22b8c2ca3e09402e48d41ed0340aa1c50
   TPKeyboardAvoiding: 925e1e1912597d1a4956697eec3bd9656552153c

@@ -15,10 +15,9 @@
 @property (strong, nonatomic) NSDictionary<FBGraphUser> *user;
 @property (strong, nonatomic) IBOutlet UILabel *userNameLabel;
 
+@property (strong, nonatomic) IBOutlet UIImageView *imgFotoUsuario;
 
-@property (strong, nonatomic) IBOutlet FBProfilePictureView *userProfilePictureView;
 
-- (IBAction)logoutButtonClicked:(UIButton *)sender;
 - (IBAction)minhasCombinacoesButtonClicked:(UIButton *)sender;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (IBAction)inicioButtonClicked:(UIButton *)sender;

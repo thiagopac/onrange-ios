@@ -1,5 +1,5 @@
 //
-//  LoadingViewController.h
+//  IntroViewController.h
 //  Onrange
 //
 //  Created by Thiago Castro on 16/10/14.

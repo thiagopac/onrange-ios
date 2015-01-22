@@ -18,10 +18,7 @@
 
 
 NSString *const FBSessionStateChangedNotification =
-@"com.facebook.samples. SocialCafe:FBSessionStateChangedNotification";
-
-NSString *const FBMenuDataChangedNotification =
-@"com.facebook.samples.SocialCafe:FBMenuDataChangedNotification";
+@"Onrange:FBSessionStateChangedNotification";
 
 @implementation AppDelegate
 
@@ -63,17 +60,6 @@ NSString *const FBMenuDataChangedNotification =
 #ifndef DEBUG
     [QBSettings useProductionEnvironmentForPushNotifications:YES];
 #endif
-    
-    
-//tema
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    
-    if ([def objectForKey:@"tema_cor"] == nil) {
-        [def setObject:@"#F46122" forKey:@"tema_cor"];
-        [def setObject:@"icone_nav.png" forKey:@"tema_img"];
-        
-        [def synchronize];
-    }
     
     return YES;
 }
@@ -145,21 +131,37 @@ NSString *const FBMenuDataChangedNotification =
     Usuario *usuario = [Usuario new];
     usuario = [Usuario carregarPreferenciasUsuario];
     
-    // register for push notifications
-    [QBRequest registerSubscriptionForDeviceToken:deviceToken successBlock:^(QBResponse *response, NSArray *subscriptions) {
-        // successfully subscribed
-    } errorBlock:^(QBError *error) {
-        // Handle error
-        NSString *erroResponse = [NSString stringWithFormat:@"%@",[error.reasons objectForKey:@"errors"]];
+    
+    // QuickBlox session creation
+    QBSessionParameters *extendedAuthRequest = [[QBSessionParameters alloc] init];
+    extendedAuthRequest.userLogin = usuario.facebook_usuario;
+    extendedAuthRequest.userPassword = usuario.facebook_usuario;
+    //
+    [QBRequest createSessionWithExtendedParameters:extendedAuthRequest successBlock:^(QBResponse *response, QBASession *session) {
         
-        ErroQB *erroQB = [ErroQB new];
-        erroQB.id_usuario = usuario.id_usuario;
-        erroQB.erro = erroResponse;
-        erroQB.funcao = @"didRegisterForRemoteNotificationsWithDeviceToken";
-        erroQB.plataforma = @"iOS";
+        // register for push notifications
+        [QBRequest registerSubscriptionForDeviceToken:deviceToken successBlock:^(QBResponse *response, NSArray *subscriptions) {
+            // successfully subscribed
+        } errorBlock:^(QBError *error) {
+            // Handle error
+            NSString *erroResponse = [NSString stringWithFormat:@"%@",[error.reasons objectForKey:@"errors"]];
+            
+            ErroQB *erroQB = [ErroQB new];
+            erroQB.facebook_usuario = usuario.facebook_usuario;
+            erroQB.erro = erroResponse;
+            erroQB.funcao = @"didRegisterForRemoteNotificationsWithDeviceToken";
+            erroQB.plataforma = @"iOS";
+            
+            [erroQB adicionaErroQB:erroQB];
+        }];
         
-        [erroQB adicionaErroQB:erroQB];
+    } errorBlock:^(QBResponse *response) {
+        NSString *errorMessage = [[response.error description] stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        
+        NSLog(@"Erro ao se registrar para pushes. Detalhes: %@",errorMessage);
+        
     }];
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -225,11 +227,12 @@ NSString *const FBMenuDataChangedNotification =
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Aviso"
-                                  message:@"O Onrange precisa de permissão para acessar o seu facebook e criar o seu perfil. Clique em Conectar com Facebook novamente."
+                                  message:@"O Onrange precisa de permissão para acessar o seu facebook e criar o seu perfil. Clique em Conectar com Facebook novamente. Se o erro persistir, feche o aplicativo e abra novamente."
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
         [alertView show];
+        
     }
 
 }

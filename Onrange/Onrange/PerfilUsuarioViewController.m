@@ -15,6 +15,7 @@
 #import "ConfirmaMatchViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "AppDelegate.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface PerfilUsuarioViewController ()<QBActionStatusDelegate>{
     NSInteger id_usuario1;
@@ -47,6 +48,12 @@
     
     Usuario *usuario = [Usuario new];
     usuario = [Usuario carregarPreferenciasUsuario];
+    
+    self.imgFotoUsuario.layer.cornerRadius = 68.0f;
+    self.imgFotoUsuario.layer.masksToBounds = YES;
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=200&height=200",self.usuario.facebook_usuario];
+    [self.imgFotoUsuario sd_setImageWithURL:[NSURL URLWithString:strURL] placeholderImage:[UIImage imageNamed:@"fb-medal2.png"]];
     
     self.QBUser = usuario.facebook_usuario;
     self.QBPassword = usuario.facebook_usuario;
@@ -99,8 +106,7 @@
         NSLog(@"%@", response.error);
     }];
     
-    self.imgProfileUsuario.pictureCropping = FBProfilePictureCroppingSquare;
-    self.imgProfileUsuario.profileID = self.usuario.facebook_usuario;
+
     self.lblNomeUsuario.text = self.usuario.nome_usuario;
     
     NSString *tema_img = [def objectForKey:@"tema_img"];
@@ -233,9 +239,9 @@
             
             QBChatDialog *chatDialog = [QBChatDialog new];
             chatDialog.name = @"";
-            chatDialog.occupantIDs = @[@(self.ID_QB1),@(self.ID_QB2)];
+            chatDialog.occupantIDs = @[@(self.ID_QB2)];
             
-            chatDialog.occupantIDs = [[[chatDialog.occupantIDs sortedArrayUsingSelector:@selector(compare:)] reverseObjectEnumerator] allObjects];
+//            chatDialog.occupantIDs = [[[chatDialog.occupantIDs sortedArrayUsingSelector:@selector(compare:)] reverseObjectEnumerator] allObjects];
             
             chatDialog.type = QBChatDialogTypePrivate;
             
@@ -254,7 +260,7 @@
             NSString *erroResponse = [NSString stringWithFormat:@"%@",[response.error.reasons objectForKey:@"errors"]];
 
             ErroQB *erroQB = [ErroQB new];
-            erroQB.id_usuario = usuario.id_usuario;
+            erroQB.facebook_usuario = usuario.facebook_usuario;
             erroQB.erro = erroResponse;
             erroQB.funcao = @"enviaPushAoSegundoUsuario-userWithLogin";
             erroQB.plataforma = @"iOS";
@@ -270,7 +276,7 @@
         NSString *erroResponse = [NSString stringWithFormat:@"%@",[response.error.reasons objectForKey:@"errors"]];
         
         ErroQB *erroQB = [ErroQB new];
-        erroQB.id_usuario = usuario.id_usuario;
+        erroQB.facebook_usuario = usuario.facebook_usuario;
         erroQB.erro = erroResponse;
         erroQB.funcao = @"enviaPushAoSegundoUsuario-logInWithUserLogin";
         erroQB.plataforma = @"iOS";

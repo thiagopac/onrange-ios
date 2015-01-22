@@ -7,7 +7,7 @@
 //
 
 #import "UsuariosCheckedViewController.h"
-
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <Restkit/RestKit.h>
 #import "MappingProvider.h"
 #import "Usuario.h"
@@ -181,6 +181,9 @@
     cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     Usuario *usuario = [_arrUsuarios objectAtIndex:[indexPath item]];
+    
+    cell.imgFotoUsuario.layer.cornerRadius = 45.0f;
+    cell.imgFotoUsuario.layer.masksToBounds = YES;
 
     [self configureCell:cell withUsuario:usuario];
 
@@ -188,7 +191,14 @@
 }
 
 - (void)configureCell:(UsuarioFotoCollectionCell *)cell withUsuario:(Usuario *)usuario {
-    cell.userProfilePictureView.profileID = usuario.facebook_usuario;
+    
+//    cell.userProfilePictureView.profileID = usuario.facebook_usuario;
+    
+//    http://graph.facebook.com/873898955974353/picture?type=large
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=180&height=180",usuario.facebook_usuario];
+    [cell.imgFotoUsuario sd_setImageWithURL:[NSURL URLWithString:strURL] placeholderImage:[UIImage imageNamed:@"fb-medal2.png"]];
+
     if (usuario.liked == 1 && usuario.matched == 0) {
         cell.imgLiked.hidden = NO;
         cell.imgMatch.hidden = YES;
@@ -242,10 +252,10 @@
     return reusableview;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UsuarioFotoCollectionCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.userProfilePictureView.profileID = nil;
-}
+//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UsuarioFotoCollectionCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    cell.userProfilePictureView.profileID = nil;
+//}
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     

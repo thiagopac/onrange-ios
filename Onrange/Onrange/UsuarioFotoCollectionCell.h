@@ -12,9 +12,9 @@
 
 @interface UsuarioFotoCollectionCell : UICollectionViewCell
 
-@property (strong, nonatomic) IBOutlet FBProfilePictureView *userProfilePictureView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgLiked;
 @property (strong, nonatomic) IBOutlet CSAnimationView *viewContainerUsuarios;
 @property (strong, nonatomic) IBOutlet UIImageView *imgMatch;
+@property (strong, nonatomic) IBOutlet UIImageView *imgFotoUsuario;
 
 @end

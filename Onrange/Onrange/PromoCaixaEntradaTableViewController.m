@@ -249,6 +249,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     PromoController *promoControler = [[self storyboard]instantiateViewControllerWithIdentifier:@"PromoController"];
     
     Promo *promo = [[self arrPromos]objectAtIndex:indexPath.row];

@@ -177,17 +177,10 @@
                                             <rect key="frame" x="1" y="3" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" id="i1W-cj-yjr" customClass="FBProfilePictureView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="jM1-kN-Jxc">
                                                     <rect key="frame" x="5" y="5" width="90" height="90"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                            <integer key="value" value="45"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
@@ -213,9 +206,9 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
+                                    <outlet property="imgFotoUsuario" destination="jM1-kN-Jxc" id="SHd-AZ-HBI"/>
                                     <outlet property="imgLiked" destination="Fop-yY-Mgq" id="y5V-Gh-uue"/>
                                     <outlet property="imgMatch" destination="ZF4-8d-dyG" id="eU0-NJ-U8o"/>
-                                    <outlet property="userProfilePictureView" destination="i1W-cj-yjr" id="hkE-eA-NdK"/>
                                     <outlet property="viewContainerUsuarios" destination="Cmu-LI-i8m" id="eJc-hn-byb"/>
                                 </connections>
                             </collectionViewCell>
@@ -323,16 +316,10 @@
                                         <rect key="frame" x="12" y="86" width="148" height="148"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
-                                    <view contentMode="scaleToFill" id="qa6-hn-2tY" customClass="FBProfilePictureView">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Own-Kq-nAw">
                                         <rect key="frame" x="18" y="92" width="136" height="136"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="NO"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="68"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </view>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
@@ -373,7 +360,7 @@
                     </view>
                     <connections>
                         <outlet property="btnCurtirUsuario" destination="EGk-Br-dF4" id="c90-QN-Ntg"/>
-                        <outlet property="imgProfileUsuario" destination="qa6-hn-2tY" id="rVO-3K-czl"/>
+                        <outlet property="imgFotoUsuario" destination="Own-Kq-nAw" id="pbc-jW-JZt"/>
                         <outlet property="lblNomeUsuario" destination="1K6-YV-SwL" id="ERS-1H-p06"/>
                         <outlet property="loading" destination="Kdb-fW-0jD" id="ph7-Va-VkA"/>
                         <outlet property="viewColoredHeader" destination="T7J-j7-S4F" id="KI8-VN-jMY"/>
@@ -1050,21 +1037,21 @@
             <objects>
                 <tableViewController storyboardIdentifier="MenuViewController" id="h1z-g7-NIE" customClass="MenuViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="aN6-2k-fNf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="zJf-jd-ggt">
-                            <rect key="frame" x="0.0" y="390" width="320" height="91"/>
+                            <rect key="frame" x="0.0" y="440" width="320" height="129"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="o_pressed.png" id="f1B-vf-2T8">
-                                    <rect key="frame" x="116" y="26" width="28" height="40"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <rect key="frame" x="116" y="76" width="28" height="40"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </imageView>
                                 <view contentMode="scaleToFill" id="eQl-WE-4Tr">
-                                    <rect key="frame" x="0.0" y="0.0" width="5" height="91"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="5" height="129"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 </view>
@@ -1102,17 +1089,10 @@
                                                     <rect key="frame" x="74" y="36" width="112" height="112"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" id="sH3-MP-DhM" customClass="FBProfilePictureView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="0Dh-cQ-N5I">
                                                     <rect key="frame" x="80" y="42" width="100" height="100"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" red="0.77647058820000003" green="0.75294117650000003" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                            <integer key="value" value="50"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1124,14 +1104,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mapa" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="d54-BS-PwD">
-                                                    <rect key="frame" x="18" y="5" width="115" height="30"/>
+                                                    <rect key="frame" x="18" y="4" width="115" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="DNL-ib-i3B">
-                                                    <rect key="frame" x="0.0" y="-1" width="274" height="44"/>
+                                                    <rect key="frame" x="0.0" y="-1" width="274" height="42"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <state key="normal">
                                                         <color key="titleColor" red="0.0" green="0.40000000000000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1167,14 +1147,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fazer check-in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LZc-f7-BeX">
-                                                    <rect key="frame" x="18" y="5" width="156" height="30"/>
+                                                    <rect key="frame" x="18" y="4" width="156" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="XZR-rQ-ijp">
-                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="41"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="39"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1209,14 +1189,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Onrange Club" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5ZL-ih-IH7">
-                                                    <rect key="frame" x="18" y="6" width="162" height="30"/>
+                                                    <rect key="frame" x="18" y="5" width="162" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xzB-AA-rjf">
-                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="41"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="39"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1251,14 +1231,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minhas combinações" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H3A-ny-Jyp">
-                                                    <rect key="frame" x="18" y="5" width="224" height="30"/>
+                                                    <rect key="frame" x="18" y="4" width="224" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z5Y-JW-dwQ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="41"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="39"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1293,14 +1273,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Configurações" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jah-AT-vdB">
-                                                    <rect key="frame" x="18" y="6" width="162" height="30"/>
+                                                    <rect key="frame" x="18" y="5" width="162" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="k84-IP-r02">
-                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="41"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="39"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1335,9 +1315,11 @@
                             <outlet property="delegate" destination="h1z-g7-NIE" id="xXf-J1-KEp"/>
                         </connections>
                     </tableView>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
+                        <outlet property="imgFotoUsuario" destination="0Dh-cQ-N5I" id="GXd-vP-aE8"/>
                         <outlet property="userNameLabel" destination="GGt-k9-QpQ" id="gPD-vb-ssg"/>
-                        <outlet property="userProfilePictureView" destination="sH3-MP-DhM" id="wic-hZ-mfx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5gg-ix-Ty7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1547,38 +1529,31 @@
         <scene sceneID="HJ7-JW-chA">
             <objects>
                 <tableViewController storyboardIdentifier="MinhasCombinacoesTableViewController" id="sua-LD-kEp" customClass="MinhasCombinacoesTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="74" sectionHeaderHeight="22" sectionFooterHeight="22" id="oYd-MQ-Rra">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="62" sectionHeaderHeight="10" sectionFooterHeight="10" id="oYd-MQ-Rra">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="combinacaoCell" rowHeight="74" id="IDP-fG-zhE" customClass="MinhasCombinacoesTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="combinacaoCell" rowHeight="62" id="IDP-fG-zhE" customClass="MinhasCombinacoesTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="320" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IDP-fG-zhE" id="61P-PY-j2P">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="73"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" id="kCw-Ix-lXm" customClass="FBProfilePictureView">
-                                            <rect key="frame" x="8" y="16" width="42" height="42"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                    <integer key="value" value="21"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="NO"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sRg-vg-cud">
+                                            <rect key="frame" x="8" y="10" width="42" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="labelNomeCombinacao" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o6M-ih-aoN">
-                                            <rect key="frame" x="58" y="26" width="232" height="21"/>
+                                            <rect key="frame" x="58" y="19" width="232" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="STHeitiSC-Medium" family="Heiti SC" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" id="X6K-DA-WbS">
-                                            <rect key="frame" x="269" y="32" width="10" height="10"/>
+                                            <rect key="frame" x="269" y="25" width="10" height="10"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.21493055555555557" green="0.70150462962962967" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <userDefinedRuntimeAttributes>
@@ -1591,7 +1566,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="imgProfile" destination="kCw-Ix-lXm" id="ykM-Di-Qjv"/>
+                                    <outlet property="imgFotoUsuario" destination="sRg-vg-cud" id="DOr-Ja-2Z8"/>
                                     <outlet property="lblNomeCombinacao" destination="o6M-ih-aoN" id="vuI-oA-NEG"/>
                                     <outlet property="viewUnredMessages" destination="X6K-DA-WbS" id="MQc-8o-8z4"/>
                                     <segue destination="K7S-JQ-kcf" kind="push" identifier="ShowChatViewControllerSegue" id="Eaw-vw-aBn"/>
