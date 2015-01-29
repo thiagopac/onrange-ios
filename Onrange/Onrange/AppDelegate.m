@@ -281,7 +281,7 @@ NSString *const FBSessionStateChangedNotification =
          ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
              if (!error) {
                  // Update menu user info
-                 self.menu.profileID = user.id;
+                 self.menu.profileID = [user objectForKey:@"id"];
                  // Save the user data
                  self.user = user;
                                   
@@ -290,9 +290,9 @@ NSString *const FBSessionStateChangedNotification =
                  usuario.nome_usuario = user.first_name;
                  usuario.sobrenome_usuario = user.last_name;
                  usuario.email_usuario = [user objectForKey:@"email"];
-                 usuario.facebook_usuario = user.id;
+                 usuario.facebook_usuario = [user objectForKey:@"id"];
                  usuario.idioma_usuario = [user objectForKey:@"locale"];
-                 usuario.aniversario_usuario = user.birthday;
+                 usuario.aniversario_usuario = [user objectForKey:@"birthday"];
                  
                  NSArray *tempArray = [[user objectForKey:@"location"][@"name"] componentsSeparatedByString:@","];
                  usuario.cidade_usuario = [tempArray objectAtIndex:0];

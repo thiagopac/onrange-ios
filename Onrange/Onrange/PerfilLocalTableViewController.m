@@ -194,6 +194,8 @@
 
       Checkin *checkinefetuado = [mappingResult firstObject];
       [SVProgressHUD dismiss];
+        
+      [self carregaUsuarios];
 
       UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
       ConfirmaCheckinViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ConfirmaCheckinViewController"];
@@ -214,7 +216,13 @@
       }else if(self.status == 517) { //Erro ao fazer checkin
           [self fazCheckin];
       }else{
-          [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+          if (error.code == -1009) { //erro de conexão com a internet
+              NSLog(@"Erro %ld",self.status);
+              [self fazCheckin];
+          }else{
+              NSLog(@"Erro %ld",self.status);
+              [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+          }
       }
       NSLog(@"Error: %@", error);
       [SVProgressHUD dismiss];
@@ -248,13 +256,17 @@
     
     [objectManager putObject:checkin path:path parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
-      NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
-      [SVProgressHUD dismiss];
-      [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
+          NSLog(@"Dados de checkout enviados e recebidos com sucesso!");
+          [SVProgressHUD dismiss];
+          [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
 
+         [self carregaUsuarios];
+        
           self.usuarioEstaNoLocal = NO;
-          
-          [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
+        
+         [self.view setNeedsLayout];
+        
+         [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
 
       }
       failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -269,10 +281,18 @@
               [self fazCheckout];
               [SVProgressHUD dismiss];
           }else{
-              NSLog(@"ERRO FATAL - fazCheckout");
-              NSLog(@"Erro na API: %ld",self.status);
-              NSLog(@"Error: %@", error);
-              [SVProgressHUD dismiss];
+              if (error.code == -1009) { //erro de conexão com a internet
+                  NSLog(@"Erro %ld",self.status);
+                  [self fazCheckin];
+              }else{
+                  NSLog(@"ERRO FATAL - fazCheckout");
+                  NSLog(@"Erro %ld",self.status);
+                  
+                  [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+              }
+              
+             NSLog(@"Error: %@", error);
+             [SVProgressHUD dismiss];
           }
       }];
 }
@@ -287,9 +307,13 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
+    
+
+    
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
         self.arrUsuarios = [NSMutableArray arrayWithArray:mappingResult.array];
+        qt_checkin = [NSString stringWithFormat:@"%d",(int)[self.arrUsuarios count]];
         
         for (int i=0; i<[self.arrUsuarios count]; i++) {
             Usuario *usuario = [self.arrUsuarios objectAtIndex:i];
@@ -344,6 +368,10 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self carregaUsuarios];
+    });
     [self.tableView reloadData];
 }
 
@@ -361,7 +389,6 @@
         
         [self.btnCheckin setImage:imgCheckin forState:UIControlStateNormal];
         
-        [self carregaUsuarios];
         if ([qt_checkin intValue] == 0) {
            cell.textLabel.text = @"Ninguém no local";
         }else if([qt_checkin intValue] == 1){

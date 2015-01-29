@@ -48,7 +48,7 @@
         
         self.imgFotoUsuario.hidden = NO;
         
-        NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=280&height=280",user.id];
+        NSString *strURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=280&height=280",[user objectForKey:@"id"]];
         [self.imgFotoUsuario sd_setImageWithURL:[NSURL URLWithString:strURL]];
         self.lblNomeUsuario.text = user.first_name;
         

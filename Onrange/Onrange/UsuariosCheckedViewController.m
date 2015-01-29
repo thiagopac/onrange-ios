@@ -265,11 +265,6 @@
     return reusableview;
 }
 
-//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UsuarioFotoCollectionCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    cell.userProfilePictureView.profileID = nil;
-//}
-
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.usuarioEstaNoLocal == YES) {
@@ -403,8 +398,14 @@
               NSLog(@"Erro %ld",self.status);
               [self fazCheckin];
           }else{
-              NSLog(@"Erro %ld",self.status);
-              [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+              
+              if (error.code == -1009) { //erro de conexão com a internet
+                NSLog(@"Erro %ld",self.status);
+                  [self fazCheckin];
+              }else{
+                  NSLog(@"Erro %ld",self.status);
+                  [self alert:@"Erro ao fazer checkin. Tente novamente em alguns minutos.":@"Erro"];
+              }
           }
           NSLog(@"Error: %@", error);
           [SVProgressHUD dismiss];
@@ -449,12 +450,12 @@
       
       [SVProgressHUD showSuccessWithStatus:@"Checkout efetuado!"];
       
-      if (checkoutefetuado.id_output == 1) {
-          self.usuarioEstaNoLocal = NO;
-          [self carregaUsuarios];
-          
-          [self.view setNeedsLayout];
-      }
+
+      self.usuarioEstaNoLocal = NO;
+      [self carregaUsuarios];
+      
+      [self.view setNeedsLayout];
+
   }
   failure:^(RKObjectRequestOperation *operation, NSError *error) {
       
@@ -464,8 +465,13 @@
           NSLog(@"Erro %ld",self.status);
           [self fazCheckout];
       }else{
-          NSLog(@"Erro %ld",self.status);
-          [self alert:@"Erro ao fazer checkout. Tente novamente em alguns minutos.":@"Erro"];
+          if (error.code == -1009) { //erro de conexão com a internet
+              NSLog(@"Erro %ld",self.status);
+              [self fazCheckout];
+          }else{
+              NSLog(@"Erro %ld",self.status);
+              [self alert:@"Erro ao fazer checkout. Tente novamente em alguns minutos.":@"Erro"];
+          }
       }
 
       NSLog(@"Error: %@", error);
