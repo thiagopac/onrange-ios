@@ -15,5 +15,7 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CWStatusBarNotification *notification;
 @property (assign, nonatomic) NSInteger status;
+@property (strong, nonatomic) IBOutlet UIButton *btnTentarNovamente;
+- (IBAction)btnTentarNovamente:(id)sender;
 
 @end

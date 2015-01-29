@@ -11,6 +11,8 @@
 @interface ConfirmaMatchViewController : UIViewController
 @property (strong, nonatomic) NSString *strNomeUsuario;
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeUsuario;
+@property (strong, nonatomic) IBOutlet UILabel *lblTimer;
+@property (strong, nonatomic) IBOutlet UIButton *btnFechar;
 - (IBAction)btnFechar:(id)sender;
 
 @end

@@ -365,7 +365,7 @@
         if ([qt_checkin intValue] == 0) {
            cell.textLabel.text = @"Ninguém no local";
         }else if([qt_checkin intValue] == 1){
-            cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoas no local",qt_checkin];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoa no local",qt_checkin];
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         }else{
             cell.textLabel.text = [NSString stringWithFormat:@"%@ pessoas no local",qt_checkin];

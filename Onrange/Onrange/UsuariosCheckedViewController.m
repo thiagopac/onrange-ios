@@ -22,6 +22,7 @@
     NSString *nome_local;
     NSString *qt_checkin;
     NSString *genero;
+    UIRefreshControl *refreshControl;
 }
 
 @property (nonatomic, strong) NSMutableArray *arrUsuarios;
@@ -78,6 +79,13 @@
     self.navigationController.navigationBar.barTintColor = navcolor;
     
     self.navigationController.navigationBar.topItem.title = @"•";
+   
+    refreshControl = [[UIRefreshControl alloc]init];
+    refreshControl.tintColor = [UIColor grayColor];
+    [refreshControl addTarget:self action:@selector(viewWillAppear:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:refreshControl];
+    self.collectionView.alwaysBounceVertical = YES;
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -133,11 +141,16 @@
         self.arrUsuarios = [NSMutableArray arrayWithArray:mappingResult.array];
         qt_checkin = [NSString stringWithFormat:@"%d",(int)[self.arrUsuarios count]];
         [self verificaUsuarioNoLocal];
+        
+        [refreshControl performSelector:@selector(endRefreshing)];
+        
         [self.collectionView reloadData];
         
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
 
         self.status = operation.HTTPRequestOperation.response.statusCode;
+        
+        [refreshControl performSelector:@selector(endRefreshing)];
         
         if(self.status == 531) {
               NSLog(@"Erro %ld",self.status);

@@ -14,4 +14,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblNomeLocal;
 @property (strong, nonatomic) NSString *strNomeLocal;
 
+
 @end

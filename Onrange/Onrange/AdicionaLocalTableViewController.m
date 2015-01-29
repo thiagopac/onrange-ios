@@ -45,6 +45,13 @@
     
     self.navigationController.navigationBar.topItem.title = @"•";
     
+    UIBarButtonItem *btnCriar = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Criar "
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(criarLocal)];
+    self.navigationItem.rightBarButtonItem = btnCriar;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -139,8 +146,8 @@
     if (self.locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-        self.locationManager.distanceFilter = 200.00;
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        self.locationManager.distanceFilter = 300000.00;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     }
     
     [self.locationManager startUpdatingLocation];
@@ -303,12 +310,15 @@ didChangeDragState:(MKAnnotationViewDragState)newState
 }
 
 
-- (IBAction)btnConfirmar:(UIButton *)sender {
-    if (self.txtNomeLocal.text && self.lblCategoria != nil) {
-        [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
-        [self criaLocal];
+-(void)criarLocal{
+    if ([self.txtNomeLocal.text isEqualToString:@""] || self.nomeCategoria == nil) {
+            [self alert:@"Preencha o campo de nome e a categoria":@"Erro"];
+        
     }else{
-        [self alert:@"Preencha o campo de nome e a categoria":@"Erro"];
+            [SVProgressHUD showWithStatus:@"Aguarde" maskType:SVProgressHUDMaskTypeBlack];
+            [self criaLocal];
+
     }
+    
 }
 @end

@@ -309,16 +309,6 @@
     }
 }
 
-//- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
-//    
-//    NSString *text = @"Você não tem nenhuma combinação :(";
-//    
-//    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0],
-//                                 NSForegroundColorAttributeName: [UIColor darkGrayColor]};
-//    
-//    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
-//}
-
 - (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView {
     
     NSString *text = @"Você ainda não tem nenhuma combinação.\n:(";

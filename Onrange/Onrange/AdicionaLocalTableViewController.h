@@ -16,7 +16,6 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) IBOutlet UITextField *txtNomeLocal;
 @property (strong, nonatomic) IBOutlet MKMapView *mapLocal;
-- (IBAction)btnConfirmar:(UIButton *)sender;
 @property (strong, nonatomic) IBOutlet UIButton *btnConfirmar;
 @property (assign, nonatomic) int tipoLocal;
 @property (strong, nonatomic) IBOutlet UILabel *lblCategoria;

@@ -78,7 +78,7 @@ NSString *const FBSessionStateChangedNotification =
         [pushInfo setObject:richContent forKey:@"rich_content"];
     }
     
-    [[NSNotificationCenter defaultCenter]  postNotificationName:kPushDidReceive object:nil userInfo:pushInfo];
+//    [[NSNotificationCenter defaultCenter]  postNotificationName:@"MinhaNotificacao" object:self userInfo:pushInfo];
     
     NSDictionary *aps = userInfo[@"aps"];
     NSString *msgBody = aps[@"alert"];

@@ -65,7 +65,7 @@
     if (self.locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-        self.locationManager.distanceFilter = 200.00;
+        self.locationManager.distanceFilter = kCLHeadingFilterNone;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     }
     
@@ -101,7 +101,7 @@
     }
 }
 
-- (void)carregaLocais {
+- (void)carregaLocaisNoRange:(double)range {
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     latitude = [def objectForKey:@"userLatitude"];
     longitude = [def objectForKey:@"userLongitude"];
@@ -110,7 +110,7 @@
     RKMapping *mapping = [MappingProvider localMapping];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping method:false pathPattern:nil keyPath:nil statusCodes:statusCodeSet];
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/0.5/distancia",API,latitude,longitude]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@local/listaLocaisRange/%@/%@/%f/distancia",API,latitude,longitude,range]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     RKObjectRequestOperation *operation = [[RKObjectRequestOperation alloc] initWithRequest:request
                                                                         responseDescriptors:@[responseDescriptor]];
@@ -118,9 +118,12 @@
 
         self.arrLocais = [NSMutableArray arrayWithArray:mappingResult.array];
 
+        [self.btnTentarNovamente setHidden:YES];
+        
         if (self.arrLocais.count < 1) {
             [SVProgressHUD showErrorWithStatus:@"Nenhum local próximo encontrado"];
             [self.notification dismissNotification];
+            [self.btnTentarNovamente setHidden:NO];
         }
         [self.notification dismissNotification];
         [self.tableView reloadData];
@@ -131,15 +134,15 @@
         
         if(self.status == 502) { //Erro na listagem de locais
             NSLog(@"Erro %ld",self.status);
-            [self carregaLocais];
+            [self carregaLocaisNoRange:range];
         }else{
             [self.refreshControl performSelector:@selector(endRefreshing)];
             [self.notification dismissNotification];
-            NSLog(@"ERRO FATAL - carregaLocais");
+            NSLog(@"ERRO FATAL - carregaLocaisNoRange");
             NSLog(@"Erro da API: %ld",self.status);
             NSLog(@"ERROR: %@", error);
             NSLog(@"Response: %@", operation.HTTPRequestOperation.responseString);
-            [self carregaLocais];
+            [self carregaLocaisNoRange:range];
         }
 
     }];
@@ -163,6 +166,11 @@
     NSString *tema_img = [def objectForKey:@"tema_img"];
     NSString *tema_cor = [def objectForKey:@"tema_cor"];
     
+    [[self.btnTentarNovamente layer] setBorderWidth:1.0f];
+    [[self.btnTentarNovamente layer] setBorderColor:[UIColor lightGrayColor].CGColor];
+    [[self.btnTentarNovamente layer] setCornerRadius:15.0f];
+    [[self.btnTentarNovamente layer] masksToBounds];
+     
     UIImage *image = [UIImage imageNamed:tema_img];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     
@@ -178,7 +186,7 @@
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     
-    [refresh addTarget:self action:@selector(carregaLocais) forControlEvents:UIControlEventValueChanged];
+    [refresh addTarget:self action:@selector(viewWillAppear:) forControlEvents:UIControlEventValueChanged];
     
     self.refreshControl = refresh;
     
@@ -205,7 +213,7 @@
     [self statusBarCustomizadaWithMsg:@"Buscando locais próximos..."];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
-        [self carregaLocais];
+        [self carregaLocaisNoRange:0.5];
     });
 }
 
@@ -308,4 +316,11 @@
     }
 }
 
+- (IBAction)btnTentarNovamente:(id)sender {
+    [self statusBarCustomizadaWithMsg:@"Buscando mais locais..."];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self carregaLocaisNoRange:1.0];
+    });
+}
 @end

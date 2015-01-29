@@ -27,6 +27,7 @@
 {
     [super viewDidLoad];
     self.lblNomeLocal.text = self.strNomeLocal;
+    
 }
 
 - (void)didReceiveMemoryWarning

@@ -33,23 +33,29 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     NSLog(@"didFailWithError: %@", error);
-    UIAlertView *errorAlert = [[UIAlertView alloc]
-                               initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Tentar novamente?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim",nil];
-    [errorAlert show];
+//    UIAlertView *errorAlert = [[UIAlertView alloc]
+//                               initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Tentar novamente?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim",nil];
+//    [errorAlert show];
+    
+    //nao mais apresentar o Alert para o usuário, apenas já fazer a busca novamente quando resultar erro
+    [self buscarLocalizacao];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) //NÃO
-    {
-        UIAlertView *errorAlert = [[UIAlertView alloc]
-                                   initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Nenhum local será mapeado." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [errorAlert show];
-    }
-    else //SIM
-    {
-        [self buscarLocalizacao];
-    }
-}
+
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    if (buttonIndex == 0) //NÃO
+//    {
+//        UIAlertView *errorAlert = [[UIAlertView alloc]
+//                                   initWithTitle:@"Erro" message:@"Não foi possível determinar sua localização. Nenhum local será mapeado." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//
+////        Estava em loop infinito e não há motivos para mostrar isto para o usuário
+////        [errorAlert show];
+//    }
+//    else //SIM
+//    {
+//        [self buscarLocalizacao];
+//    }
+//}
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
@@ -291,7 +297,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuAbriu:) name:MenuLeft object:nil];
     
 //    chegou notificação de push
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recebeNotificacao:) name:@"MinhaNotificacao" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recebeNotificacao:) name:@"MinhaNotificacao" object:nil];
     
     [self buscarLocalizacao];
     
@@ -311,8 +317,6 @@
     }
 
 }
-
-
 
 -(void)viewWillAppear:(BOOL)animated{
 
@@ -552,9 +556,10 @@
 }
 
 - (void) recebeNotificacao:(NSNotification *)notification {
-    [self.btnMatches setImage:[UIImage imageNamed:@"btn_minhascombinacoes2"] forState:UIControlStateNormal];
-    [self.view setNeedsDisplay];
-    NSLog(@"A mensagem foi: %@", [notification.userInfo objectForKey:@"Mensagem"]);
+    UIImage *imgBtn = [UIImage imageNamed:@"btn_minhascombinacoes2.png"];
+    [self.btnMatches setImage:imgBtn forState:UIControlStateNormal];
+//    [self.view setNeedsDisplay];
+    NSLog(@"A mensagem foi: %@", [notification.userInfo objectForKey:@"message"]);
 }
 
 - (IBAction)btnOnrangeClub:(UIButton *)sender {

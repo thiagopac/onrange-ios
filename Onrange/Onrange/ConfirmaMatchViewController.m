@@ -8,7 +8,18 @@
 
 #import "ConfirmaMatchViewController.h"
 
-@interface ConfirmaMatchViewController ()
+@interface ConfirmaMatchViewController (){
+    
+@private
+    
+    NSTimer * countdownTimer;
+    NSUInteger remainingTicks;
+    
+}
+
+-(void)handleTimerTick;
+
+-(void)updateLabel;
 
 @end
 
@@ -23,10 +34,40 @@
     return self;
 }
 
+-(void)handleTimerTick
+{
+    remainingTicks--;
+    [self updateLabel];
+    
+    if (remainingTicks <= 0) {
+        [countdownTimer invalidate];
+        countdownTimer = nil;
+        self.lblTimer.hidden = YES;
+        self.btnFechar.hidden = NO;
+    }
+}
+
+-(void)updateLabel
+{
+    self.lblTimer.text = [[NSNumber numberWithUnsignedInt:(int)remainingTicks] stringValue];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.lblNomeUsuario setText:self.strNomeUsuario];
+    
+    self.btnFechar.hidden = YES;
+    
+    if (countdownTimer)
+        return;
+    
+    
+    remainingTicks = 3;
+    [self updateLabel];
+    
+    countdownTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 target: self selector: @selector(handleTimerTick) userInfo: nil repeats: YES];
+
 }
 
 - (void)didReceiveMemoryWarning
