@@ -388,7 +388,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
     cell.delegate = self;
     
     NSString *messageText = [messageData text];
-    NSParameterAssert(messageText != nil);
+//    NSParameterAssert(messageText != nil);
     
     cell.textView.text = messageText;
     cell.messageBubbleImageView = [collectionView.dataSource collectionView:collectionView bubbleImageViewForItemAtIndexPath:indexPath];

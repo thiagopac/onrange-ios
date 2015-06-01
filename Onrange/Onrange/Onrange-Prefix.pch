@@ -6,7 +6,8 @@
 
 #import <Availability.h>
 
-#define API @"http://roomnants.com/onrange/api/"
+#define API @"http://onrange.com.br/api/" //PRODUÇÃO
+#define API_DEV @"http://roomnants.com/onrange/api/" //DESENVOLVIMENTO
 
 #define kPushDidReceive @"kPushDidReceive"
 
